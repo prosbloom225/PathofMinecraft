@@ -1,0 +1,7 @@
+{
+    "pack": {
+        "description": "Path of Minecraft",
+        "pack_format": 3,
+        "_comment": "An attempt to port Path of Exile features to Minecraft"
+    }
+}

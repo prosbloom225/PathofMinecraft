@@ -1,0 +1,19 @@
+[{
+  "name": "heavy",
+  "ilvl": 1,
+  "tier": 8,
+  "damageMod": [
+    0.40,
+    0.49
+  ]
+},
+  {
+    "name": "merciless",
+    "ilvl": 83,
+    "tier": 1,
+    "damageMod": [
+      1.70,
+      1.79
+    ]
+  }
+]
