@@ -1,70 +1,88 @@
 package com.prosbloom.pom.items;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.items.interfaces.IModifiable;
 import com.prosbloom.pom.model.Modifier;
+import com.prosbloom.pom.model.PomTag;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import org.apache.logging.log4j.Logger;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public class ModSword extends ItemSword implements IModifiable {
-    private String baseName = "ModSword";
-    private Modifier prefix;
-    private Modifier suffix;
-    private List<Modifier> modifiers = new ArrayList();
-    private float []damagePhysical;
-
+    protected String baseName = "modsword";
 
     public ModSword() {
         super(ToolMaterial.STONE);
-        damagePhysical = new float[2];
+        setRegistryName(Pom.MODID, baseName);
         setUnlocalizedName(baseName);
     }
-    public void addPrefix(Modifier mod) {
-        this.prefix = mod;
-        refreshMods();
-    }
-    public void addSuffix(Modifier mod) {
-        this.suffix = mod;
-        refreshMods();
+
+    @SideOnly(Side.CLIENT)
+    public void initModel() {
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
-    public void addModifier(Modifier mod) {
-        modifiers.add(mod);
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX)) {
+            if (stack.getTagCompound().getCompoundTag(PomTag.PREFIX).hasKey(PomTag.MOD_NAME)) {
+                String prefix = stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getString(PomTag.MOD_NAME);
+                System.out.println("gotPrefix: " + prefix);
+                tooltip.add(TextFormatting.WHITE + prefix + " " + TextFormatting.RESET + baseName);
+            }
+        }
+        tooltip.add(TextFormatting.GRAY + "" + getAttackDamage() + " Damage ");
     }
-    public boolean removeModifier(Modifier mod) {
-        return modifiers.remove(mod);
-    }
-    public List<Modifier> getModifiers() {
-        return this.modifiers;
+
+    // deprecated
+    public void refreshMods(ItemStack stack) {
+        System.out.println("Refreshing mods for item: " + baseName);
     }
 
     @Override
-    public float getAttackDamage() {
-        Random r = new Random();
-        float physMod =damagePhysical[0] + r.nextFloat() * (damagePhysical[1] - damagePhysical[0]);
-        return super.getAttackDamage() * (1 + physMod);
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+        // Maybe should remove attributes, but wipe them for now
+        //Multimap<String, AttributeModifier> modifiers = super.getItemAttributeModifiers(slot);
+        Multimap<String, AttributeModifier> modifiers = HashMultimap.<String, AttributeModifier>create();
+        // Weapons
+        if (slot == EntityEquipmentSlot.MAINHAND) {
+            // load the prefix - we only need the dmg right now, but preparing for more modifiers
+            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX)) {
+                Modifier prefix = Pom.itemFactory.getPrefix(stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getString(PomTag.MOD_NAME));
+                System.out.println("getAttributeModifiers prefixName: " + prefix.getName());
+            }
+            // Process prefixes
+            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX)) {
+                // Phys Dmg
+                if (stack.getTagCompound().getCompoundTag(PomTag.PREFIX).hasKey(PomTag.MOD_DAMAGEMOD)) {
+                    double dmg = stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getFloat(PomTag.MOD_DAMAGEMOD);
+                    modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", dmg, 0));
+                }
+                // Atk Sp
+                if (stack.getTagCompound().getCompoundTag(PomTag.PREFIX).hasKey(PomTag.MOD_SPEEDMOD)) {
+                    double spd = stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getFloat(PomTag.MOD_SPEEDMOD);
+                    modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", spd, 0));
+                }
+            }
+        }
+        return modifiers;
     }
 
-    public void refreshMods() {
-        System.out.println("Refreshing mods for item: " + baseName);
-        String name = new String(baseName);
-
-        if (prefix != null) {
-            name = prefix.getName() + " " + name;
-            damagePhysical[0] += prefix.getDamageMod()[0];
-            damagePhysical[1] += prefix.getDamageMod()[1];
-        }
-        if (suffix != null) {
-            name = name + " " + suffix.getName();
-        }
-        this.setUnlocalizedName(name);
-
-        for (Modifier mod : modifiers) {
-            damagePhysical[0]+=mod.getDamageMod()[0];
-            damagePhysical[1]+=mod.getDamageMod()[1];
-        }
-    }
 }
