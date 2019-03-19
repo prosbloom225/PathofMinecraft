@@ -9,8 +9,12 @@ public class Modifiers {
         List<Modifier> prefixes = Arrays.asList(this.prefixes);
         return prefixes;
     }
+    public List<Modifier> getSuffixes() {
+        List<Modifier> suffixes = Arrays.asList(this.suffixes);
+        return suffixes;
+    }
 
-    private Modifier[] prefixes;
-    private Modifier[] suffixes;
+    private Prefix[] prefixes;
+    private Suffix[] suffixes;
 
 }

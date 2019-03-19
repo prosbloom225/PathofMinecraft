@@ -3,11 +3,7 @@ package com.prosbloom.pom.factory;
 import com.google.gson.Gson;
 import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.items.ModSword;
-import com.prosbloom.pom.model.Modifier;
-import com.prosbloom.pom.model.Modifiers;
-import com.prosbloom.pom.model.PomTag;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
+import com.prosbloom.pom.model.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ItemFactory {
@@ -31,18 +26,15 @@ public class ItemFactory {
         //Type listType = new TypeToken<List<Modifiers>>() {}.getType();
         modifiers = gson.fromJson(new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/prefixes.json"))), Modifiers.class);
     }
-    /*
-    public IModifiable regenerate(int ilvl, IModifiable item){
-        // Get the list of prefixes available for our ilvl
-        List <Modifier>viablePrefixes = modifiers.getPrefixes().stream().filter(i->ilvl >= i.getIlvl()).collect(Collectors.toList());
-        // Grab a random one and apply it
-        //item.addPrefix(viablePrefixes.get(new Random().nextInt(viablePrefixes.size())));
-        return item;
-    }
-    */
 
     public Modifier getPrefix (String name) {
         return modifiers.getPrefixes().stream()
+                .filter(s-> name.equals(s.getName()))
+                .findFirst()
+                .orElse(null);
+    }
+    public Modifier getSuffix (String name) {
+        return modifiers.getSuffixes().stream()
                 .filter(s-> name.equals(s.getName()))
                 .findFirst()
                 .orElse(null);
@@ -51,19 +43,27 @@ public class ItemFactory {
     public ItemStack testGenerate(int ilvl) {
         ItemStack itemStack = new ItemStack(ModItems.modSword);
         List <Modifier>viablePrefixes = modifiers.getPrefixes().stream().filter(i->ilvl>= i.getIlvl()).collect(Collectors.toList());
-        Modifier prefix = viablePrefixes.get(new Random().nextInt(viablePrefixes.size()));
+        List <Modifier>viableSuffixes = modifiers.getSuffixes().stream().filter(i->ilvl>= i.getIlvl()).collect(Collectors.toList());
+        Prefix prefix = (Prefix)viablePrefixes.get(new Random().nextInt(viablePrefixes.size()));
+        Suffix suffix = (Suffix)viableSuffixes.get(new Random().nextInt(viableSuffixes.size()));
 
         // build nbt for item
-        NBTTagCompound nbt = prefix.toNbt();
+        NBTTagCompound tag = new NBTTagCompound();
 
-
-        // roll the mods
+        // roll the prefix mods
+        NBTTagCompound prefixNbt = prefix.toNbt();
         float physMod =1 + (prefix.getDamageModRange()[0] + new Random().nextFloat() * (prefix.getDamageModRange()[1] - prefix.getDamageModRange()[0]));
         System.out.println("PHYSMOD: " + physMod);
-        nbt.setFloat(PomTag.MOD_DAMAGEMOD, physMod);
-        NBTTagCompound tag = new NBTTagCompound();
+        prefixNbt.setFloat(PomTag.MOD_DAMAGEMOD, physMod);
+        tag.setTag(PomTag.PREFIX, prefixNbt);
+
+        // roll the suffix mods
+        NBTTagCompound suffixNbt = suffix.toNbt();
+        float spdMod =suffix.getSpeedModRange()[0] + new Random().nextFloat() * (suffix.getSpeedModRange()[1] - suffix.getSpeedModRange()[0]);
+        System.out.println("SPDMOD: " + physMod);
+        suffixNbt.setFloat(PomTag.MOD_SPEEDMOD, spdMod);
         // create the prefix
-        tag.setTag(PomTag.PREFIX, nbt);
+        tag.setTag(PomTag.SUFFIX, suffixNbt);
 
 
 
