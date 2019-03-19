@@ -26,6 +26,10 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
+    maven {
+        name = "CoFH Maven"
+        url = "http://maven.covers1624.net"
+    }
 }
 
 version = "1.0"
@@ -52,7 +56,8 @@ minecraft {
 
 dependencies {
     deobfCompile "mezz.jei:jei_1.12.2:4.13.1.220"
-    implementation 'com.google.code.gson:gson:2.8.5'
+    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.20-12"
+    compile 'com.google.code.gson:gson:2.8.5'
 
 }
 
