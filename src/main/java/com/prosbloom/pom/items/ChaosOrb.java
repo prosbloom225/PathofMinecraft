@@ -13,6 +13,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO - Implement IModifier - save name of currency item to nbt on itemstack, playercontainerevent firing triggers a reroll of the item based on the currency item name
 public class ChaosOrb extends Item {
     public ChaosOrb() {
         super();

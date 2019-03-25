@@ -17,4 +17,6 @@ public class PomTag {
     public static final String MOD_SPEEDRANGE_MIN = "speedmin";
     public static final String MOD_SPEEDRANGE_MAX = "speedmax";
     public static final String MOD_SPEEDMOD = "speedmod";
+
+    public static final String CURRENCY_NAME = "currency";
 }
