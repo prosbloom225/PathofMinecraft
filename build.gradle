@@ -7,9 +7,22 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+plugins {
+  id "org.sonarqube" version "2.6.2"
+}
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
+apply plugin: 'org.sonarqube'
+apply plugin: 'jacoco'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "pom"
+        property "sonar.projectKey", "com.prosbloom.pom"
+        property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+    }
+}
 
 repositories {
     maven { // JEI

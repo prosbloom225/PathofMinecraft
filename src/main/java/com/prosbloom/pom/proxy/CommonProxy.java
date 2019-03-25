@@ -1,5 +1,7 @@
 package com.prosbloom.pom.proxy;
 
+import com.prosbloom.pom.events.PomEvents;
+import com.prosbloom.pom.items.ChaosOrb;
 import com.prosbloom.pom.items.ItemCase;
 import com.prosbloom.pom.items.ModSword;
 import net.minecraft.block.Block;
@@ -13,6 +15,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
+
+    public static PomEvents pomEvents = new PomEvents();
+
     public void preInit(FMLPreInitializationEvent e) {
     }
 
@@ -30,5 +35,6 @@ public class CommonProxy {
     public static void registerItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().register(new ModSword());
         event.getRegistry().register(new ItemCase());
+        event.getRegistry().register(new ChaosOrb());
     }
 }

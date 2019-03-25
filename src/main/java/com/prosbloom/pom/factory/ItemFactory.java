@@ -49,6 +49,7 @@ public class ItemFactory {
 
         // build nbt for item
         NBTTagCompound tag = new NBTTagCompound();
+        tag.setInteger(PomTag.ILVL, ilvl);
 
         // roll the prefix mods
         NBTTagCompound prefixNbt = prefix.toNbt();

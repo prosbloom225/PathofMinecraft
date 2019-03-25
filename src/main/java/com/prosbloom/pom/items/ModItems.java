@@ -12,10 +12,14 @@ public class ModItems {
     @GameRegistry.ObjectHolder("pom:itemcase")
     public static ItemCase itemCase;
 
+    @GameRegistry.ObjectHolder("pom:chaosorb")
+    public static ChaosOrb chaosOrb;
+
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         modSword.initModel();
         itemCase.initModel();
+        chaosOrb.initModel();
     }
 
 }

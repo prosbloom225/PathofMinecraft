@@ -41,6 +41,9 @@ public class ModSword extends ItemSword implements IModifiable {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
 
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.ILVL)) {
+            tooltip.add(TextFormatting.BLUE + "(" + stack.getTagCompound().getInteger(PomTag.ILVL) + ")");
+        }
         String prefix = "", suffix = "";
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX)) {
             prefix = stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getString(PomTag.MOD_NAME);
@@ -48,7 +51,12 @@ public class ModSword extends ItemSword implements IModifiable {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.SUFFIX)) {
             suffix = stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).getString(PomTag.MOD_NAME);
         }
-        tooltip.add(TextFormatting.WHITE + prefix + " " + TextFormatting.RESET + baseName + " " + TextFormatting.WHITE + suffix);
+        tooltip.add(
+                TextFormatting.WHITE + prefix + " " +
+                TextFormatting.RESET + baseName + " " +
+                TextFormatting.WHITE + suffix);
+
+
     }
 
     // deprecated
@@ -58,8 +66,7 @@ public class ModSword extends ItemSword implements IModifiable {
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        //Multimap<String, AttributeModifier> modifiers = HashMultimap.<String, AttributeModifier>create();
-        Multimap<String, AttributeModifier> oldModifiers = super.getAttributeModifiers(slot, stack);
+        Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
         // Weapons
         if (slot == EntityEquipmentSlot.MAINHAND) {
             // Process prefixes
@@ -67,14 +74,14 @@ public class ModSword extends ItemSword implements IModifiable {
                 // Phys Dmg
                 if (stack.getTagCompound().getCompoundTag(PomTag.PREFIX).hasKey(PomTag.MOD_DAMAGEMOD)) {
                     double dmgMod = stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getFloat(PomTag.MOD_DAMAGEMOD);
-                    final Optional<AttributeModifier> modifierOptional = oldModifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
+                    final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
                             .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_DAMAGE_MODIFIER))
                             .findFirst();
                     if (modifierOptional.isPresent()) {
                         final AttributeModifier modifier = modifierOptional.get();
                         double dmg = modifierOptional.get().getAmount()  * dmgMod;
-                        oldModifiers.remove(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), modifier);
-                        oldModifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", dmg, 0));
+                        modifiers.remove(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), modifier);
+                        modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", dmg, 0));
                     }
                 }
             }
@@ -82,7 +89,7 @@ public class ModSword extends ItemSword implements IModifiable {
                 // Atk Spd
                 if (stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).hasKey(PomTag.MOD_SPEEDMOD)) {
                     double spdMod = stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).getFloat(PomTag.MOD_SPEEDMOD);
-                    final Optional<AttributeModifier> modifierOptional = oldModifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName()).stream()
+                    final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName()).stream()
                             .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_SPEED_MODIFIER))
                             .findFirst();
                     if (modifierOptional.isPresent()) {
@@ -91,13 +98,13 @@ public class ModSword extends ItemSword implements IModifiable {
                         // spd calc is weird cuz it starts negative
                         double val = modifierOptional.get().getAmount();
                         double spd = val + Math.abs(val) * spdMod;
-                        oldModifiers.remove(SharedMonsterAttributes.ATTACK_SPEED.getName(), modifier);
-                        oldModifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", spd, 0));
+                        modifiers.remove(SharedMonsterAttributes.ATTACK_SPEED.getName(), modifier);
+                        modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", spd, 0));
                     }
                 }
             }
         }
-        return oldModifiers;
+        return modifiers;
     }
 
 }

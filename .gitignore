@@ -24,3 +24,5 @@ run
 classes/**
 gradle/**
 logs/**
+
+.DS_Store
