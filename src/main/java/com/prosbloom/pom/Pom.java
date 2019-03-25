@@ -38,7 +38,7 @@ public class Pom {
     public static Pom instance;
 
     public static ItemFactory itemFactory = new ItemFactory();
-    public static CurrencyFactory currencyFactory = new CurrencyFactory();
+    public static CurrencyFactory currencyFactory;
 
     public static Logger logger;
 
