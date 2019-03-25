@@ -5,7 +5,6 @@ import com.prosbloom.pom.items.ChaosOrb;
 import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.items.ModSword;
 import com.prosbloom.pom.model.PomTag;
-import net.minecraft.item.ItemSaddle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.AnvilUpdateEvent;
@@ -27,8 +26,10 @@ public class PomEvents {
         for (ItemStack stack : event.getContainer().getInventory()) {
             if (stack.getItem() instanceof ModSword) {
                 System.out.println("ContainerEvent: " + stack.getItem().getUnlocalizedName());
-                if (stack.getTagCompound().hasKey(PomTag.CURRENCY_NAME))
+                if (stack.getTagCompound().hasKey(PomTag.CURRENCY_NAME)) {
                     System.out.println("Tag: " + stack.getTagCompound().getString(PomTag.CURRENCY_NAME));
+                    Pom.currencyFactory.processCurrency(stack);
+                }
             }
         }
     }

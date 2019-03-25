@@ -15,6 +15,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class ItemFactory {
+    // TODO - should these factories be static?  set the constructor stuff in a static block and just reference statically???
     private static Logger logger;
     private static Gson gson;
     private Modifiers modifiers;
