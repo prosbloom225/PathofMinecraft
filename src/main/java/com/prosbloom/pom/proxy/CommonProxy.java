@@ -1,8 +1,6 @@
 package com.prosbloom.pom.proxy;
 
-import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.events.PomEvents;
-import com.prosbloom.pom.factory.CurrencyFactory;
 import com.prosbloom.pom.items.ChaosOrb;
 import com.prosbloom.pom.items.ItemCase;
 import com.prosbloom.pom.items.ModSword;
@@ -24,7 +22,6 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent e) {
-        Pom.currencyFactory = new CurrencyFactory();
     }
 
     public void postInit(FMLPostInitializationEvent e) {

@@ -35,6 +35,14 @@ public class NbtHelper {
         return stack;
     }
 
+    public static int getIlvl(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.ILVL))
+            return stack.getTagCompound().getInteger(PomTag.ILVL);
+        // default all items to ilvl 1, means we have to handle less exceptions
+        // TODO - this is unsafe.  proceed with caution
+        return 1;
+
+    }
 
     public static NBTTagCompound getPrefix(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX))

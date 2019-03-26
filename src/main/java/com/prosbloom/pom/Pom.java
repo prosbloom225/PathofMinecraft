@@ -1,7 +1,6 @@
 package com.prosbloom.pom;
 
 
-import com.prosbloom.pom.factory.CurrencyFactory;
 import com.prosbloom.pom.factory.ItemFactory;
 import com.prosbloom.pom.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,8 +12,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Currency;
 
 
 @Mod(modid = Pom.MODID, name = Pom.MODNAME, version = Pom.MODVERSION, dependencies = "", useMetadata = true)
@@ -38,7 +35,6 @@ public class Pom {
     public static Pom instance;
 
     public static ItemFactory itemFactory = new ItemFactory();
-    public static CurrencyFactory currencyFactory;
 
     public static Logger logger;
 
