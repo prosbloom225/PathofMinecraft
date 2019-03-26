@@ -4,6 +4,7 @@ import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.items.ChaosOrb;
 import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.items.ModSword;
+import com.prosbloom.pom.items.interfaces.ICurrency;
 import com.prosbloom.pom.model.PomTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +24,7 @@ public class PomEvents {
 
     @SubscribeEvent
     public static void playerContainerEvent(PlayerContainerEvent event) {
+        /*
         for (ItemStack stack : event.getContainer().getInventory()) {
             if (stack.getItem() instanceof ModSword) {
                 System.out.println("ContainerEvent: " + stack.getItem().getUnlocalizedName());
@@ -32,6 +34,7 @@ public class PomEvents {
                 }
             }
         }
+        */
     }
     @SubscribeEvent
     public static void EntityItemPickup(EntityItemPickupEvent event) {
@@ -40,9 +43,20 @@ public class PomEvents {
 
     @SubscribeEvent
     public static void AnvilRepairEvent(AnvilRepairEvent event) {
-        System.out.println("Left: " + event.getItemInput());
-        System.out.println("Right: " + event.getIngredientInput());
-        System.out.println("Right: " + event.getItemResult());
+        ItemStack rightStack = event.getIngredientInput();
+        ItemStack outputStack = event.getItemResult();
+        ItemStack leftStack = event.getItemInput();
+
+        if (rightStack.getItem() instanceof ICurrency) {
+            // TODO - combine these if possible
+            // shift click clears the anvil
+            event.getEntityPlayer().inventory.mainInventory.stream()
+                    .filter(stack->stack.getItem() instanceof ModSword)
+                    .forEach(stack->((ICurrency)rightStack.getItem()).process(stack));
+            // clicking item out of output slot leaves it in the anvil
+            if (outputStack.getItem() instanceof ModSword)
+                ((ICurrency) rightStack.getItem()).process(outputStack);
+        }
     }
 
     @SubscribeEvent
@@ -52,12 +66,12 @@ public class PomEvents {
         ItemStack leftItem = event.getLeft();
 
         System.out.println("AnvilUpdate: " + leftItem.getItem().getUnlocalizedName() + " " + rightItem.getItem().getUnlocalizedName());
-        if (leftItem.getItem() instanceof ModSword && rightItem.getItem() instanceof ChaosOrb) {
+        if (leftItem.getItem() instanceof ModSword && rightItem.getItem() instanceof ICurrency) {
+            // we need to set a valid cost and output item to give the player something in output slot
             event.setCost(1);
             event.setMaterialCost(1);
             ItemStack stack = new ItemStack(ModItems.modSword);
             stack.setTagCompound(new NBTTagCompound());
-            stack.getTagCompound().setString(PomTag.CURRENCY_NAME, rightItem.getUnlocalizedName());
             if (leftItem.hasTagCompound() && leftItem.getTagCompound().hasKey(PomTag.ILVL))
                 stack.getTagCompound().setInteger(PomTag.ILVL, leftItem.getTagCompound().getInteger(PomTag.ILVL));
             event.setOutput(stack);
