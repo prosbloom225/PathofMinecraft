@@ -1,7 +1,6 @@
 package com.prosbloom.pom.model;
 
 public class PomTag {
-    public static final String POM = "pom";
     public static final String PREFIX = "prefix";
     public static final String SUFFIX = "suffix";
     public static final String ILVL = "ilvl";

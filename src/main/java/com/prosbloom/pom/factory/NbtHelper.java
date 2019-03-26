@@ -6,6 +6,7 @@ import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,25 @@ public class NbtHelper {
         return stack;
     }
 
+    public static ItemStack clearPrefixes(ItemStack stack) {
+        return clearModifier(stack, PomTag.PREFIX);
+    }
+    public static ItemStack clearSuffixes(ItemStack stack) {
+        return clearModifier(stack, PomTag.SUFFIX);
+    }
+    private static ItemStack clearModifier(ItemStack stack, String tag) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(tag))
+            stack.getTagCompound().removeTag(tag);
+        return stack;
+    }
+
+
+    public static NBTTagCompound getPrefix(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX))
+            return stack.getTagCompound().getCompoundTag(PomTag.PREFIX);
+        else
+            return null;
+    }
 
     public List<Modifier> getModifiers(ItemStack stack) {
         List<Modifier> modifiers = new ArrayList<>();
