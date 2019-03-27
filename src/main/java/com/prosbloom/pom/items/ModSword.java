@@ -5,7 +5,6 @@ import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.interfaces.IModifiable;
-import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
