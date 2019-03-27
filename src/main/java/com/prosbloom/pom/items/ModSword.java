@@ -73,7 +73,7 @@ public class ModSword extends ItemSword implements IModifiable {
         // Weapons
         if (slot == EntityEquipmentSlot.MAINHAND) {
             // Process prefixes
-            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX)) {
+            if (NbtHelper.hasPrefix(stack)) {
                 // Phys Dmg
                 if (stack.getTagCompound().getCompoundTag(PomTag.PREFIX).hasKey(PomTag.MOD_DAMAGEMOD)) {
                     double dmgMod = stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getFloat(PomTag.MOD_DAMAGEMOD);
@@ -84,11 +84,12 @@ public class ModSword extends ItemSword implements IModifiable {
                         final AttributeModifier modifier = modifierOptional.get();
                         double dmg = modifierOptional.get().getAmount()  * dmgMod;
                         modifiers.remove(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), modifier);
-                        modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", dmg, 0));
+                        modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
+                                new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", dmg, 0));
                     }
                 }
             }
-            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.SUFFIX)) {
+            if (NbtHelper.hasSuffix(stack)) {
                 // Atk Spd
                 if (stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).hasKey(PomTag.MOD_SPEEDMOD)) {
                     double spdMod = stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).getFloat(PomTag.MOD_SPEEDMOD);
@@ -102,7 +103,8 @@ public class ModSword extends ItemSword implements IModifiable {
                         double val = modifierOptional.get().getAmount();
                         double spd = val + Math.abs(val) * spdMod;
                         modifiers.remove(SharedMonsterAttributes.ATTACK_SPEED.getName(), modifier);
-                        modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", spd, 0));
+                        modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
+                                new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", spd, 0));
                     }
                 }
             }
