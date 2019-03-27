@@ -2,8 +2,9 @@ package com.prosbloom.pom.items;
 
 import com.google.common.collect.Multimap;
 import com.prosbloom.pom.Pom;
+import com.prosbloom.pom.exception.ModifierNotFoundException;
+import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.interfaces.IModifiable;
-import com.prosbloom.pom.model.Modifier;
 import com.prosbloom.pom.model.PomTag;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -41,15 +42,17 @@ public class ModSword extends ItemSword implements IModifiable {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
 
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.ILVL)) {
-            tooltip.add(TextFormatting.BLUE + "(" + stack.getTagCompound().getInteger(PomTag.ILVL) + ")");
+        tooltip.add(TextFormatting.BLUE + "(" + NbtHelper.getIlvl(stack) + ")");
+        String prefix, suffix;
+        try {
+            prefix = NbtHelper.getPrefix(stack).getName();
+        } catch (ModifierNotFoundException e){
+            prefix = "";
         }
-        String prefix = "", suffix = "";
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX)) {
-            prefix = stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getString(PomTag.MOD_NAME);
-        }
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.SUFFIX)) {
-            suffix = stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).getString(PomTag.MOD_NAME);
+        try {
+            suffix = NbtHelper.getSuffix(stack).getName();
+        } catch (ModifierNotFoundException e){
+            suffix = "";
         }
         tooltip.add(
                 TextFormatting.WHITE + prefix + " " +
