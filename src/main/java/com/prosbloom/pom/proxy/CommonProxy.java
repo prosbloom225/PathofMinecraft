@@ -36,5 +36,6 @@ public class CommonProxy {
         event.getRegistry().register(new ChaosOrb());
         event.getRegistry().register(new AnnulmentOrb());
         event.getRegistry().register(new DivineOrb());
+        event.getRegistry().register(new ScourOrb());
     }
 }

@@ -21,6 +21,9 @@ public class ModItems {
     @GameRegistry.ObjectHolder("pom:divineorb")
     public static DivineOrb divineOrb;
 
+    @GameRegistry.ObjectHolder("pom:scourorb")
+    public static ScourOrb scourOrb;
+
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         modSword.initModel();
@@ -28,6 +31,7 @@ public class ModItems {
         chaosOrb.initModel();
         annulmentOrb.initModel();
         divineOrb.initModel();
+        scourOrb.initModel();
     }
 
 }

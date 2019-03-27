@@ -46,6 +46,17 @@ public class NbtHelper {
         else
             throw new ModifierNotFoundException();
     }
+    public static ItemStack clearModifiers(ItemStack stack) throws ModifierNotFoundException {
+        List<Modifier> mods = NbtHelper.getModifiers(stack);
+        if (mods.size() > 0) {
+            for (Modifier mod : mods) {
+                NbtHelper.clearModifier(stack, mod);
+            }
+            return stack;
+        } else {
+            throw new ModifierNotFoundException();
+        }
+    }
 
     public static boolean isDummy(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.DUMMY))
