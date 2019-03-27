@@ -5,7 +5,8 @@ import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.interfaces.IModifiable;
-import com.prosbloom.pom.model.PomTag;
+import com.prosbloom.pom.model.Prefix;
+import com.prosbloom.pom.model.Suffix;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -56,8 +57,8 @@ public class ModSword extends ItemSword implements IModifiable {
         }
         tooltip.add(
                 TextFormatting.WHITE + prefix + " " +
-                TextFormatting.RESET + baseName + " " +
-                TextFormatting.WHITE + suffix);
+                        TextFormatting.RESET + baseName + " " +
+                        TextFormatting.WHITE + suffix);
 
 
     }
@@ -73,10 +74,11 @@ public class ModSword extends ItemSword implements IModifiable {
         // Weapons
         if (slot == EntityEquipmentSlot.MAINHAND) {
             // Process prefixes
-            if (NbtHelper.hasPrefix(stack)) {
-                // Phys Dmg
-                if (stack.getTagCompound().getCompoundTag(PomTag.PREFIX).hasKey(PomTag.MOD_DAMAGEMOD)) {
-                    double dmgMod = stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getFloat(PomTag.MOD_DAMAGEMOD);
+            if (NbtHelper.hasPrefix(stack))
+                try {
+                    Prefix prefix = NbtHelper.getPrefix(stack);
+                    // Phys Dmg
+                    double dmgMod = (double)prefix.getDamageMod();
                     final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
                             .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_DAMAGE_MODIFIER))
                             .findFirst();
@@ -87,12 +89,15 @@ public class ModSword extends ItemSword implements IModifiable {
                         modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
                                 new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", dmg, 0));
                     }
+                } catch (ModifierNotFoundException e) {
+                    System.out.println("Couldnt find modifier, though one exists: " + e.toString());
                 }
-            }
-            if (NbtHelper.hasSuffix(stack)) {
-                // Atk Spd
-                if (stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).hasKey(PomTag.MOD_SPEEDMOD)) {
-                    double spdMod = stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).getFloat(PomTag.MOD_SPEEDMOD);
+            // Suffix
+            if (NbtHelper.hasSuffix(stack))
+                try {
+                    Suffix suffix = NbtHelper.getSuffix(stack);
+                    // Atk Spd
+                    double spdMod = suffix.getSpeedMod();
                     final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName()).stream()
                             .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_SPEED_MODIFIER))
                             .findFirst();
@@ -106,8 +111,9 @@ public class ModSword extends ItemSword implements IModifiable {
                         modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
                                 new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", spd, 0));
                     }
+                } catch (ModifierNotFoundException e) {
+                    System.out.println("Couldnt find modifier, though one exists: " + e.toString());
                 }
-            }
         }
         return modifiers;
     }
