@@ -33,15 +33,22 @@ public class PomEvents {
         if (rightStack.getItem() instanceof ICurrency) {
             // TODO - combine these if possible
             // shift click clears the anvil
+            /*
             event.getEntityPlayer().inventory.mainInventory.stream()
                     .filter(stack->stack.getItem() instanceof ModSword && !NbtHelper.isDummy(stack))
                     .forEach(stack->((ICurrency)rightStack.getItem()).process(stack));
+                    */
             // clicking item out of output slot leaves it in the anvil
             if (event.getEntityPlayer().inventory.getItemStack().getItem() instanceof ModSword)
-                //if (outputStack.getItem() instanceof ModSword)
-                event.getEntityPlayer().inventory.setItemStack(((ICurrency) rightStack.getItem()).process(leftStack.copy()));
-            // remove the dummy item
-            event.getEntityPlayer().inventory.mainInventory.remove(outputStack);
+                event.getEntityPlayer().inventory.setItemStack(((ICurrency)rightStack.getItem()).process(leftStack.copy()));
+            else
+                event.getEntityPlayer().inventory.addItemStackToInventory(((ICurrency)rightStack.getItem()).process(leftStack.copy()));
+
+            // remove the(all) dummy item(s)
+            //event.getEntityPlayer().inventory.mainInventory.remove(outputStack);
+            event.getEntityPlayer().inventory.mainInventory.stream()
+                    .filter(stack->stack.getItem() instanceof ModSword && NbtHelper.isDummy(stack))
+                    .forEach(stack->stack.shrink(1));
             //outputStack.shrink(1);
         }
     }
