@@ -28,17 +28,21 @@ public class PomEvents {
     public static void AnvilRepairEvent(AnvilRepairEvent event) {
         ItemStack rightStack = event.getIngredientInput();
         ItemStack outputStack = event.getItemResult();
-        //ItemStack leftStack = event.getItemInput();
+        ItemStack leftStack = event.getItemInput();
 
         if (rightStack.getItem() instanceof ICurrency) {
             // TODO - combine these if possible
             // shift click clears the anvil
             event.getEntityPlayer().inventory.mainInventory.stream()
-                    .filter(stack->stack.getItem() instanceof ModSword)
+                    .filter(stack->stack.getItem() instanceof ModSword && !NbtHelper.isDummy(stack))
                     .forEach(stack->((ICurrency)rightStack.getItem()).process(stack));
             // clicking item out of output slot leaves it in the anvil
-            if (outputStack.getItem() instanceof ModSword)
-                ((ICurrency) rightStack.getItem()).process(outputStack);
+            if (event.getEntityPlayer().inventory.getItemStack().getItem() instanceof ModSword)
+                //if (outputStack.getItem() instanceof ModSword)
+                event.getEntityPlayer().inventory.setItemStack(((ICurrency) rightStack.getItem()).process(leftStack.copy()));
+            // remove the dummy item
+            event.getEntityPlayer().inventory.mainInventory.remove(outputStack);
+            //outputStack.shrink(1);
         }
     }
 
@@ -55,6 +59,7 @@ public class PomEvents {
             ItemStack stack = new ItemStack(ModItems.modSword);
             stack.setTagCompound(new NBTTagCompound());
             stack.getTagCompound().setInteger(PomTag.ILVL, NbtHelper.getIlvl(leftItem));
+            stack.getTagCompound().setString(PomTag.DUMMY, "dummytag");
             event.setOutput(stack);
         }
     }

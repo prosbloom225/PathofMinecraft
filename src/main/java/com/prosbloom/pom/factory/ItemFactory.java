@@ -28,7 +28,7 @@ public class ItemFactory {
         //Type listType = new TypeToken<List<Modifiers>>() {}.getType();
         modifiers = gson.fromJson(new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/prefixes.json"))), Modifiers.class);
     }
-
+    // TODO  - prefix and suffix shouldn't be separate.  should refactor to just modifiers with prefix/suffix being a property
     public Modifier getPrefix (String name) {
         return modifiers.getPrefixes().stream()
                 .filter(s-> name.equals(s.getName()))

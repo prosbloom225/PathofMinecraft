@@ -15,11 +15,15 @@ public class ModItems {
     @GameRegistry.ObjectHolder("pom:chaosorb")
     public static ChaosOrb chaosOrb;
 
+    @GameRegistry.ObjectHolder("pom:annulmentorb")
+    public static AnnulmentOrb annulmentOrb;
+
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         modSword.initModel();
         itemCase.initModel();
         chaosOrb.initModel();
+        annulmentOrb.initModel();
     }
 
 }

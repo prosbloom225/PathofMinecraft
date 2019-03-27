@@ -1,6 +1,7 @@
 package com.prosbloom.pom.proxy;
 
 import com.prosbloom.pom.events.PomEvents;
+import com.prosbloom.pom.items.AnnulmentOrb;
 import com.prosbloom.pom.items.ChaosOrb;
 import com.prosbloom.pom.items.ItemCase;
 import com.prosbloom.pom.items.ModSword;
@@ -36,5 +37,6 @@ public class CommonProxy {
         event.getRegistry().register(new ModSword());
         event.getRegistry().register(new ItemCase());
         event.getRegistry().register(new ChaosOrb());
+        event.getRegistry().register(new AnnulmentOrb());
     }
 }
