@@ -21,6 +21,11 @@ public class Prefix extends Modifier {
     public void setDamageModRange(float[] damageModRange) {
         this.damageModRange = damageModRange;
     }
+
+    public float getDamageMod() {
+        return damageMod;
+    }
+
     public float[] getDamageModRange() {
         return damageModRange;
     }

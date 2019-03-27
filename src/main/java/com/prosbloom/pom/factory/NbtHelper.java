@@ -111,11 +111,13 @@ public class NbtHelper {
             throw new ModifierNotFoundException();
     }
     public static boolean hasPrefix(ItemStack stack) {
+        // TODO - could probably optimize and just look for a tag
         return getModifiers(stack).stream()
                 .filter(mod->mod instanceof Prefix)
                 .collect(Collectors.toList()).size() > 0;
     }
     public static boolean hasSuffix(ItemStack stack) {
+        // TODO - could probably optimize and just look for a tag
         return getModifiers(stack).stream()
                 .filter(mod->mod instanceof Suffix)
                 .collect(Collectors.toList()).size() > 0;
