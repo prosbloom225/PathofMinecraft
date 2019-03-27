@@ -2,6 +2,7 @@ package com.prosbloom.pom.items;
 
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierExistsException;
+import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.interfaces.ICurrency;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -30,10 +31,10 @@ public class ChaosOrb extends Item implements ICurrency {
         NbtHelper.clearSuffixes(stack);
 
         try {
-            Pom.itemFactory.addPrefix(stack);
-            Pom.itemFactory.addSuffix(stack);
+            NbtHelper.addPrefix(stack, Pom.itemFactory.rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addSuffix(stack, Pom.itemFactory.rollSuffix(NbtHelper.getIlvl(stack)));
         } catch (ModifierExistsException e) {
-            System.out.println("Tried to add a prefix where one exists already");
+            System.out.print("Somehow we tried to add a modifier when one exists: " + e.toString());
         }
 
         return stack;

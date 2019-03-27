@@ -4,9 +4,7 @@ import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.items.ModSword;
 import com.prosbloom.pom.items.interfaces.ICurrency;
-import com.prosbloom.pom.model.PomTag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -56,9 +54,8 @@ public class PomEvents {
             event.setCost(1);
             event.setMaterialCost(1);
             ItemStack stack = new ItemStack(ModItems.modSword);
-            stack.setTagCompound(new NBTTagCompound());
-            stack.getTagCompound().setInteger(PomTag.ILVL, NbtHelper.getIlvl(leftItem));
-            stack.getTagCompound().setString(PomTag.DUMMY, "dummytag");
+            NbtHelper.setIlvl(stack, 99);
+            NbtHelper.setDummy(stack, true);
             event.setOutput(stack);
         }
     }

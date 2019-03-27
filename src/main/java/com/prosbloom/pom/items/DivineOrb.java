@@ -2,7 +2,6 @@ package com.prosbloom.pom.items;
 
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
-import com.prosbloom.pom.factory.ItemFactory;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.interfaces.ICurrency;
 import com.prosbloom.pom.model.Modifier;
@@ -14,7 +13,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-import java.util.Random;
 
 public class DivineOrb extends Item implements ICurrency {
 
@@ -35,9 +33,9 @@ public class DivineOrb extends Item implements ICurrency {
         List<Modifier> mods = NbtHelper.getModifiers(stack);
         if (mods.size() > 0)
             try {
-                Pom.itemFactory.rollPrefix(stack);
-                Pom.itemFactory.rollSuffix(stack);
-            } catch (ModifierNotFoundException e) {
+                Pom.itemFactory.rerollPrefix(stack);
+                Pom.itemFactory.rerollSuffix(stack);
+            } catch (Exception e) {
                 System.out.println("Modifier not found: " + e.toString());
             }
         return stack;

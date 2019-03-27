@@ -9,6 +9,11 @@ public class Prefix extends Modifier {
     }
 
     private float[] damageModRange;
+
+    public void setDamageMod(float damageMod) {
+        this.damageMod = damageMod;
+    }
+
     // this should be set by the item factory
     private float damageMod = 0;
 

@@ -5,6 +5,11 @@ import net.minecraft.nbt.NBTTagCompound;
 public class Suffix extends Modifier {
 
         private float []speedModRange;
+
+        public void setSpeedMod(float speedMod) {
+                this.speedMod = speedMod;
+        }
+
         private float speedMod = 0;
 
         public float[] getSpeedModRange() {
