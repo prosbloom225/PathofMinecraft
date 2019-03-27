@@ -46,12 +46,13 @@ public class ModSword extends ItemSword implements IModifiable {
         tooltip.add(TextFormatting.BLUE + "(" + NbtHelper.getIlvl(stack) + ")");
         String prefix, suffix;
         try {
-            prefix = NbtHelper.getPrefix(stack).getName();
+            // TODO - naming item on first modifiers
+            prefix = NbtHelper.getPrefixes(stack).get(0).getName();
         } catch (ModifierNotFoundException e){
             prefix = "";
         }
         try {
-            suffix = NbtHelper.getSuffix(stack).getName();
+            suffix = NbtHelper.getSuffixes(stack).get(0).getName();
         } catch (ModifierNotFoundException e){
             suffix = "";
         }
@@ -76,7 +77,8 @@ public class ModSword extends ItemSword implements IModifiable {
             // Process prefixes
             if (NbtHelper.hasPrefix(stack))
                 try {
-                    Prefix prefix = NbtHelper.getPrefix(stack);
+                // TODO - just use first prefix
+                    Prefix prefix = NbtHelper.getPrefixes(stack).get(0);
                     // Phys Dmg
                     double dmgMod = (double)prefix.getDamageMod();
                     final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
@@ -95,7 +97,7 @@ public class ModSword extends ItemSword implements IModifiable {
             // Suffix
             if (NbtHelper.hasSuffix(stack))
                 try {
-                    Suffix suffix = NbtHelper.getSuffix(stack);
+                    Suffix suffix = NbtHelper.getSuffixes(stack).get(0);
                     // Atk Spd
                     double spdMod = suffix.getSpeedMod();
                     final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName()).stream()

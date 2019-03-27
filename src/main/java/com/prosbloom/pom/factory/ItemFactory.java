@@ -57,9 +57,10 @@ public class ItemFactory {
     }
     public void rerollPrefix(ItemStack stack) {
         try {
-            Prefix prefix = NbtHelper.getPrefix(stack);
+            List<Prefix> prefix = NbtHelper.getPrefixes(stack);
             NbtHelper.clearPrefixes(stack);
-            NbtHelper.addPrefix(stack, rollPrefix(prefix));
+            for (Prefix p : prefix)
+                NbtHelper.addPrefix(stack, rollPrefix(p));
         } catch (ModifierExistsException e) {
             System.out.println("Somehow the clear modifiers failed: " + e.toString());
         } catch (ModifierNotFoundException e) {
@@ -80,9 +81,10 @@ public class ItemFactory {
     }
     public void rerollSuffix(ItemStack stack) {
         try {
-            Suffix suffix = NbtHelper.getSuffix(stack);
+            List<Suffix> suffix = NbtHelper.getSuffixes(stack);
             NbtHelper.clearSuffixes(stack);
-            NbtHelper.addSuffix(stack, rollSuffix(suffix));
+            for (Suffix s : suffix)
+                NbtHelper.addSuffix(stack, rollSuffix(s));
         } catch (ModifierExistsException e) {
             System.out.println("Somehow the clear modifiers failed: " + e.toString());
         } catch (ModifierNotFoundException e) {

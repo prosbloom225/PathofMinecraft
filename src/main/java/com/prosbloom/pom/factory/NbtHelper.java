@@ -96,17 +96,21 @@ public class NbtHelper {
     }
 
 
-    public static Prefix getPrefix(ItemStack stack) throws ModifierNotFoundException{
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX))
-            return new Prefix(stack.getTagCompound().getCompoundTag(PomTag.PREFIX));
-            //return (Prefix)Pom.itemFactory.getPrefix(stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getString(PomTag.MOD_NAME));
+    public static List<Prefix> getPrefixes(ItemStack stack) throws ModifierNotFoundException{
+        if (hasPrefix(stack))
+            return getModifiers(stack).stream()
+                    .filter(m->m instanceof Prefix)
+                    .map(m->(Prefix)m)
+                    .collect(Collectors.toList());
         else
             throw new ModifierNotFoundException();
     }
-    public static Suffix getSuffix(ItemStack stack) throws ModifierNotFoundException{
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.SUFFIX))
-            return new Suffix(stack.getTagCompound().getCompoundTag(PomTag.SUFFIX));
-            //return (Suffix)Pom.itemFactory.getSuffix(stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).getString(PomTag.MOD_NAME));
+    public static List<Suffix> getSuffixes(ItemStack stack) throws ModifierNotFoundException{
+        if (hasSuffix(stack))
+            return getModifiers(stack).stream()
+                    .filter(m->m instanceof Suffix)
+                    .map(m->(Suffix)m)
+                    .collect(Collectors.toList());
         else
             throw new ModifierNotFoundException();
     }
