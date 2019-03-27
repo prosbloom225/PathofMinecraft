@@ -2,6 +2,7 @@ package com.prosbloom.pom.factory;
 
 import com.google.gson.Gson;
 import com.prosbloom.pom.exception.ModifierExistsException;
+import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.items.ModSword;
 import com.prosbloom.pom.model.*;
@@ -29,6 +30,7 @@ public class ItemFactory {
         modifiers = gson.fromJson(new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/prefixes.json"))), Modifiers.class);
     }
     // TODO  - prefix and suffix shouldn't be separate.  should refactor to just modifiers with prefix/suffix being a property
+    // TODO - this class shouldn't really be touching nbt directly.  move nbt calls to NbtHelper
     public Modifier getPrefix (String name) {
         return modifiers.getPrefixes().stream()
                 .filter(s-> name.equals(s.getName()))
@@ -42,29 +44,49 @@ public class ItemFactory {
                 .orElse(null);
     }
 
+    // rerolls
+    public ItemStack rollPrefix(ItemStack stack) throws ModifierNotFoundException {
+        Prefix prefix = NbtHelper.getPrefix(stack);
+        NBTTagCompound nbt = rollPrefix(prefix);
+        stack.getTagCompound().setTag(PomTag.PREFIX, nbt);
+        return stack;
+    }
+    public ItemStack rollSuffix(ItemStack stack) throws ModifierNotFoundException {
+        Suffix suffix = NbtHelper.getSuffix(stack);
+        NBTTagCompound nbt = rollSuffix(suffix);
+        stack.getTagCompound().setTag(PomTag.SUFFIX, nbt);
+        return stack;
+    }
 
-    private NBTTagCompound rollPrefix(int ilvl) {
-        // roll the prefix mods
+    // actual mod generator rolls
+    private NBTTagCompound rollPrefix(Prefix prefix) {
         NBTTagCompound tag = new NBTTagCompound();
-        List <Modifier>viablePrefixes = modifiers.getPrefixes().stream().filter(i->ilvl>= i.getIlvl()).collect(Collectors.toList());
-        Prefix prefix = (Prefix)viablePrefixes.get(new Random().nextInt(viablePrefixes.size()));
         NBTTagCompound prefixNbt = prefix.toNbt();
         // physMod
         prefixNbt.setFloat(PomTag.MOD_DAMAGEMOD, 1 + (prefix.getDamageModRange()[0] + new Random().nextFloat() * (prefix.getDamageModRange()[1] - prefix.getDamageModRange()[0])));
         // save nbt
         return prefixNbt;
     }
-
-    private NBTTagCompound rollSuffix(int ilvl) {
-        // roll the suffix mods
+    private NBTTagCompound rollPrefix(int ilvl) {
+        // roll the prefix mods
         NBTTagCompound tag = new NBTTagCompound();
-        List <Modifier>viableSuffixes = modifiers.getSuffixes().stream().filter(i->ilvl>= i.getIlvl()).collect(Collectors.toList());
-        Suffix suffix = (Suffix)viableSuffixes.get(new Random().nextInt(viableSuffixes.size()));
+        List <Modifier>viablePrefixes = modifiers.getPrefixes().stream().filter(i->ilvl>= i.getIlvl()).collect(Collectors.toList());
+        Prefix prefix = (Prefix)viablePrefixes.get(new Random().nextInt(viablePrefixes.size()));
+        return rollPrefix(prefix);
+    }
+    private NBTTagCompound rollSuffix(Suffix suffix) {
         NBTTagCompound suffixNbt = suffix.toNbt();
         // spdMod
         suffixNbt.setFloat(PomTag.MOD_SPEEDMOD, suffix.getSpeedModRange()[0] + new Random().nextFloat() * (suffix.getSpeedModRange()[1] - suffix.getSpeedModRange()[0]));
         // save nbt
         return suffixNbt;
+    }
+    private NBTTagCompound rollSuffix(int ilvl) {
+        // roll the suffix mods
+        NBTTagCompound tag = new NBTTagCompound();
+        List <Modifier>viableSuffixes = modifiers.getSuffixes().stream().filter(i->ilvl>= i.getIlvl()).collect(Collectors.toList());
+        Suffix suffix = (Suffix)viableSuffixes.get(new Random().nextInt(viableSuffixes.size()));
+        return rollSuffix(suffix);
     }
 
     public ItemStack addPrefix(ItemStack stack) throws ModifierExistsException {

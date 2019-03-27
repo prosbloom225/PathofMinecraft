@@ -18,12 +18,16 @@ public class ModItems {
     @GameRegistry.ObjectHolder("pom:annulmentorb")
     public static AnnulmentOrb annulmentOrb;
 
+    @GameRegistry.ObjectHolder("pom:divineorb")
+    public static DivineOrb divineOrb;
+
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         modSword.initModel();
         itemCase.initModel();
         chaosOrb.initModel();
         annulmentOrb.initModel();
+        divineOrb.initModel();
     }
 
 }
