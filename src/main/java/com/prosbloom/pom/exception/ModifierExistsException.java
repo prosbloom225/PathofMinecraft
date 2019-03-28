@@ -1,4 +1,4 @@
 package com.prosbloom.pom.exception;
 
-public class ModifierExistsException extends Exception {
+public class ModifierExistsException extends ModifierException{
 }

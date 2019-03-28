@@ -1,6 +1,7 @@
 package com.prosbloom.pom.factory;
 
 import com.google.gson.Gson;
+import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierExistsException;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.items.ModItems;
@@ -61,10 +62,8 @@ public class ItemFactory {
             NbtHelper.clearPrefixes(stack);
             for (Prefix p : prefix)
                 NbtHelper.addPrefix(stack, rollPrefix(p));
-        } catch (ModifierExistsException e) {
+        } catch (ModifierException e) {
             System.out.println("Somehow the clear modifiers failed: " + e.toString());
-        } catch (ModifierNotFoundException e) {
-            System.out.println("Somehow the modifier we want to reroll is missing: " + e.toString());
         }
     }
 
