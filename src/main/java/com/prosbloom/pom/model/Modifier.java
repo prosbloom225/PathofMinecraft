@@ -1,6 +1,7 @@
 package com.prosbloom.pom.model;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
 
 public class Modifier {
 
@@ -56,5 +57,10 @@ public class Modifier {
         this.setName(nbt.hasKey(PomTag.MOD_NAME) ? nbt.getString(PomTag.MOD_NAME) : "modifier");
         this.setIlvl(nbt.hasKey(PomTag.ILVL) ? nbt.getInteger(PomTag.ILVL) : 1);
         this.setTier(nbt.hasKey(PomTag.MOD_TIER) ? nbt.getInteger(PomTag.MOD_TIER) : 1);
+    }
+
+    public String getAdvTooltip(){
+        return String.format(TextFormatting.GRAY + "Mod \"%s\" (%d)\n" + TextFormatting.RESET,
+                this.getName(), this.getTier());
     }
 }

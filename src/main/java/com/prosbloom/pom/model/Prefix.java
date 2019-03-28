@@ -1,6 +1,7 @@
 package com.prosbloom.pom.model;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
 
 public class Prefix extends Modifier {
 
@@ -17,15 +18,12 @@ public class Prefix extends Modifier {
     public void setDamageMod(float damageMod) {
         this.damageMod = damageMod;
     }
-
     public void setDamageModRange(float[] damageModRange) {
         this.damageModRange = damageModRange;
     }
-
     public float getDamageMod() {
         return damageMod;
     }
-
     public float[] getDamageModRange() {
         return damageModRange;
     }
@@ -48,4 +46,11 @@ public class Prefix extends Modifier {
                 nbt.hasKey(PomTag.MOD_DAMAGERANGE_MAX) ? nbt.getFloat(PomTag.MOD_DAMAGERANGE_MAX) : 0});
     }
 
+    @Override
+    public String getAdvTooltip() {
+        String t = super.getAdvTooltip();
+        t += String.format(TextFormatting.BLUE + "%.2f(%.2f-%.2f) to damage\n" + TextFormatting.RESET,
+                (double)this.getDamageMod(), (double)this.getDamageModRange()[0], (double)this.getDamageModRange()[1]);
+        return t;
+    }
 }

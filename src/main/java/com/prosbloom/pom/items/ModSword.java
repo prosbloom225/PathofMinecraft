@@ -7,6 +7,7 @@ import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.interfaces.IModifiable;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -19,8 +20,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.tools.reflect.ToolBoxError;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,14 +48,21 @@ public class ModSword extends ItemSword implements IModifiable {
 
         tooltip.add(TextFormatting.BLUE + "(" + NbtHelper.getIlvl(stack) + ")");
         String prefix, suffix;
+        List<String> advPrefix = new ArrayList<>();
+        List<String> advSuffix = new ArrayList<>();
+        List<Prefix> prefixes = new ArrayList<>();
+        List<Suffix> suffixes = new ArrayList<>();
+
         try {
             // TODO - naming item on first modifiers
-            prefix = NbtHelper.getPrefixes(stack).get(0).getName();
+            prefixes = NbtHelper.getPrefixes(stack);
+            prefix = prefixes.get(0).getName();
         } catch (ModifierNotFoundException e){
             prefix = "";
         }
         try {
-            suffix = NbtHelper.getSuffixes(stack).get(0).getName();
+            suffixes = NbtHelper.getSuffixes(stack);
+            suffix = suffixes.get(0).getName();
         } catch (ModifierNotFoundException e){
             suffix = "";
         }
@@ -60,7 +70,12 @@ public class ModSword extends ItemSword implements IModifiable {
                 TextFormatting.WHITE + prefix + " " +
                         TextFormatting.RESET + baseName + " " +
                         TextFormatting.WHITE + suffix);
-
+        if (GuiScreen.isShiftKeyDown()) {
+            prefixes.stream().forEach(p->advPrefix.add(p.getAdvTooltip()));
+            suffixes.stream().forEach(s->advSuffix.add(s.getAdvTooltip()));
+            tooltip.addAll(advPrefix);
+            tooltip.addAll(advSuffix);
+        }
 
     }
 
