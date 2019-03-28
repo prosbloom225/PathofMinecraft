@@ -1,4 +1,4 @@
 package com.prosbloom.pom.exception;
 
-public class ModifierNotFoundException extends Exception {
+public class ModifierNotFoundException extends ModifierException {
 }

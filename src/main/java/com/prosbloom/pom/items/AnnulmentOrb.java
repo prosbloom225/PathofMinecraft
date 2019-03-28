@@ -1,6 +1,7 @@
 package com.prosbloom.pom.items;
 
 import com.prosbloom.pom.Pom;
+import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.interfaces.ICurrency;
@@ -36,7 +37,7 @@ public class AnnulmentOrb extends Item implements ICurrency {
             try {
                 Modifier mod = mods.get(new Random().nextInt(mods.size()));
                 NbtHelper.clearModifier(stack, mod);
-            } catch (ModifierNotFoundException e) {
+            } catch (ModifierException e) {
                 System.out.println("Modifier not found: " + e.toString());
             }
         return stack;

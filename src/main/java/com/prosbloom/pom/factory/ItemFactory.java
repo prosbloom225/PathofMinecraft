@@ -1,6 +1,7 @@
 package com.prosbloom.pom.factory;
 
 import com.google.gson.Gson;
+import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierExistsException;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.items.ModItems;
@@ -57,13 +58,12 @@ public class ItemFactory {
     }
     public void rerollPrefix(ItemStack stack) {
         try {
-            Prefix prefix = NbtHelper.getPrefix(stack);
+            List<Prefix> prefix = NbtHelper.getPrefixes(stack);
             NbtHelper.clearPrefixes(stack);
-            NbtHelper.addPrefix(stack, rollPrefix(prefix));
-        } catch (ModifierExistsException e) {
+            for (Prefix p : prefix)
+                NbtHelper.addModifier(stack, rollPrefix(p));
+        } catch (ModifierException e) {
             System.out.println("Somehow the clear modifiers failed: " + e.toString());
-        } catch (ModifierNotFoundException e) {
-            System.out.println("Somehow the modifier we want to reroll is missing: " + e.toString());
         }
     }
 
@@ -80,13 +80,12 @@ public class ItemFactory {
     }
     public void rerollSuffix(ItemStack stack) {
         try {
-            Suffix suffix = NbtHelper.getSuffix(stack);
+            List<Suffix> suffix = NbtHelper.getSuffixes(stack);
             NbtHelper.clearSuffixes(stack);
-            NbtHelper.addSuffix(stack, rollSuffix(suffix));
-        } catch (ModifierExistsException e) {
+            for (Suffix s : suffix)
+                NbtHelper.addModifier(stack, rollSuffix(s));
+        } catch (ModifierException e) {
             System.out.println("Somehow the clear modifiers failed: " + e.toString());
-        } catch (ModifierNotFoundException e) {
-            System.out.println("Somehow the modifier we want to reroll is missing: " + e.toString());
         }
     }
 
@@ -97,8 +96,10 @@ public class ItemFactory {
 
         // roll the mods
         try {
-            NbtHelper.addPrefix(stack, rollPrefix(NbtHelper.getIlvl(stack)));
-            NbtHelper.addSuffix(stack, rollSuffix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addModifier(stack, rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addModifier(stack, rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addModifier(stack, rollSuffix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addModifier(stack, rollSuffix(NbtHelper.getIlvl(stack)));
         } catch (Exception e) {
             System.out.println(e.toString());
         }

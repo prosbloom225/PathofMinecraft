@@ -1,6 +1,7 @@
 package com.prosbloom.pom.items;
 
 import com.prosbloom.pom.Pom;
+import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.interfaces.ICurrency;
@@ -33,11 +34,7 @@ public class ScourOrb extends Item implements ICurrency {
         System.out.println("Scouring: " + stack.getItem().getUnlocalizedName());
         List<Modifier> mods = NbtHelper.getModifiers(stack);
         if (mods.size() > 0)
-            try {
-                NbtHelper.clearModifiers(stack);
-            } catch (ModifierNotFoundException e) {
-                System.out.println("Modifier not found: " + e.toString());
-            }
+            NbtHelper.clearModifiers(stack);
         return stack;
     }
 }

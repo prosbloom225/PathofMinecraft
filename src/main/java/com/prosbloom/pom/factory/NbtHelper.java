@@ -1,68 +1,107 @@
 package com.prosbloom.pom.factory;
 
-import com.prosbloom.pom.Pom;
-import com.prosbloom.pom.exception.ModifierExistsException;
+import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.model.Modifier;
 import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class NbtHelper {
 
-    public static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierExistsException {
+    private static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierException{
         checkOrCreateNbt(stack);
-        if (stack.getTagCompound().hasKey(PomTag.PREFIX))
-                throw new ModifierExistsException();
-        stack.getTagCompound().setTag(PomTag.PREFIX, prefix.toNbt());
+        if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.PREFIXES::equals))
+            throw new ModifierException();
+        // get first available prefix slot
+        String prefixTag = "";
+        for (int i=0; i <PomTag.PREFIXES.length; i++){
+            if (!stack.getTagCompound().hasKey(PomTag.PREFIXES[i])) {
+                prefixTag = PomTag.PREFIXES[i];
+                break;
+            }
+        }
+        if (prefixTag != "")
+            stack.getTagCompound().setTag(prefixTag, prefix.toNbt());
+        else
+            throw new ModifierException();
+
     }
-    public static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierExistsException{
+    private static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierException{
         checkOrCreateNbt(stack);
-        if (stack.getTagCompound().hasKey(PomTag.SUFFIX))
-            throw new ModifierExistsException();
-        stack.getTagCompound().setTag(PomTag.SUFFIX, suffix.toNbt());
+        if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.SUFFIXES::equals))
+            throw new ModifierException();
+        // get first available suffix slot
+        String suffixTag = "";
+        for (int i=0; i <PomTag.SUFFIXES.length; i++){
+            if (!stack.getTagCompound().hasKey(PomTag.SUFFIXES[i])) {
+                suffixTag = PomTag.SUFFIXES[i];
+                break;
+            }
+        }
+        if (suffixTag != "")
+            stack.getTagCompound().setTag(suffixTag, suffix.toNbt());
+        else
+            throw new ModifierException();
+    }
+    public static void addModifiers(ItemStack stack, List<Modifier> mods) throws ModifierException{
+        for (Modifier mod : mods)
+            addModifier(stack, mod);
+    }
+    public static void addModifier(ItemStack stack, Modifier mod) throws ModifierException {
+        if (mod instanceof Prefix)
+            addPrefix(stack, (Prefix) mod);
+        else if (mod instanceof Suffix)
+            addSuffix(stack, (Suffix) mod);
+        else
+            throw new ModifierException();
     }
 
-    public static ItemStack clearPrefixes(ItemStack stack) {
-        return clearModifier(stack, PomTag.PREFIX);
-    }
-    public static ItemStack clearSuffixes(ItemStack stack) {
-        return clearModifier(stack, PomTag.SUFFIX);
-    }
-    public static ItemStack clearModifier(ItemStack stack, String tag) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(tag))
-            stack.getTagCompound().removeTag(tag);
-        else
-            System.out.println("Couldn't find modifier to remove: " + tag);
-        return stack;
-    }
-    public static ItemStack clearModifier(ItemStack stack, Modifier mod) throws ModifierNotFoundException {
-        // this is dirty since im still separating suffix and prefixes
-        if (Pom.itemFactory.getPrefix(mod.getName()) != null)
-            return clearModifier(stack, PomTag.PREFIX);
-        else if (Pom.itemFactory.getSuffix(mod.getName()) != null)
-            return clearModifier(stack, PomTag.SUFFIX);
-        else
-            throw new ModifierNotFoundException();
-    }
-    public static ItemStack clearModifiers(ItemStack stack) throws ModifierNotFoundException {
-        List<Modifier> mods = NbtHelper.getModifiers(stack);
-        if (mods.size() > 0) {
-            for (Modifier mod : mods) {
-                NbtHelper.clearModifier(stack, mod);
+    public static void clearPrefixes(ItemStack stack) {
+        try {
+            for (Prefix prefix : getPrefixes(stack)) {
+                NbtHelper.clearModifier(stack, prefix);
             }
-            return stack;
-        } else {
-            throw new ModifierNotFoundException();
+        } catch (ModifierException e) {
+            System.out.println("No modifiers to clear..");
         }
+    }
+    public static void clearSuffixes(ItemStack stack) {
+        try {
+            for (Suffix suffix : getSuffixes(stack)) {
+                NbtHelper.clearModifier(stack, suffix);
+            }
+        } catch (ModifierException e) {
+            System.out.println("No modifiers to clear..");
+        }
+    }
+
+    public static void clearModifier(ItemStack stack, Modifier mod) throws ModifierException{
+        List<Modifier> mods = NbtHelper.getModifiers(stack);
+        for (Modifier modifier : mods)
+            if (mod.equals(modifier)) {
+                mods.remove(modifier);
+                break;
+            }
+        NbtHelper.clearModifiers(stack);
+        // reserialize
+        NbtHelper.addModifiers(stack, mods);
+    }
+    public static void clearModifiers(ItemStack stack) {
+        // this is cheaty, but more efficient
+        for (String p : PomTag.PREFIXES)
+            if (stack.getTagCompound().hasKey(p))
+                stack.getTagCompound().removeTag(p);
+        for (String s : PomTag.SUFFIXES)
+            if (stack.getTagCompound().hasKey(s))
+                stack.getTagCompound().removeTag(s);
     }
 
     private static boolean checkOrCreateNbt(ItemStack stack){
@@ -96,43 +135,32 @@ public class NbtHelper {
     }
 
 
-    public static Prefix getPrefix(ItemStack stack) throws ModifierNotFoundException{
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX))
-            return new Prefix(stack.getTagCompound().getCompoundTag(PomTag.PREFIX));
-            //return (Prefix)Pom.itemFactory.getPrefix(stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getString(PomTag.MOD_NAME));
-        else
-            throw new ModifierNotFoundException();
-    }
-    public static Suffix getSuffix(ItemStack stack) throws ModifierNotFoundException{
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.SUFFIX))
-            return new Suffix(stack.getTagCompound().getCompoundTag(PomTag.SUFFIX));
-            //return (Suffix)Pom.itemFactory.getSuffix(stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).getString(PomTag.MOD_NAME));
-        else
-            throw new ModifierNotFoundException();
-    }
-    public static boolean hasPrefix(ItemStack stack) {
-        // TODO - could probably optimize and just look for a tag
+    public static List<Prefix> getPrefixes(ItemStack stack) {
         return getModifiers(stack).stream()
-                .filter(mod->mod instanceof Prefix)
-                .collect(Collectors.toList()).size() > 0;
+                .filter(m->m instanceof Prefix)
+                .map(m->(Prefix)m)
+                .collect(Collectors.toList());
     }
-    public static boolean hasSuffix(ItemStack stack) {
-        // TODO - could probably optimize and just look for a tag
+    public static List<Suffix> getSuffixes(ItemStack stack) {
         return getModifiers(stack).stream()
-                .filter(mod->mod instanceof Suffix)
-                .collect(Collectors.toList()).size() > 0;
+                .filter(m->m instanceof Suffix)
+                .map(m->(Suffix)m)
+                .collect(Collectors.toList());
     }
 
     public static List<Modifier> getModifiers(ItemStack stack) {
         List<Modifier> modifiers = new ArrayList<>();
 
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX)) {
-            modifiers.add(Pom.itemFactory.getPrefix(stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getString(PomTag.MOD_NAME)));
+        for (String p : PomTag.PREFIXES) {
+            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(p)) {
+                modifiers.add(new Prefix(stack.getTagCompound().getCompoundTag(p)));
+            }
         }
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.SUFFIX)) {
-            modifiers.add(Pom.itemFactory.getSuffix(stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).getString(PomTag.MOD_NAME)));
+        for (String s : PomTag.SUFFIXES) {
+            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(s)) {
+                modifiers.add(new Suffix(stack.getTagCompound().getCompoundTag(s)));
+            }
         }
-
         return modifiers;
     }
 }
