@@ -135,35 +135,17 @@ public class NbtHelper {
     }
 
 
-    public static List<Prefix> getPrefixes(ItemStack stack) throws ModifierNotFoundException{
-        if (hasPrefix(stack))
-            return getModifiers(stack).stream()
-                    .filter(m->m instanceof Prefix)
-                    .map(m->(Prefix)m)
-                    .collect(Collectors.toList());
-        else
-            throw new ModifierNotFoundException();
-    }
-    public static List<Suffix> getSuffixes(ItemStack stack) throws ModifierNotFoundException{
-        if (hasSuffix(stack))
-            return getModifiers(stack).stream()
-                    .filter(m->m instanceof Suffix)
-                    .map(m->(Suffix)m)
-                    .collect(Collectors.toList());
-        else
-            throw new ModifierNotFoundException();
-    }
-    public static boolean hasPrefix(ItemStack stack) {
-        // TODO - could probably optimize and just look for a tag
+    public static List<Prefix> getPrefixes(ItemStack stack) {
         return getModifiers(stack).stream()
-                .filter(mod->mod instanceof Prefix)
-                .collect(Collectors.toList()).size() > 0;
+                .filter(m->m instanceof Prefix)
+                .map(m->(Prefix)m)
+                .collect(Collectors.toList());
     }
-    public static boolean hasSuffix(ItemStack stack) {
-        // TODO - could probably optimize and just look for a tag
+    public static List<Suffix> getSuffixes(ItemStack stack) {
         return getModifiers(stack).stream()
-                .filter(mod->mod instanceof Suffix)
-                .collect(Collectors.toList()).size() > 0;
+                .filter(m->m instanceof Suffix)
+                .map(m->(Suffix)m)
+                .collect(Collectors.toList());
     }
 
     public static List<Modifier> getModifiers(ItemStack stack) {

@@ -50,29 +50,28 @@ public class ModSword extends ItemSword implements IModifiable {
         String prefix, suffix;
         List<String> advPrefix = new ArrayList<>();
         List<String> advSuffix = new ArrayList<>();
-        List<Prefix> prefixes = new ArrayList<>();
-        List<Suffix> suffixes = new ArrayList<>();
+        List<Prefix> prefixes;
+        List<Suffix> suffixes;
 
-        try {
-            // TODO - naming item on first modifiers
-            prefixes = NbtHelper.getPrefixes(stack);
+        // TODO - naming item on first modifiers
+        prefixes = NbtHelper.getPrefixes(stack);
+        if (prefixes.size() > 0)
             prefix = prefixes.get(0).getName();
-        } catch (ModifierNotFoundException e){
+        else
             prefix = "";
-        }
-        try {
-            suffixes = NbtHelper.getSuffixes(stack);
+
+        suffixes = NbtHelper.getSuffixes(stack);
+        if (suffixes.size() > 0)
             suffix = suffixes.get(0).getName();
-        } catch (ModifierNotFoundException e){
+        else
             suffix = "";
-        }
         tooltip.add(
                 TextFormatting.WHITE + prefix + " " +
                         TextFormatting.RESET + baseName + " " +
                         TextFormatting.WHITE + suffix);
         if (GuiScreen.isShiftKeyDown()) {
-            prefixes.stream().forEach(p->advPrefix.add(p.getAdvTooltip()));
-            suffixes.stream().forEach(s->advSuffix.add(s.getAdvTooltip()));
+            prefixes.stream().forEach(p -> advPrefix.add(p.getAdvTooltip()));
+            suffixes.stream().forEach(s -> advSuffix.add(s.getAdvTooltip()));
             tooltip.addAll(advPrefix);
             tooltip.addAll(advSuffix);
         }
@@ -87,52 +86,46 @@ public class ModSword extends ItemSword implements IModifiable {
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+        List<Prefix> prefixes = NbtHelper.getPrefixes(stack);
+        List<Suffix> suffixes = NbtHelper.getSuffixes(stack);
         // Weapons
         if (slot == EntityEquipmentSlot.MAINHAND) {
             // Process prefixes
-            if (NbtHelper.hasPrefix(stack))
-                try {
+            if (prefixes.size() > 0) {
                 // TODO - just use first prefix
-                    Prefix prefix = NbtHelper.getPrefixes(stack).get(0);
-                    // Phys Dmg
-                    double dmgMod = (double)prefix.getDamageMod();
-                    final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
-                            .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_DAMAGE_MODIFIER))
-                            .findFirst();
-                    if (modifierOptional.isPresent()) {
-                        final AttributeModifier modifier = modifierOptional.get();
-                        double dmg = modifierOptional.get().getAmount()  * dmgMod;
-                        modifiers.remove(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), modifier);
-                        modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
-                                new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", dmg, 0));
-                    }
-                } catch (ModifierNotFoundException e) {
-                    System.out.println("Couldnt find modifier, though one exists: " + e.toString());
+                // Phys Dmg
+                double dmgMod = (double) prefixes.get(0).getDamageMod();
+                final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
+                        .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_DAMAGE_MODIFIER))
+                        .findFirst();
+                if (modifierOptional.isPresent()) {
+                    final AttributeModifier modifier = modifierOptional.get();
+                    double dmg = modifierOptional.get().getAmount() * dmgMod;
+                    modifiers.remove(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), modifier);
+                    modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
+                            new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", dmg, 0));
                 }
+            }
             // Suffix
-            if (NbtHelper.hasSuffix(stack))
-                try {
-                    Suffix suffix = NbtHelper.getSuffixes(stack).get(0);
-                    // Atk Spd
-                    double spdMod = suffix.getSpeedMod();
-                    final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName()).stream()
-                            .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_SPEED_MODIFIER))
-                            .findFirst();
-                    if (modifierOptional.isPresent()) {
-                        final AttributeModifier modifier = modifierOptional.get();
+            if (suffixes.size() > 0) {
+                // Atk Spd
+                double spdMod = suffixes.get(0).getSpeedMod();
+                final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName()).stream()
+                        .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_SPEED_MODIFIER))
+                        .findFirst();
+                if (modifierOptional.isPresent()) {
+                    final AttributeModifier modifier = modifierOptional.get();
 
-                        // spd calc is weird cuz it starts negative
-                        double val = modifierOptional.get().getAmount();
-                        double spd = val + Math.abs(val) * spdMod;
-                        modifiers.remove(SharedMonsterAttributes.ATTACK_SPEED.getName(), modifier);
-                        modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-                                new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", spd, 0));
-                    }
-                } catch (ModifierNotFoundException e) {
-                    System.out.println("Couldnt find modifier, though one exists: " + e.toString());
+                    // spd calc is weird cuz it starts negative
+                    double val = modifierOptional.get().getAmount();
+                    double spd = val + Math.abs(val) * spdMod;
+                    modifiers.remove(SharedMonsterAttributes.ATTACK_SPEED.getName(), modifier);
+                    modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
+                            new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", spd, 0));
                 }
+            }
         }
+
         return modifiers;
     }
-
 }
