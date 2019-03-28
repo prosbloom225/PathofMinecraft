@@ -53,4 +53,10 @@ public class Prefix extends Modifier {
                 (double)this.getDamageMod(), (double)this.getDamageModRange()[0], (double)this.getDamageModRange()[1]);
         return t;
     }
+
+    public boolean equals(Prefix other) {
+        return (super.equals(other)
+                && this.damageMod == other.getDamageMod()
+                && this.getDamageModRange() == other.getDamageModRange());
+    }
 }

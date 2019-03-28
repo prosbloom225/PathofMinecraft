@@ -1,16 +1,11 @@
 package com.prosbloom.pom.factory;
 
-import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierException;
-import com.prosbloom.pom.exception.ModifierExistsException;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
-import com.prosbloom.pom.exception.NoModifierSlotsAvailableException;
 import com.prosbloom.pom.model.Modifier;
 import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -21,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class NbtHelper {
 
-    public static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierException{
+    private static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierException{
         checkOrCreateNbt(stack);
         if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.PREFIXES::equals))
             throw new ModifierException();
@@ -39,7 +34,7 @@ public class NbtHelper {
             throw new ModifierException();
 
     }
-    public static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierException{
+    private static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierException{
         checkOrCreateNbt(stack);
         if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.SUFFIXES::equals))
             throw new ModifierException();
@@ -57,6 +52,19 @@ public class NbtHelper {
             throw new ModifierException();
     }
 
+    public static void addModifiers(ItemStack stack, List<Modifier> mods) throws ModifierException{
+        for (Modifier mod : mods)
+            addModifier(stack, mod);
+    }
+    public static void addModifier(ItemStack stack, Modifier mod) throws ModifierException {
+        if (mod instanceof Prefix)
+            addPrefix(stack, (Prefix) mod);
+        else if (mod instanceof Suffix)
+            addSuffix(stack, (Suffix) mod);
+        else
+            throw new ModifierException();
+    }
+
     public static ItemStack clearPrefixes(ItemStack stack) {
         return clearModifier(stack, PomTag.PREFIXES);
     }
@@ -64,47 +72,35 @@ public class NbtHelper {
         return clearModifier(stack, PomTag.SUFFIXES);
     }
 
-    public static ItemStack clearModifier(ItemStack stack, String []tags) {
+    private static ItemStack clearModifier(ItemStack stack, String []tags) {
         Arrays.stream(tags).forEach(tag->clearModifier(stack, tag));
         return stack;
     }
-    public static ItemStack clearModifier(ItemStack stack, String tag) {
+    private static ItemStack clearModifier(ItemStack stack, String tag) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(tag))
             stack.getTagCompound().removeTag(tag);
         else
             System.out.println("Couldn't find modifier to remove: " + tag);
         return stack;
     }
-    public static ItemStack clearModifier(ItemStack stack, Modifier mod) throws ModifierException{
-        // this is dirty since im still separating suffix and prefixes
-        String tag;
-        if (Pom.itemFactory.getPrefix(mod.getName()) != null) {
-            for (int i = 0; i < PomTag.PREFIXES.length; i++) {
-                Prefix prefix = new Prefix(stack.getTagCompound().getCompoundTag(PomTag.PREFIXES[i]));
-                if (prefix.getName().equals(mod.getName()))
-                    return clearModifier(stack, PomTag.PREFIXES[i]);
-            }
-            throw new ModifierException();
-        } else if (Pom.itemFactory.getSuffix(mod.getName()) != null)
-            for (int i = 0; i < PomTag.SUFFIXES.length; i++) {
-                Suffix suffix = new Suffix(stack.getTagCompound().getCompoundTag(PomTag.SUFFIXES[i]));
-                if (suffix.getName().equals(mod.getName()))
-                    return clearModifier(stack, PomTag.SUFFIXES[i]);
-            }
-        else
-            throw new ModifierNotFoundException();
-        return null;
-    }
-    public static ItemStack clearModifiers(ItemStack stack) throws ModifierException{
+    public static void clearModifier(ItemStack stack, Modifier mod) throws ModifierException{
         List<Modifier> mods = NbtHelper.getModifiers(stack);
-        if (mods.size() > 0) {
-            for (Modifier mod : mods) {
-                NbtHelper.clearModifier(stack, mod);
+        for (Modifier modifier : mods)
+            if (mod.equals(modifier)) {
+                mods.remove(modifier);
+                break;
             }
-            return stack;
-        } else {
-            throw new ModifierNotFoundException();
-        }
+        NbtHelper.clearModifiers(stack);
+        // reserialize
+        NbtHelper.addModifiers(stack, mods);
+    }
+    public static void clearModifiers(ItemStack stack) {
+        for (String p : PomTag.PREFIXES)
+            if (stack.getTagCompound().hasKey(p))
+                stack.getTagCompound().removeTag(p);
+        for (String s : PomTag.SUFFIXES)
+            if (stack.getTagCompound().hasKey(s))
+                stack.getTagCompound().removeTag(s);
     }
 
     private static boolean checkOrCreateNbt(ItemStack stack){

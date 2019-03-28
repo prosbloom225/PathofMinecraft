@@ -46,4 +46,10 @@ public class Suffix extends Modifier {
                         (double)this.getSpeedMod(), (double)this.getSpeedModRange()[0], (double)this.getSpeedModRange()[1]);
                 return t;
         }
+
+    public boolean equals(Suffix other) {
+        return (super.equals(other)
+                && this.getSpeedMod() == other.getSpeedMod()
+                && this.getSpeedModRange() == other.getSpeedModRange());
+    }
 }

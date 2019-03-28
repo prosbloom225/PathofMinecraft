@@ -63,4 +63,12 @@ public class Modifier {
         return String.format(TextFormatting.GRAY + "Mod \"%s\" (%d)\n" + TextFormatting.RESET,
                 this.getName(), this.getTier());
     }
+
+
+    public boolean equals(Modifier other) {
+        return (this.getName().equals(other.getName())
+                && this.getIlvl() == other.getIlvl()
+                && this.getTier() == other.getTier()
+        );
+    }
 }

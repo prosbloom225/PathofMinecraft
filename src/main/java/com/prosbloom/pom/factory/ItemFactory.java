@@ -61,7 +61,7 @@ public class ItemFactory {
             List<Prefix> prefix = NbtHelper.getPrefixes(stack);
             NbtHelper.clearPrefixes(stack);
             for (Prefix p : prefix)
-                NbtHelper.addPrefix(stack, rollPrefix(p));
+                NbtHelper.addModifier(stack, rollPrefix(p));
         } catch (ModifierException e) {
             System.out.println("Somehow the clear modifiers failed: " + e.toString());
         }
@@ -83,7 +83,7 @@ public class ItemFactory {
             List<Suffix> suffix = NbtHelper.getSuffixes(stack);
             NbtHelper.clearSuffixes(stack);
             for (Suffix s : suffix)
-                NbtHelper.addSuffix(stack, rollSuffix(s));
+                NbtHelper.addModifier(stack, rollSuffix(s));
         } catch (ModifierException e) {
             System.out.println("Somehow the clear modifiers failed: " + e.toString());
         }
@@ -96,10 +96,10 @@ public class ItemFactory {
 
         // roll the mods
         try {
-            NbtHelper.addPrefix(stack, rollPrefix(NbtHelper.getIlvl(stack)));
-            NbtHelper.addPrefix(stack, rollPrefix(NbtHelper.getIlvl(stack)));
-            NbtHelper.addSuffix(stack, rollSuffix(NbtHelper.getIlvl(stack)));
-            NbtHelper.addSuffix(stack, rollSuffix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addModifier(stack, rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addModifier(stack, rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addModifier(stack, rollSuffix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addModifier(stack, rollSuffix(NbtHelper.getIlvl(stack)));
         } catch (Exception e) {
             System.out.println(e.toString());
         }

@@ -34,11 +34,7 @@ public class ScourOrb extends Item implements ICurrency {
         System.out.println("Scouring: " + stack.getItem().getUnlocalizedName());
         List<Modifier> mods = NbtHelper.getModifiers(stack);
         if (mods.size() > 0)
-            try {
-                NbtHelper.clearModifiers(stack);
-            } catch (ModifierException e) {
-                System.out.println("Modifier not found: " + e.toString());
-            }
+            NbtHelper.clearModifiers(stack);
         return stack;
     }
 }
