@@ -51,7 +51,6 @@ public class NbtHelper {
         else
             throw new ModifierException();
     }
-
     public static void addModifiers(ItemStack stack, List<Modifier> mods) throws ModifierException{
         for (Modifier mod : mods)
             addModifier(stack, mod);
@@ -65,24 +64,25 @@ public class NbtHelper {
             throw new ModifierException();
     }
 
-    public static ItemStack clearPrefixes(ItemStack stack) {
-        return clearModifier(stack, PomTag.PREFIXES);
+    public static void clearPrefixes(ItemStack stack) {
+        try {
+            for (Prefix prefix : getPrefixes(stack)) {
+                NbtHelper.clearModifier(stack, prefix);
+            }
+        } catch (ModifierException e) {
+            System.out.println("No modifiers to clear..");
+        }
     }
-    public static ItemStack clearSuffixes(ItemStack stack) {
-        return clearModifier(stack, PomTag.SUFFIXES);
+    public static void clearSuffixes(ItemStack stack) {
+        try {
+            for (Suffix suffix : getSuffixes(stack)) {
+                NbtHelper.clearModifier(stack, suffix);
+            }
+        } catch (ModifierException e) {
+            System.out.println("No modifiers to clear..");
+        }
     }
 
-    private static ItemStack clearModifier(ItemStack stack, String []tags) {
-        Arrays.stream(tags).forEach(tag->clearModifier(stack, tag));
-        return stack;
-    }
-    private static ItemStack clearModifier(ItemStack stack, String tag) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(tag))
-            stack.getTagCompound().removeTag(tag);
-        else
-            System.out.println("Couldn't find modifier to remove: " + tag);
-        return stack;
-    }
     public static void clearModifier(ItemStack stack, Modifier mod) throws ModifierException{
         List<Modifier> mods = NbtHelper.getModifiers(stack);
         for (Modifier modifier : mods)
@@ -95,6 +95,7 @@ public class NbtHelper {
         NbtHelper.addModifiers(stack, mods);
     }
     public static void clearModifiers(ItemStack stack) {
+        // this is cheaty, but more efficient
         for (String p : PomTag.PREFIXES)
             if (stack.getTagCompound().hasKey(p))
                 stack.getTagCompound().removeTag(p);
