@@ -84,10 +84,8 @@ public class ItemFactory {
             NbtHelper.clearSuffixes(stack);
             for (Suffix s : suffix)
                 NbtHelper.addSuffix(stack, rollSuffix(s));
-        } catch (ModifierExistsException e) {
+        } catch (ModifierException e) {
             System.out.println("Somehow the clear modifiers failed: " + e.toString());
-        } catch (ModifierNotFoundException e) {
-            System.out.println("Somehow the modifier we want to reroll is missing: " + e.toString());
         }
     }
 
@@ -99,6 +97,8 @@ public class ItemFactory {
         // roll the mods
         try {
             NbtHelper.addPrefix(stack, rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addPrefix(stack, rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addSuffix(stack, rollSuffix(NbtHelper.getIlvl(stack)));
             NbtHelper.addSuffix(stack, rollSuffix(NbtHelper.getIlvl(stack)));
         } catch (Exception e) {
             System.out.println(e.toString());

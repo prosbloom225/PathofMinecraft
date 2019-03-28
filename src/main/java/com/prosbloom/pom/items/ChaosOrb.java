@@ -33,6 +33,10 @@ public class ChaosOrb extends Item implements ICurrency {
 
         try {
             NbtHelper.addPrefix(stack, Pom.itemFactory.rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addPrefix(stack, Pom.itemFactory.rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addPrefix(stack, Pom.itemFactory.rollPrefix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addSuffix(stack, Pom.itemFactory.rollSuffix(NbtHelper.getIlvl(stack)));
+            NbtHelper.addSuffix(stack, Pom.itemFactory.rollSuffix(NbtHelper.getIlvl(stack)));
             NbtHelper.addSuffix(stack, Pom.itemFactory.rollSuffix(NbtHelper.getIlvl(stack)));
         } catch (ModifierException e) {
             System.out.print("Somehow we tried to add a modifier when one exists: " + e.toString());

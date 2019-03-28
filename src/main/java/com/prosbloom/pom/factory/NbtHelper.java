@@ -25,8 +25,6 @@ public class NbtHelper {
         checkOrCreateNbt(stack);
         if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.PREFIXES::equals))
             throw new ModifierException();
-        //if (stack.getTagCompound().hasKey(PomTag.PREFIX))
-                //throw new ModifierExistsException();
         // get first available prefix slot
         String prefixTag = "";
         for (int i=0; i <PomTag.PREFIXES.length; i++){
@@ -41,18 +39,29 @@ public class NbtHelper {
             throw new ModifierException();
 
     }
-    public static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierExistsException{
+    public static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierException{
         checkOrCreateNbt(stack);
-        if (stack.getTagCompound().hasKey(PomTag.SUFFIX))
-            throw new ModifierExistsException();
-        stack.getTagCompound().setTag(PomTag.SUFFIX, suffix.toNbt());
+        if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.SUFFIXES::equals))
+            throw new ModifierException();
+        // get first available suffix slot
+        String suffixTag = "";
+        for (int i=0; i <PomTag.SUFFIXES.length; i++){
+            if (!stack.getTagCompound().hasKey(PomTag.SUFFIXES[i])) {
+                suffixTag = PomTag.SUFFIXES[i];
+                break;
+            }
+        }
+        if (suffixTag != "")
+            stack.getTagCompound().setTag(suffixTag, suffix.toNbt());
+        else
+            throw new ModifierException();
     }
 
     public static ItemStack clearPrefixes(ItemStack stack) {
         return clearModifier(stack, PomTag.PREFIXES);
     }
     public static ItemStack clearSuffixes(ItemStack stack) {
-        return clearModifier(stack, PomTag.SUFFIX);
+        return clearModifier(stack, PomTag.SUFFIXES);
     }
 
     public static ItemStack clearModifier(ItemStack stack, String []tags) {
@@ -77,9 +86,14 @@ public class NbtHelper {
             }
             throw new ModifierException();
         } else if (Pom.itemFactory.getSuffix(mod.getName()) != null)
-            return clearModifier(stack, PomTag.SUFFIX);
+            for (int i = 0; i < PomTag.SUFFIXES.length; i++) {
+                Suffix suffix = new Suffix(stack.getTagCompound().getCompoundTag(PomTag.SUFFIXES[i]));
+                if (suffix.getName().equals(mod.getName()))
+                    return clearModifier(stack, PomTag.SUFFIXES[i]);
+            }
         else
             throw new ModifierNotFoundException();
+        return null;
     }
     public static ItemStack clearModifiers(ItemStack stack) throws ModifierException{
         List<Modifier> mods = NbtHelper.getModifiers(stack);
@@ -163,15 +177,11 @@ public class NbtHelper {
                 modifiers.add(Pom.itemFactory.getPrefix(stack.getTagCompound().getCompoundTag(p).getString(PomTag.MOD_NAME)));
             }
         }
-        /*
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.PREFIX)) {
-            modifiers.add(Pom.itemFactory.getPrefix(stack.getTagCompound().getCompoundTag(PomTag.PREFIX).getString(PomTag.MOD_NAME)));
+        for (String s : PomTag.SUFFIXES) {
+            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(s)) {
+                modifiers.add(Pom.itemFactory.getSuffix(stack.getTagCompound().getCompoundTag(s).getString(PomTag.MOD_NAME)));
+            }
         }
-        */
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.SUFFIX)) {
-            modifiers.add(Pom.itemFactory.getSuffix(stack.getTagCompound().getCompoundTag(PomTag.SUFFIX).getString(PomTag.MOD_NAME)));
-        }
-
         return modifiers;
     }
 }
