@@ -174,12 +174,12 @@ public class NbtHelper {
 
         for (String p : PomTag.PREFIXES) {
             if (stack.hasTagCompound() && stack.getTagCompound().hasKey(p)) {
-                modifiers.add(Pom.itemFactory.getPrefix(stack.getTagCompound().getCompoundTag(p).getString(PomTag.MOD_NAME)));
+                modifiers.add(new Prefix(stack.getTagCompound().getCompoundTag(p)));
             }
         }
         for (String s : PomTag.SUFFIXES) {
             if (stack.hasTagCompound() && stack.getTagCompound().hasKey(s)) {
-                modifiers.add(Pom.itemFactory.getSuffix(stack.getTagCompound().getCompoundTag(s).getString(PomTag.MOD_NAME)));
+                modifiers.add(new Suffix(stack.getTagCompound().getCompoundTag(s)));
             }
         }
         return modifiers;
