@@ -1,5 +1,6 @@
 package com.prosbloom.pom.factory;
 
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.model.Modifier;
@@ -104,13 +105,13 @@ public class NbtHelper {
                 stack.getTagCompound().removeTag(s);
     }
 
+    // item level nbt
     private static boolean checkOrCreateNbt(ItemStack stack){
         // any nbt initialization can happen here
         if (!stack.hasTagCompound())
             stack.setTagCompound(new NBTTagCompound());
         return true;
     }
-
     public static boolean isDummy(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.DUMMY))
             return true;
@@ -120,6 +121,16 @@ public class NbtHelper {
         checkOrCreateNbt(stack);
         stack.getTagCompound().setString(PomTag.DUMMY, "dummy");
     }
+    public static LibMisc.Rarity getRarity(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.RARITY))
+                return LibMisc.Rarity.valueOf(stack.getTagCompound().getString(PomTag.RARITY));
+        else return LibMisc.Rarity.NORMAL;
+    }
+    public static void setRarity(ItemStack stack, LibMisc.Rarity rarity) {
+        checkOrCreateNbt(stack);
+        stack.getTagCompound().setString(PomTag.RARITY, rarity.toString());
+    }
+
 
     public static int getIlvl(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.ILVL))
