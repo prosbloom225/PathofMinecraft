@@ -94,7 +94,9 @@ public class ModSword extends ItemSword implements IModifiable {
             if (prefixes.size() > 0) {
                 // TODO - just use first prefix
                 // Phys Dmg
-                double dmgMod = (double) prefixes.get(0).getDamageMod();
+                double dmgMod = 1.0;
+                for (Prefix prefix : prefixes)
+                    dmgMod += prefix.getDamageMod();
                 final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
                         .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_DAMAGE_MODIFIER))
                         .findFirst();
@@ -109,7 +111,10 @@ public class ModSword extends ItemSword implements IModifiable {
             // Suffix
             if (suffixes.size() > 0) {
                 // Atk Spd
-                double spdMod = suffixes.get(0).getSpeedMod();
+                double spdMod = 1.0;
+                for (Suffix suffix : suffixes) {
+                    spdMod += suffix.getSpeedMod();
+                }
                 final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName()).stream()
                         .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_SPEED_MODIFIER))
                         .findFirst();
