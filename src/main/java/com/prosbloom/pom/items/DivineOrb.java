@@ -28,6 +28,12 @@ public class DivineOrb extends Item implements ICurrency {
     }
 
     @Override
+    public boolean canProcess(ItemStack stack) {
+        // TODO - implement
+        return true;
+    }
+
+    @Override
     public ItemStack process(ItemStack stack) {
         System.out.println("Divining: " + stack.getItem().getUnlocalizedName());
         List<Modifier> mods = NbtHelper.getModifiers(stack);

@@ -26,6 +26,12 @@ public class ChaosOrb extends Item implements ICurrency {
     }
 
     @Override
+    public boolean canProcess(ItemStack stack) {
+        // TODO - implement
+        return true;
+    }
+
+    @Override
     public ItemStack process(ItemStack stack) {
         System.out.println("Chaos Orbing: " + stack.getItem().getUnlocalizedName());
         NbtHelper.clearPrefixes(stack);

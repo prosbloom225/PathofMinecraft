@@ -92,7 +92,6 @@ public class ModSword extends ItemSword implements IModifiable {
         if (slot == EntityEquipmentSlot.MAINHAND) {
             // Process prefixes
             if (prefixes.size() > 0) {
-                // TODO - just use first prefix
                 // Phys Dmg
                 double dmgMod = 1.0;
                 for (Prefix prefix : prefixes)
@@ -112,9 +111,8 @@ public class ModSword extends ItemSword implements IModifiable {
             if (suffixes.size() > 0) {
                 // Atk Spd
                 double spdMod = 1.0;
-                for (Suffix suffix : suffixes) {
+                for (Suffix suffix : suffixes)
                     spdMod += suffix.getSpeedMod();
-                }
                 final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName()).stream()
                         .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_SPEED_MODIFIER))
                         .findFirst();

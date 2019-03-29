@@ -34,10 +34,18 @@ public class ExaltedOrb extends Item implements ICurrency {
     }
 
     @Override
+    public boolean canProcess(ItemStack stack) {
+        // TODO - implement
+        return true;
+    }
+
+    @Override
     public ItemStack process(ItemStack stack) {
         System.out.println("Exalting: " + stack.getItem().getUnlocalizedName());
         List<Modifier> mods = NbtHelper.getModifiers(stack);
-        if (mods.size() > 0)
+        // last check for modifier space to add a mod
+        if (NbtHelper.getPrefixes(stack).size() < PomTag.PREFIXES.length ||
+                NbtHelper.getSuffixes(stack).size() < PomTag.SUFFIXES.length) {
             try {
                 boolean redo = true;
                 Modifier mod = null;
@@ -57,6 +65,7 @@ public class ExaltedOrb extends Item implements ICurrency {
             } catch (ModifierException e) {
                 System.out.println("Modifier not found: " + e.toString());
             }
+        }
         return stack;
     }
 }
