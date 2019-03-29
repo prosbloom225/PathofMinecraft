@@ -27,6 +27,7 @@ public class PomEvents {
         ItemStack rightStack = event.getIngredientInput();
         ItemStack outputStack = event.getItemResult();
         ItemStack leftStack = event.getItemInput();
+        // TODO - event seems to be triggering twice.  really need to clean this up.
 
         if (rightStack.getItem() instanceof ICurrency) {
             // clicking item out of output slot leaves it in the anvil
