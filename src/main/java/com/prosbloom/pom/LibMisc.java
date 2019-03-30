@@ -7,20 +7,4 @@ public class LibMisc {
         RARE,
         UNIQUE;
     };
-    /*
-    public enum Rarity {
-        NORMAL("normal"),
-        MAGIC("magic"),
-        RARE("rare"),
-        UNIQUE("unique");
-        private String name;
-
-        Rarity(String name) {
-            this.name = name;
-        }
-        public String getName(){
-            return this.name;
-        }
-    };
-    */
 }
