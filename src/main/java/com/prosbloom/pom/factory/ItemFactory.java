@@ -94,7 +94,7 @@ public class ItemFactory {
     public ItemStack testGenerate(int ilvl) {
         ItemStack stack = new ItemStack(ModItems.modSword);
         NbtHelper.setIlvl(stack, ilvl); //this generates the base nbt
-        NbtHelper.setRarity(stack, LibMisc.Rarity.RARE);
+        NbtHelper.setRarity(stack, LibMisc.Rarity.getRandomRarity());
 
         // roll the mods
         try {

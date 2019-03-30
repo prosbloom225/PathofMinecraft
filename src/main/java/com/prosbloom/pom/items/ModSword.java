@@ -72,16 +72,16 @@ public class ModSword extends ItemSword implements IModifiable {
                 name = TextFormatting.WHITE + "";
                 break;
             case MAGIC:
-                tooltip.add(TextFormatting.BLUE+ "");
+                name = TextFormatting.BLUE+ "";
                 break;
             case RARE:
                 name = TextFormatting.YELLOW+ "";
                 break;
             case UNIQUE:
-                tooltip.add(TextFormatting.RED+ "");
+                name = TextFormatting.RED+ "";
                 break;
             default:
-                tooltip.add(TextFormatting.WHITE+ "");
+                name = TextFormatting.WHITE+ "";
         }
         tooltip.add(String.format("%s %s %s %s", name, prefix, baseName, suffix));
         //tooltip.add(prefix + " " + baseName + " " + suffix);
