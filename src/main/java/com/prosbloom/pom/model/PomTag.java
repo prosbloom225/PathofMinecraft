@@ -5,6 +5,7 @@ public class PomTag {
     public static final String []SUFFIXES = new String[]{"suffix1", "suffix2", "suffix3"};
     public static final String ILVL = "ilvl";
     public static final String DUMMY = "dummy";
+    public static final String RARITY = "rarity";
 
 
     public static final String MOD_NAME = "name";

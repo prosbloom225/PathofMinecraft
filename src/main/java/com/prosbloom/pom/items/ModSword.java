@@ -1,6 +1,7 @@
 package com.prosbloom.pom.items;
 
 import com.google.common.collect.Multimap;
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
@@ -46,7 +47,7 @@ public class ModSword extends ItemSword implements IModifiable {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
 
-        tooltip.add(TextFormatting.BLUE + "(" + NbtHelper.getIlvl(stack) + ")");
+        tooltip.add("(" + NbtHelper.getIlvl(stack) + ")");
         String prefix, suffix;
         List<String> advPrefix = new ArrayList<>();
         List<String> advSuffix = new ArrayList<>();
@@ -65,10 +66,24 @@ public class ModSword extends ItemSword implements IModifiable {
             suffix = suffixes.get(0).getName();
         else
             suffix = "";
-        tooltip.add(
-                TextFormatting.WHITE + prefix + " " +
-                        TextFormatting.RESET + baseName + " " +
-                        TextFormatting.WHITE + suffix);
+        String name;
+        switch (NbtHelper.getRarity(stack)) {
+            case NORMAL:
+                name = TextFormatting.WHITE + "";
+                break;
+            case MAGIC:
+                name = TextFormatting.BLUE+ "";
+                break;
+            case RARE:
+                name = TextFormatting.YELLOW+ "";
+                break;
+            case UNIQUE:
+                name = TextFormatting.RED+ "";
+                break;
+            default:
+                name = TextFormatting.WHITE+ "";
+        }
+        tooltip.add(String.format("%s %s %s %s", name, prefix, baseName, suffix));
         if (GuiScreen.isShiftKeyDown()) {
             prefixes.stream().forEach(p -> advPrefix.add(p.getAdvTooltip()));
             suffixes.stream().forEach(s -> advSuffix.add(s.getAdvTooltip()));

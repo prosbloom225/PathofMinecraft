@@ -1,6 +1,7 @@
 package com.prosbloom.pom.factory;
 
 import com.google.gson.Gson;
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierExistsException;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
@@ -93,6 +94,7 @@ public class ItemFactory {
     public ItemStack testGenerate(int ilvl) {
         ItemStack stack = new ItemStack(ModItems.modSword);
         NbtHelper.setIlvl(stack, ilvl); //this generates the base nbt
+        NbtHelper.setRarity(stack, LibMisc.Rarity.getRandomRarity());
 
         // roll the mods
         try {
