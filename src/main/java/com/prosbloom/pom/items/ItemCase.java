@@ -13,11 +13,10 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCase extends Item {
-    public ItemCase() {
-        super();
-        setUnlocalizedName("itemcase");
-        setRegistryName(Pom.MODID, "itemcase");
+public class ItemCase extends BaseItem {
+    @Override
+    public String getBaseName() {
+        return "itemcase";
     }
 
     @Override
@@ -30,9 +29,4 @@ public class ItemCase extends Item {
         return new ActionResult<>(EnumActionResult.PASS, itemStack);
     }
 
-
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-    }
 }
