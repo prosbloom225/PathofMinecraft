@@ -29,8 +29,9 @@ public class DivineOrb extends Item implements ICurrency {
 
     @Override
     public boolean canProcess(ItemStack stack) {
-        // TODO - implement
-        return true;
+        if (NbtHelper.getModifiers(stack).size() > 0)
+            return true;
+        return false;
     }
 
     @Override

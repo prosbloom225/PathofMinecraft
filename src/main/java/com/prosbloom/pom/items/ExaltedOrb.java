@@ -1,5 +1,6 @@
 package com.prosbloom.pom.items;
 
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierExistsException;
@@ -35,8 +36,10 @@ public class ExaltedOrb extends Item implements ICurrency {
 
     @Override
     public boolean canProcess(ItemStack stack) {
-        // TODO - implement
-        return true;
+        int modCount = NbtHelper.getModifiers(stack).size();
+        if (modCount < (PomTag.PREFIXES.length + PomTag.SUFFIXES.length) && NbtHelper.getRarity(stack) == LibMisc.Rarity.RARE)
+            return true;
+        return false;
     }
 
     @Override

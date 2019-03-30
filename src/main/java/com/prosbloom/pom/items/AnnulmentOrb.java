@@ -31,8 +31,9 @@ public class AnnulmentOrb extends Item implements ICurrency {
 
     @Override
     public boolean canProcess(ItemStack stack) {
-        // TODO - implement
-        return true;
+        if (NbtHelper.getModifiers(stack).size() >= 1)
+            return true;
+        return false;
     }
 
     @Override

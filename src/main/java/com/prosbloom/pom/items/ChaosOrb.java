@@ -1,5 +1,6 @@
 package com.prosbloom.pom.items;
 
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierExistsException;
@@ -28,7 +29,9 @@ public class ChaosOrb extends Item implements ICurrency {
     @Override
     public boolean canProcess(ItemStack stack) {
         // TODO - implement
-        return true;
+        if (NbtHelper.getRarity(stack) == LibMisc.Rarity.RARE)
+            return true;
+        return false;
     }
 
     @Override

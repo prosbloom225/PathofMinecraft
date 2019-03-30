@@ -56,7 +56,6 @@ public class PomEvents {
     {
         ItemStack rightItem = event.getRight();
         ItemStack leftItem = event.getLeft();
-        // TODO - should check if the currency can apply here.  ie full on prefixes, dont let them exalt
         if (leftItem.getItem() instanceof ModSword && rightItem.getItem() instanceof ICurrency && ((ICurrency)rightItem.getItem()).canProcess(leftItem)) {
             // we need to set a valid cost and output item to give the player something in output slot
             event.setCost(1);
