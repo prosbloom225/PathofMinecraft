@@ -21,17 +21,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
 
-public class ExaltedOrb extends Item implements ICurrency {
-
-    public ExaltedOrb() {
-        super();
-        setUnlocalizedName("exaltedorb");
-        setRegistryName(Pom.MODID, "exaltedorb");
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+public class ExaltedOrb extends BaseItem implements ICurrency {
+    @Override
+    public String getBaseName() {
+        return "exaltedorb";
     }
 
     @Override

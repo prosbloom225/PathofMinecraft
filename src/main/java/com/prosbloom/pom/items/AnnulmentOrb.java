@@ -16,17 +16,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
 
-public class AnnulmentOrb extends Item implements ICurrency {
+public class AnnulmentOrb extends BaseItem implements ICurrency {
 
-    public AnnulmentOrb() {
-        super();
-        setUnlocalizedName("annulmentorb");
-        setRegistryName(Pom.MODID, "annulmentorb");
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+    @Override
+    public String getBaseName() {
+        return "annulmentorb";
     }
 
     @Override

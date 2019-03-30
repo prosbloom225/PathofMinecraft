@@ -14,17 +14,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class DivineOrb extends Item implements ICurrency {
-
-    public DivineOrb() {
-        super();
-        setUnlocalizedName("divineorb");
-        setRegistryName(Pom.MODID, "divineorb");
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+public class DivineOrb extends BaseItem implements ICurrency {
+    @Override
+    public String getBaseName() {
+        return "divineorb";
     }
 
     @Override
