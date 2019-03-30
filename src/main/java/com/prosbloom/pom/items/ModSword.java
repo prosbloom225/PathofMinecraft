@@ -66,7 +66,7 @@ public class ModSword extends ItemSword implements IModifiable {
             suffix = suffixes.get(0).getName();
         else
             suffix = "";
-        String name = "";
+        String name;
         switch (NbtHelper.getRarity(stack)) {
             case NORMAL:
                 name = TextFormatting.WHITE + "";
@@ -84,7 +84,6 @@ public class ModSword extends ItemSword implements IModifiable {
                 name = TextFormatting.WHITE+ "";
         }
         tooltip.add(String.format("%s %s %s %s", name, prefix, baseName, suffix));
-        //tooltip.add(prefix + " " + baseName + " " + suffix);
         if (GuiScreen.isShiftKeyDown()) {
             prefixes.stream().forEach(p -> advPrefix.add(p.getAdvTooltip()));
             suffixes.stream().forEach(s -> advSuffix.add(s.getAdvTooltip()));
