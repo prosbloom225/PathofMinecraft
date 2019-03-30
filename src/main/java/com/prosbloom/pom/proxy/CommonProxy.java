@@ -2,6 +2,7 @@ package com.prosbloom.pom.proxy;
 
 import com.prosbloom.pom.events.PomEvents;
 import com.prosbloom.pom.items.*;
+import com.prosbloom.pom.model.Modifier;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
@@ -38,5 +39,6 @@ public class CommonProxy {
         event.getRegistry().register(new DivineOrb());
         event.getRegistry().register(new ScourOrb());
         event.getRegistry().register(new ExaltedOrb());
+        event.getRegistry().register(new AlchemyOrb());
     }
 }

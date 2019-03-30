@@ -27,6 +27,9 @@ public class ModItems {
     @GameRegistry.ObjectHolder("pom:exaltedorb")
     public static ExaltedOrb exaltedOrb;
 
+    @GameRegistry.ObjectHolder("pom:alchemyorb")
+    public static AlchemyOrb alchemyOrb;
+
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         modSword.initModel();
@@ -36,6 +39,7 @@ public class ModItems {
         divineOrb.initModel();
         scourOrb.initModel();
         exaltedOrb.initModel();
+        alchemyOrb.initModel();
     }
 
 }
