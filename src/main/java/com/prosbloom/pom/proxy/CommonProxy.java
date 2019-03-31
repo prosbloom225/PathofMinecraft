@@ -42,5 +42,6 @@ public class CommonProxy {
         event.getRegistry().register(new AlchemyOrb());
         event.getRegistry().register(new AlterationOrb());
         event.getRegistry().register(new AugmentOrb());
+        event.getRegistry().register(new RegalOrb());
     }
 }

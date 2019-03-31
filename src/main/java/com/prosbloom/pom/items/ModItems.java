@@ -36,6 +36,9 @@ public class ModItems {
     @GameRegistry.ObjectHolder("pom:augmentorb")
     public static AugmentOrb augmentOrb;
 
+    @GameRegistry.ObjectHolder("pom:regalorb")
+    public static RegalOrb regalOrb;
+
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         modSword.initModel();
@@ -48,6 +51,7 @@ public class ModItems {
         alchemyOrb.initModel();
         alterationOrb.initModel();
         augmentOrb.initModel();
+        regalOrb.initModel();
     }
 
 }
