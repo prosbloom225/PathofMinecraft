@@ -13,6 +13,7 @@ public class BaseItem extends Item {
         super();
         setUnlocalizedName(this.getBaseName());
         setRegistryName(Pom.MODID, this.getBaseName());
+        setCreativeTab(Pom.tabPom);
     }
 
     public String getBaseName() {
