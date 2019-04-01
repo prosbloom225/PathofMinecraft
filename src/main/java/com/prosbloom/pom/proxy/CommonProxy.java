@@ -33,6 +33,7 @@ public class CommonProxy {
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().register(new ModSword());
+        event.getRegistry().register(new ModBow());
         event.getRegistry().register(new ItemCase());
         event.getRegistry().register(new ChaosOrb());
         event.getRegistry().register(new AnnulmentOrb());

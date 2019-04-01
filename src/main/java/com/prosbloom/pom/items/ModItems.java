@@ -10,6 +10,9 @@ public class ModItems {
     @GameRegistry.ObjectHolder("pom:modsword")
     public static ModSword modSword;
 
+    @GameRegistry.ObjectHolder("pom:modbow")
+    public static ModBow modBow;
+
     @GameRegistry.ObjectHolder("pom:itemcase")
     public static ItemCase itemCase;
 
@@ -43,6 +46,7 @@ public class ModItems {
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         modSword.initModel();
+        modBow.initModel();
         itemCase.initModel();
         chaosOrb.initModel();
         annulmentOrb.initModel();
