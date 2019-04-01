@@ -2,7 +2,7 @@ package com.prosbloom.pom.proxy;
 
 import com.prosbloom.pom.events.PomEvents;
 import com.prosbloom.pom.items.*;
-import com.prosbloom.pom.model.Modifier;
+import com.prosbloom.pom.items.currency.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;

@@ -1,4 +1,4 @@
-package com.prosbloom.pom.items;
+package com.prosbloom.pom.items.currency;
 
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;

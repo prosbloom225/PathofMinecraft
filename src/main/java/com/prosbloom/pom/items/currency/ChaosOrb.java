@@ -1,4 +1,4 @@
-package com.prosbloom.pom.items;
+package com.prosbloom.pom.items.currency;
 
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
@@ -6,6 +6,7 @@ import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.exception.ModifierExistsException;
 import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
+import com.prosbloom.pom.items.BaseItem;
 import com.prosbloom.pom.items.interfaces.ICurrency;
 import com.prosbloom.pom.model.Modifier;
 import com.prosbloom.pom.model.PomTag;

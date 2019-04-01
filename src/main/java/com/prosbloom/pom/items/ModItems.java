@@ -1,5 +1,6 @@
 package com.prosbloom.pom.items;
 
+import com.prosbloom.pom.items.currency.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
