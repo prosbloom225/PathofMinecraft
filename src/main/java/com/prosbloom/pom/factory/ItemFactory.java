@@ -22,13 +22,11 @@ public class ItemFactory {
     private static Logger logger;
     private static Gson gson;
     private Modifiers modifiers;
-    //private List<Modifier> prefixes;
-
 
     public ItemFactory() {
         gson = new Gson();
         //Type listType = new TypeToken<List<Modifiers>>() {}.getType();
-        modifiers = gson.fromJson(new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/prefixes.json"))), Modifiers.class);
+        modifiers = gson.fromJson(new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/1hSword.json"))), Modifiers.class);
     }
     // TODO  - prefix and suffix shouldn't be separate.  should refactor to just modifiers with prefix/suffix being a property
     public Modifier getPrefix (String name) {
