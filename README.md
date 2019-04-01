@@ -28,6 +28,7 @@ Path of Exile ported to minecraft
 - Item requirements (lvl/attrib)
 - Player levels
 - Equipment slots (baubles-like)
+- Hideout
 
 ## Global
 - Skill gems???

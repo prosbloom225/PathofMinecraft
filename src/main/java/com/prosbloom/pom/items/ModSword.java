@@ -1,11 +1,8 @@
 package com.prosbloom.pom.items;
 
 import com.google.common.collect.Multimap;
-import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
-import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
-import com.prosbloom.pom.items.interfaces.IModifiable;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
 import net.minecraft.client.gui.GuiScreen;
@@ -21,14 +18,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.tools.reflect.ToolBoxError;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ModSword extends ItemSword implements IModifiable {
+public class ModSword extends ItemSword {
     protected String baseName = "modsword";
 
     public ModSword() {
@@ -91,11 +87,6 @@ public class ModSword extends ItemSword implements IModifiable {
             tooltip.addAll(advSuffix);
         }
 
-    }
-
-    // deprecated
-    public void refreshMods(ItemStack stack) {
-        System.out.println("Refreshing mods for item: " + baseName);
     }
 
     @Override
