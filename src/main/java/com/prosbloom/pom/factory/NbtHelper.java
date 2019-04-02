@@ -2,7 +2,6 @@ package com.prosbloom.pom.factory;
 
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.exception.ModifierException;
-import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.model.Modifier;
 import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
@@ -21,35 +20,15 @@ import java.util.stream.Collectors;
 public class NbtHelper {
 
     private static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierException{
-        PomItemData item = checkOrCreateNbt(stack);
-        /*
-        if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.PREFIXES::equals))
+        PomItemData item = getNbt(stack);
+        if (item.prefixes.size() < PomTag.PREFIXES.length) {
+            item.prefixes.add(prefix);
+            writeNbt(stack, item);
+        } else
             throw new ModifierException();
-        // get first available prefix slot
-        String prefixTag = "";
-        for (int i=0; i <PomTag.PREFIXES.length; i++){
-            if (!stack.getTagCompound().hasKey(PomTag.PREFIXES[i])) {
-                prefixTag = PomTag.PREFIXES[i];
-                break;
-            }
-        }
-        if (prefixTag != "")
-            stack.getTagCompound().setTag(prefixTag, prefix.toNbt());
-        else
-            throw new ModifierException();
-        */
-
-        for (int i=0; i < item.prefixes.length; i++)
-            if (item.prefixes[i] == null) {
-                item.prefixes[i] = prefix;
-                new Writer().write(stack.getTagCompound(), item);
-                return;
-            }
-        throw new ModifierException();
-
     }
     private static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierException{
-        checkOrCreateNbt(stack);
+        getNbt(stack);
         if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.SUFFIXES::equals))
             throw new ModifierException();
         // get first available suffix slot
@@ -119,26 +98,33 @@ public class NbtHelper {
     }
 
     // item level nbt
-    private static PomItemData checkOrCreateNbt(ItemStack stack){
+    public static PomItemData getNbt(ItemStack stack){
         // any nbt initialization can happen here
-        if (!stack.hasTagCompound()) {
-            stack.setTagCompound(new NBTTagCompound());
-            PomItemData item = new PomItemData();
-            new Writer().write(stack.getTagCompound(), item);
-            return item;
-        } else {
-            PomItemData item = new PomItemData();
-            new Reader().read(stack.getTagCompound(), item);
-            return item;
+        PomItemData item = new PomItemData();
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.POM_TAG)) {
+            Reader.read(stack.getTagCompound().getCompoundTag(PomTag.POM_TAG), item);
         }
+        return item;
     }
+    public static void writeNbt(ItemStack stack, PomItemData item) {
+        NBTTagCompound nbt,pomNbt;
+        if (stack.hasTagCompound())
+            nbt = stack.getTagCompound();
+        else
+            nbt = new NBTTagCompound();
+        pomNbt = new NBTTagCompound();
+        Writer.write(pomNbt, item);
+        nbt.setTag(PomTag.POM_TAG, pomNbt);
+        stack.setTagCompound(nbt);
+    }
+
     public static boolean isDummy(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.DUMMY))
             return true;
         return false;
     }
     public static void setDummy(ItemStack stack, boolean dummy){
-        checkOrCreateNbt(stack);
+        getNbt(stack);
         stack.getTagCompound().setString(PomTag.DUMMY, "dummy");
     }
     public static LibMisc.Rarity getRarity(ItemStack stack) {
@@ -147,13 +133,13 @@ public class NbtHelper {
         else return LibMisc.Rarity.NORMAL;
     }
     public static void setRarity(ItemStack stack, LibMisc.Rarity rarity) {
-        checkOrCreateNbt(stack);
+        getNbt(stack);
         stack.getTagCompound().setString(PomTag.RARITY, rarity.toString());
     }
 
 
     public static int getIlvl(ItemStack stack) {
-        PomItemData item = checkOrCreateNbt(stack);
+        PomItemData item = getNbt(stack);
         return item.ilvl;
         /*
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.ILVL))
@@ -165,20 +151,16 @@ public class NbtHelper {
 
     }
     public static void setIlvl(ItemStack stack, int ilvl) {
-        PomItemData item = checkOrCreateNbt(stack);
+        PomItemData item = getNbt(stack);
         item.ilvl = ilvl;
-        Writer writer = new Writer();
-        writer.write(stack.getTagCompound(), item);
-        //stack.getTagCompound().setInteger(PomTag.ILVL, ilvl);
+        writeNbt(stack, item);
     }
 
 
     public static List<Prefix> getPrefixes(ItemStack stack) {
-        checkOrCreateNbt(stack);
-        PomItemData item = new PomItemData();
-        new Reader().read(stack.getTagCompound(), item);
+        PomItemData item = getNbt(stack);
         // filter out the blanks
-        return Arrays.asList(item.prefixes).stream().filter(p->p!=null).collect(Collectors.toList());
+        return (item.prefixes).stream().filter(p->p!=null).collect(Collectors.toList());
         /*
         return getModifiers(stack).stream()
                 .filter(m->m instanceof Prefix)
@@ -201,9 +183,7 @@ public class NbtHelper {
                 modifiers.add(new Prefix(stack.getTagCompound().getCompoundTag(p)));
             }
         }
-        checkOrCreateNbt(stack);
-        PomItemData item = new PomItemData();
-        new Reader().read(stack.getTagCompound(), item);
+        PomItemData item = getNbt(stack);
         for (Prefix p : item.prefixes)
             modifiers.add(p);
         for (String s : PomTag.SUFFIXES) {

@@ -9,9 +9,9 @@ import net.minecraft.util.text.TextFormatting;
 public class Prefix extends Modifier {
 
     @Store
-    private float damageMod = 0;
+    public float damageMod = 0;
     @Store
-    private float[] damageModRange;
+    public float[] damageModRange;
 
     public Prefix(String name, int ilvl, int tier, float[] damageModRange, float damageMod) {
         super(name, ilvl, tier);

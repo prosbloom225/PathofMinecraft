@@ -5,6 +5,7 @@ import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
+import com.prosbloom.pom.save.PomItemData;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -43,19 +44,22 @@ public class ModSword extends ItemSword {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
 
-        tooltip.add("(" + NbtHelper.getIlvl(stack) + ")");
-        String prefix, suffix;
+        PomItemData item = NbtHelper.getNbt(stack);
+        tooltip.add("(" + item.ilvl + ")");
+        String suffix;
         List<String> advPrefix = new ArrayList<>();
         List<String> advSuffix = new ArrayList<>();
         List<Prefix> prefixes;
         List<Suffix> suffixes;
 
         // TODO - naming item on first modifiers
-        prefixes = NbtHelper.getPrefixes(stack);
-        if (prefixes.size() > 0)
-            prefix = prefixes.get(0).getName();
-        else
-            prefix = "";
+        String prefix = "";
+        for (Prefix p : item.prefixes){
+            if (p != null) {
+                prefix = p.getName();
+                break;
+            }
+        }
 
         suffixes = NbtHelper.getSuffixes(stack);
         if (suffixes.size() > 0)
@@ -81,7 +85,8 @@ public class ModSword extends ItemSword {
         }
         tooltip.add(String.format("%s %s %s %s", name, prefix, baseName, suffix));
         if (GuiScreen.isShiftKeyDown()) {
-            prefixes.stream().forEach(p -> advPrefix.add(p.getAdvTooltip()));
+            for (Prefix p : item.prefixes)
+                advPrefix.add(p.getAdvTooltip());
             suffixes.stream().forEach(s -> advSuffix.add(s.getAdvTooltip()));
             tooltip.addAll(advPrefix);
             tooltip.addAll(advSuffix);

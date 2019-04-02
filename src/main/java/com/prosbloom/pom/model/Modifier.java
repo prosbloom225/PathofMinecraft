@@ -9,11 +9,11 @@ import net.minecraft.util.text.TextFormatting;
 public class Modifier {
 
     @Store
-    private String name;
+    public String name;
     @Store
-    private int ilvl;
+    public int ilvl;
     @Store
-    private int tier;
+    public int tier;
 
     public Modifier(String name, int ilvl, int tier) {
         this.name = name;

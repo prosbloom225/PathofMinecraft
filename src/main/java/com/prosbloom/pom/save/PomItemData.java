@@ -13,10 +13,10 @@ public class PomItemData {
     public int ilvl;
 
     @Store
-    public Prefix[] prefixes;
+    public List<Prefix> prefixes;
 
     public PomItemData() {
-        prefixes = new Prefix[PomTag.PREFIXES.length];
+        prefixes = new ArrayList<>();
         ilvl = 1;
     }
 }
