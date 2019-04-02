@@ -7,6 +7,9 @@ import com.prosbloom.pom.model.Modifier;
 import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
+import com.prosbloom.pom.save.PomItemData;
+import info.loenwind.autosave.Reader;
+import info.loenwind.autosave.Writer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -18,7 +21,8 @@ import java.util.stream.Collectors;
 public class NbtHelper {
 
     private static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierException{
-        checkOrCreateNbt(stack);
+        PomItemData item = checkOrCreateNbt(stack);
+        /*
         if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.PREFIXES::equals))
             throw new ModifierException();
         // get first available prefix slot
@@ -33,6 +37,15 @@ public class NbtHelper {
             stack.getTagCompound().setTag(prefixTag, prefix.toNbt());
         else
             throw new ModifierException();
+        */
+
+        for (int i=0; i < item.prefixes.length; i++)
+            if (item.prefixes[i] == null) {
+                item.prefixes[i] = prefix;
+                new Writer().write(stack.getTagCompound(), item);
+                return;
+            }
+        throw new ModifierException();
 
     }
     private static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierException{
@@ -106,11 +119,18 @@ public class NbtHelper {
     }
 
     // item level nbt
-    private static boolean checkOrCreateNbt(ItemStack stack){
+    private static PomItemData checkOrCreateNbt(ItemStack stack){
         // any nbt initialization can happen here
-        if (!stack.hasTagCompound())
+        if (!stack.hasTagCompound()) {
             stack.setTagCompound(new NBTTagCompound());
-        return true;
+            PomItemData item = new PomItemData();
+            new Writer().write(stack.getTagCompound(), item);
+            return item;
+        } else {
+            PomItemData item = new PomItemData();
+            new Reader().read(stack.getTagCompound(), item);
+            return item;
+        }
     }
     public static boolean isDummy(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.DUMMY))
@@ -133,24 +153,38 @@ public class NbtHelper {
 
 
     public static int getIlvl(ItemStack stack) {
+        PomItemData item = checkOrCreateNbt(stack);
+        return item.ilvl;
+        /*
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.ILVL))
             return stack.getTagCompound().getInteger(PomTag.ILVL);
         // default all items to ilvl 1, means we have to handle less exceptions
         // TODO - this is unsafe.  proceed with caution
         return 1;
+        */
 
     }
     public static void setIlvl(ItemStack stack, int ilvl) {
-        checkOrCreateNbt(stack);
-        stack.getTagCompound().setInteger(PomTag.ILVL, ilvl);
+        PomItemData item = checkOrCreateNbt(stack);
+        item.ilvl = ilvl;
+        Writer writer = new Writer();
+        writer.write(stack.getTagCompound(), item);
+        //stack.getTagCompound().setInteger(PomTag.ILVL, ilvl);
     }
 
 
     public static List<Prefix> getPrefixes(ItemStack stack) {
+        checkOrCreateNbt(stack);
+        PomItemData item = new PomItemData();
+        new Reader().read(stack.getTagCompound(), item);
+        // filter out the blanks
+        return Arrays.asList(item.prefixes).stream().filter(p->p!=null).collect(Collectors.toList());
+        /*
         return getModifiers(stack).stream()
                 .filter(m->m instanceof Prefix)
                 .map(m->(Prefix)m)
                 .collect(Collectors.toList());
+                */
     }
     public static List<Suffix> getSuffixes(ItemStack stack) {
         return getModifiers(stack).stream()
@@ -167,6 +201,11 @@ public class NbtHelper {
                 modifiers.add(new Prefix(stack.getTagCompound().getCompoundTag(p)));
             }
         }
+        checkOrCreateNbt(stack);
+        PomItemData item = new PomItemData();
+        new Reader().read(stack.getTagCompound(), item);
+        for (Prefix p : item.prefixes)
+            modifiers.add(p);
         for (String s : PomTag.SUFFIXES) {
             if (stack.hasTagCompound() && stack.getTagCompound().hasKey(s)) {
                 modifiers.add(new Suffix(stack.getTagCompound().getCompoundTag(s)));

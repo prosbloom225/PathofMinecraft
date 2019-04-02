@@ -1,12 +1,18 @@
 package com.prosbloom.pom.model;
 
+import info.loenwind.autosave.annotations.Storable;
+import info.loenwind.autosave.annotations.Store;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 
+@Storable
 public class Modifier {
 
+    @Store
     private String name;
+    @Store
     private int ilvl;
+    @Store
     private int tier;
 
     public Modifier(String name, int ilvl, int tier) {

@@ -1,11 +1,16 @@
 package com.prosbloom.pom.model;
 
+import info.loenwind.autosave.annotations.Storable;
+import info.loenwind.autosave.annotations.Store;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 
+@Storable
 public class Prefix extends Modifier {
 
+    @Store
     private float damageMod = 0;
+    @Store
     private float[] damageModRange;
 
     public Prefix(String name, int ilvl, int tier, float[] damageModRange, float damageMod) {
