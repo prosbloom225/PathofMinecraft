@@ -1,76 +1,57 @@
 package com.prosbloom.pom.test;
 
+
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.ArrayUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import info.loenwind.autosave.Reader;
 import info.loenwind.autosave.Writer;
 import info.loenwind.autosave.annotations.Store;
+import net.minecraft.init.Bootstrap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import org.junit.jupiter.api.BeforeAll;
 
 public class TestAutoSave {
 
     private static class Holder {
 
-        public @Store byte[] bytes;
-        public @Store Byte[] boxedBytes;
+        public @Store boolean bool;
+        public @Store char    character;
+        public @Store byte    bite;
+        public @Store short   shorty;
+        public @Store int     integer;
+        public @Store long    longy;
+        public @Store float   floaty;
+        public @Store double  doubly;
 
-        public @Store int[]     ints;
-        public @Store Integer[] boxedInts;
-
-        public @Store short[] shorts;
-        public @Store Short[] boxedShorts;
-
-        public @Store char[]      chars;
-        public @Store Character[] boxedChars;
-
-        public @Store float[] floats;
-        public @Store Float[] boxedFloats;
-
-        public @Store long[] longs;
-        public @Store Long[] boxedLongs;
-
-        public @Store double[] doubles;
-        public @Store Double[] boxedDoubles;
-
-        public @Store String[] strings;
-        public @Store EnumFacing[] enums;
+        public @Store String     string;
+        public @Store EnumFacing facing;
 
         void fill() {
-            bytes = new byte[] { 1, -1, Byte.MAX_VALUE, Byte.MIN_VALUE };
-            boxedBytes = ArrayUtils.toObject(bytes);
+            bool = true;
+            character = 'q';
+            bite = 127;
+            shorty = 1098;
+            integer = 42;
+            longy = 999_999_999_999L;
+            floaty = 3.141569F;
+            doubly = Math.PI * 2;
 
-            ints = new int[] { 1, 2, 3, 4 };
-            boxedInts = ArrayUtils.toObject(ints);
-
-            shorts = new short[] { 1, -1, Short.MAX_VALUE, Short.MIN_VALUE };
-            boxedShorts = ArrayUtils.toObject(shorts);
-
-            chars = new char[] { 'a', '\n', Character.MAX_VALUE, Character.MIN_VALUE };
-            boxedChars = ArrayUtils.toObject(chars);
-
-            floats = new float[] { 0, (1f / 3f), Float.MAX_VALUE, Float.MIN_VALUE };
-            boxedFloats = ArrayUtils.toObject(floats);
-
-            longs = new long[] { 0, -1, Long.MAX_VALUE, Long.MIN_VALUE };
-            boxedLongs = ArrayUtils.toObject(longs);
-
-            doubles = new double[] { 0, (1f / 3f), Float.MAX_VALUE, Float.MIN_VALUE };
-            boxedDoubles = ArrayUtils.toObject(doubles);
-
-            strings = new String[] { "Recursive", "handlers", "are", "cool" };
-            enums = new EnumFacing[] { EnumFacing.UP, EnumFacing.DOWN, EnumFacing.NORTH };
+            string = "Hello World!";
+            facing = EnumFacing.WEST;
         }
+
     }
 
     private static @Nonnull Holder before = new Holder(), after = new Holder();
 
     @BeforeAll
     public static void setup() {
-        // Log.enableExtremelyDetailedNBTActivity("AutoStoreTests", true);
+//    Log.enableExtremelyDetailedNBTActivity("AutoStoreTests", true);
+        Bootstrap.register();
 
         before.fill();
 
@@ -80,78 +61,56 @@ public class TestAutoSave {
     }
 
     @Test
-    public void testByteArray() {
-        Assertions.assertArrayEquals(before.bytes, after.bytes);
+    public void testBoolean() {
+        Assertions.assertEquals(before.bool, after.bool);
     }
 
     @Test
-    public void testBoxedByteArray() {
-        Assertions.assertArrayEquals(before.boxedBytes, after.boxedBytes);
+    public void testChar() {
+        Assertions.assertEquals(before.character, after.character);
     }
 
     @Test
-    public void testIntArray() {
-        Assertions.assertArrayEquals(before.ints, after.ints);
+    public void testByte() {
+        Assertions.assertEquals(before.bite, after.bite);
     }
 
     @Test
-    public void testBoxedIntArray() {
-        Assertions.assertArrayEquals(before.boxedInts, after.boxedInts);
+    public void testShort() {
+        Assertions.assertEquals(before.shorty, after.shorty);
     }
 
     @Test
-    public void testShortArray() {
-        Assertions.assertArrayEquals(before.shorts, after.shorts);
+    public void testInteger() {
+        Assertions.assertEquals(before.integer, after.integer);
     }
 
     @Test
-    public void testBoxedShortArray() {
-        Assertions.assertArrayEquals(before.boxedShorts, after.boxedShorts);
+    public void testLong() {
+        Assertions.assertEquals(before.longy, after.longy);
     }
 
     @Test
-    public void testCharArray() {
-        Assertions.assertArrayEquals(before.chars, after.chars);
+    public void testFloat() {
+        Assertions.assertEquals(before.floaty, after.floaty, 0.01F);
     }
 
     @Test
-    public void testBoxedCharArray() {
-        Assertions.assertArrayEquals(before.boxedChars, after.boxedChars);
+    public void testDouble() {
+        Assertions.assertEquals(before.doubly, after.doubly);
     }
 
     @Test
-    public void testFloatArray() {
-        Assertions.assertArrayEquals(before.floats, after.floats);
+    public void testString() {
+        Assertions.assertNotNull(after.string);
+        Assertions.assertEquals(before.string, after.string);
     }
 
     @Test
-    public void testBoxedFloatArray() {
-        Assertions.assertArrayEquals(before.boxedFloats, after.boxedFloats);
+    public void testEnum() {
+        Assertions.assertNotNull(after.facing);
+        Assertions.assertEquals(before.facing, after.facing);
     }
 
-    @Test
-    public void testLongArray() {
-        Assertions.assertArrayEquals(before.longs, after.longs);
-    }
-
-    @Test
-    public void testBoxedLongArray() {
-        Assertions.assertArrayEquals(before.boxedLongs, after.boxedLongs);
-    }
-
-    @Test
-    public void testDoubleArray() {
-        Assertions.assertArrayEquals(before.doubles, after.doubles);
-    }
-
-    @Test
-    public void testBoxedDoubleArray() {
-        Assertions.assertArrayEquals(before.boxedDoubles, after.boxedDoubles);
-    }
-
-    @Test
-    public void testStringArray() {
-        Assertions.assertArrayEquals(before.strings, after.strings);
-    }
 }
 

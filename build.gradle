@@ -14,7 +14,6 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 apply plugin: 'org.sonarqube'
 apply plugin: 'jacoco'
-//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 sonarqube {
     properties {
@@ -48,8 +47,13 @@ repositories {
         url = "http://maven.covers1624.net"
     }
 }
+ext.buildnumber = 0
+if (System.getenv('BUILD_NUMBER') != null)
+    project.buildnumber = System.getenv('BUILD_NUMBER')
+else
+    logger.lifecycle "No build number detected, setting to 0"
 
-version = "1.0"
+version = "${minecraft_version}-${mod_version}.${buildnumber}"
 group = "com.prosbloom.pathofmineraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "modid"
 
@@ -59,25 +63,19 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2820"
-    runDir = "run"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20171003"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+	mappings = "snapshot_20180612"
+		version = "${minecraft_version}-${forge_version}"
+		runDir = 'run'
 }
 
 dependencies {
-    deobfCompile        "mezz.jei:jei_1.12.2:4.13.1.220"
-    deobfCompile        "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.20-12"
+    deobfCompile        "mezz.jei:jei_1.12.2:4.15.0.268"
+    deobfCompile        "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17"
     compile             "com.google.code.gson:gson:2.8.5"
     compile             "info.loenwind.autosave:AutoSave:1.12.2-1.0.10"
-    //testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    //testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+    testImplementation  "org.junit.jupiter:junit-jupiter-api:5.3.1"
+    testRuntimeOnly     "org.junit.jupiter:junit-jupiter-engine:5.3.1"
 }
 
 test {
