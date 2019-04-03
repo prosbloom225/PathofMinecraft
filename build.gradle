@@ -72,12 +72,18 @@ minecraft {
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_1.12.2:4.13.1.220"
-    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.20-12"
-    compile 'com.google.code.gson:gson:2.8.5'
-    compile "info.loenwind.autosave:AutoSave:1.12.2-1.0.10"
-
+    deobfCompile        "mezz.jei:jei_1.12.2:4.13.1.220"
+    deobfCompile        "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.20-12"
+    compile             "com.google.code.gson:gson:2.8.5"
+    compile             "info.loenwind.autosave:AutoSave:1.12.2-1.0.10"
+    //testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    //testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
+
+test {
+    useJUnitPlatform()
+}
+
 
 processResources {
     // this will ensure that this task is redone when the versions change.
@@ -96,4 +102,5 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+
 }

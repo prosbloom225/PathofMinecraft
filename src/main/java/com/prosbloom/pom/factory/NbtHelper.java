@@ -21,8 +21,8 @@ public class NbtHelper {
 
     private static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierException{
         PomItemData item = getNbt(stack);
-        if (item.prefixes.size() < PomTag.PREFIXES.length) {
-            item.prefixes.add(prefix);
+        if (item.getPrefixes().size() < PomTag.PREFIXES.length) {
+            item.modifiers.add(prefix);
             writeNbt(stack, item);
         } else
             throw new ModifierException();
@@ -160,7 +160,11 @@ public class NbtHelper {
     public static List<Prefix> getPrefixes(ItemStack stack) {
         PomItemData item = getNbt(stack);
         // filter out the blanks
-        return (item.prefixes).stream().filter(p->p!=null).collect(Collectors.toList());
+        return item.modifiers.stream()
+                .filter(p->p!=null)
+                .filter(Prefix.class::isInstance)
+                .map(Prefix.class::cast)
+                .collect(Collectors.toList());
         /*
         return getModifiers(stack).stream()
                 .filter(m->m instanceof Prefix)
@@ -184,7 +188,7 @@ public class NbtHelper {
             }
         }
         PomItemData item = getNbt(stack);
-        for (Prefix p : item.prefixes)
+        for (Prefix p : item.getPrefixes())
             modifiers.add(p);
         for (String s : PomTag.SUFFIXES) {
             if (stack.hasTagCompound() && stack.getTagCompound().hasKey(s)) {

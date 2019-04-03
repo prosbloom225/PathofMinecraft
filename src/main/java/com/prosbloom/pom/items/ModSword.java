@@ -54,7 +54,7 @@ public class ModSword extends ItemSword {
 
         // TODO - naming item on first modifiers
         String prefix = "";
-        for (Prefix p : item.prefixes){
+        for (Prefix p : item.getPrefixes()){
             if (p != null) {
                 prefix = p.getName();
                 break;
@@ -85,7 +85,7 @@ public class ModSword extends ItemSword {
         }
         tooltip.add(String.format("%s %s %s %s", name, prefix, baseName, suffix));
         if (GuiScreen.isShiftKeyDown()) {
-            for (Prefix p : item.prefixes)
+            for (Prefix p : item.getPrefixes())
                 advPrefix.add(p.getAdvTooltip());
             suffixes.stream().forEach(s -> advSuffix.add(s.getAdvTooltip()));
             tooltip.addAll(advPrefix);
