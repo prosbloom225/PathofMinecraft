@@ -1,5 +1,6 @@
 package com.prosbloom.pom.save;
 
+import com.prosbloom.pom.model.Modifier;
 import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
@@ -7,32 +8,28 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PomItemData {
 
     public int ilvl;
+    private List<Modifier> modifiers;
 
-    /*
-    public List<Prefix> prefixes;
-    public List<Suffix> suffixes;
-     */
-    // TODO - move this shit back to list, will save so many null checks despite complicating adding prefix orders
-    public Prefix []prefixes;
-    public Suffix []suffixes;
+    public List<Modifier> getModifiers() {
+        return modifiers;
+    }
+    public void addModifier(Modifier modifier) {
+        modifiers.add(modifier);
+    }
+
 
     public PomItemData() {
-        //prefixes = new ArrayList<>();
-        //suffixes = new ArrayList<>();
-        prefixes = new Prefix[PomTag.PREFIXES.length];
-        suffixes = new Suffix[PomTag.SUFFIXES.length];
+        modifiers = new ArrayList<>();
         ilvl = 1;
     }
 
-    public List<Prefix> getPrefixes() {
-        return Arrays.asList(this.prefixes);
-    }
-    /*
     public List<Prefix> getPrefixes() {
         // filter out the blanks
         return modifiers.stream()
@@ -41,44 +38,52 @@ public class PomItemData {
                 .map(Prefix.class::cast)
                 .collect(Collectors.toList());
     }
-     */
+    public List<Suffix> getSuffixes() {
+        // filter out the blanks
+        return modifiers.stream()
+                .filter(p -> p != null)
+                .filter(Suffix.class::isInstance)
+                .map(Suffix.class::cast)
+                .collect(Collectors.toList());
+    }
 
     public NBTTagCompound serializeNbt() {
         NBTTagCompound pom = new NBTTagCompound();
         pom.setInteger(PomTag.ILVL, ilvl);
-        for (int i=0;i<PomTag.PREFIXES.length;i++)
-            if (prefixes[i] != null)
-                pom.setTag(PomTag.PREFIXES[i], prefixes[i].serializeNbt());
-        for (int i=0;i<PomTag.SUFFIXES.length;i++)
-            if (suffixes[i] != null)
-                pom.setTag(PomTag.SUFFIXES[i], suffixes[i].serializeNbt());
-
+        int p=0, s=0;
+        for (Modifier modifier : modifiers) {
+            if (modifier instanceof Prefix && p < PomTag.PREFIXES.length) {
+                pom.setTag(PomTag.PREFIXES[p], modifier.serializeNbt());
+                p++;
+            } else if (modifier instanceof Suffix && s < PomTag.SUFFIXES.length) {
+                pom.setTag(PomTag.SUFFIXES[s], modifier.serializeNbt());
+                s++;
+            } else {
+                System.out.println("Could not add modifier" + modifier.toString());
+            }
+        }
         return pom;
     }
 
     // deserialize nbt
     public PomItemData (NBTTagCompound pom) {
-        prefixes = new Prefix[PomTag.PREFIXES.length];
-        suffixes = new Suffix[PomTag.SUFFIXES.length];
+        modifiers = new ArrayList<>();
         this.ilvl = pom.getInteger(PomTag.ILVL);
         for (int i=0;i<PomTag.PREFIXES.length;i++)
             if (pom.hasKey(PomTag.PREFIXES[i]))
-                prefixes[i] = new Prefix(pom.getCompoundTag(PomTag.PREFIXES[i]));
+                modifiers.add(new Prefix(pom.getCompoundTag(PomTag.PREFIXES[i])));
         for (int i=0;i<PomTag.SUFFIXES.length;i++)
             if (pom.hasKey(PomTag.SUFFIXES[i]))
-                suffixes[i] = new Suffix(pom.getCompoundTag(PomTag.SUFFIXES[i]));
+                modifiers.add(new Suffix(pom.getCompoundTag(PomTag.SUFFIXES[i])));
 
     }
 
     public boolean equals(PomItemData other) {
         boolean ret = true;
         ret &= this.ilvl == other.ilvl;
-        for(int i=0; i < prefixes.length; i++)
-            if (prefixes[i] != null)
-                ret &= this.prefixes[i].equals(other.prefixes[i]);
-        for(int i=0; i < suffixes.length; i++)
-            if (suffixes[i] != null)
-                ret &= this.suffixes[i].equals(other.suffixes[i]);
+        for (Modifier modifier : modifiers) {
+            ret &= other.getModifiers().contains(modifier);
+        }
         return ret;
     }
 }

@@ -19,26 +19,17 @@ public class NbtHelper {
     private static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierException{
         PomItemData item = getNbt(stack);
         if (item.getPrefixes().size() < PomTag.PREFIXES.length) {
-            item.getPrefixes().add(prefix);
+            item.addModifier(prefix);
             writeNbt(stack, item);
         } else
             throw new ModifierException();
     }
     private static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierException{
-        getNbt(stack);
-        if (stack.getTagCompound().getKeySet().stream().anyMatch(PomTag.SUFFIXES::equals))
-            throw new ModifierException();
-        // get first available suffix slot
-        String suffixTag = "";
-        for (int i=0; i <PomTag.SUFFIXES.length; i++){
-            if (!stack.getTagCompound().hasKey(PomTag.SUFFIXES[i])) {
-                suffixTag = PomTag.SUFFIXES[i];
-                break;
-            }
-        }
-        if (suffixTag != "")
-            stack.getTagCompound().setTag(suffixTag, suffix.serializeNbt());
-        else
+        PomItemData item = getNbt(stack);
+        if (item.getSuffixes().size() < PomTag.SUFFIXES.length) {
+            item.addModifier(suffix);
+            writeNbt(stack, item);
+        } else
             throw new ModifierException();
     }
     public static void addModifiers(ItemStack stack, List<Modifier> mods) throws ModifierException{
@@ -158,10 +149,8 @@ public class NbtHelper {
         return item.getPrefixes();
     }
     public static List<Suffix> getSuffixes(ItemStack stack) {
-        return getModifiers(stack).stream()
-                .filter(m->m instanceof Suffix)
-                .map(m->(Suffix)m)
-                .collect(Collectors.toList());
+        PomItemData item = getNbt(stack);
+        return item.getSuffixes();
     }
 
     public static List<Modifier> getModifiers(ItemStack stack) {

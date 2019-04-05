@@ -58,7 +58,9 @@ public class Modifier {
     }
 
 
-    public boolean equals(Modifier other) {
+    @Override
+    public boolean equals(Object obj) {
+        Modifier other = (Modifier)obj;
         return (this.getName().equals(other.getName())
                 && this.getIlvl() == other.getIlvl()
                 && this.getTier() == other.getTier()
