@@ -23,7 +23,6 @@ public class ScourOrb extends Item implements ICurrency {
 
     public ScourOrb() {
         super();
-        setUnlocalizedName("scourorb");
         setRegistryName(Pom.MODID, "scourorb");
     }
 
@@ -42,7 +41,7 @@ public class ScourOrb extends Item implements ICurrency {
 
     @Override
     public ItemStack process(ItemStack stack) {
-        System.out.println("Scouring: " + stack.getItem().getUnlocalizedName());
+        System.out.println("Scouring: " + stack.getItem().getRegistryName());
         List<Modifier> mods = NbtHelper.getModifiers(stack);
         if (mods.size() > 0)
             NbtHelper.clearModifiers(stack);

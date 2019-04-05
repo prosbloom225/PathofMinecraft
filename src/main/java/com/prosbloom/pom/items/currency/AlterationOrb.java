@@ -30,7 +30,7 @@ public class AlterationOrb extends BaseItem implements ICurrency {
 
     @Override
     public ItemStack process(ItemStack stack) {
-        System.out.println("Alting: " + stack.getItem().getUnlocalizedName());
+        System.out.println("Alting: " + stack.getItem().getRegistryName());
         NbtHelper.clearModifiers(stack);
         try {
             while (NbtHelper.getModifiers(stack).size() == 0) {

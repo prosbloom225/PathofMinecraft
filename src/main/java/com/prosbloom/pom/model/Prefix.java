@@ -5,6 +5,8 @@ import info.loenwind.autosave.annotations.Store;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 
+import java.util.Arrays;
+
 @Storable
 public class Prefix extends Modifier {
 
@@ -62,6 +64,6 @@ public class Prefix extends Modifier {
     public boolean equals(Prefix other) {
         return (super.equals(other)
                 && this.damageMod == other.getDamageMod()
-                && this.getDamageModRange() == other.getDamageModRange());
+                && Arrays.equals(this.getDamageModRange(), other.getDamageModRange()));
     }
 }

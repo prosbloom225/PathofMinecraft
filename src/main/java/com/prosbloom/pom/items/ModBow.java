@@ -31,7 +31,6 @@ public class ModBow extends ItemBow {
     public ModBow() {
         super();
         setRegistryName(Pom.MODID, baseName);
-        setUnlocalizedName(baseName);
     }
 
     @SideOnly(Side.CLIENT)

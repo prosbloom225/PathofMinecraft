@@ -30,7 +30,7 @@ public class DivineOrb extends BaseItem implements ICurrency {
 
     @Override
     public ItemStack process(ItemStack stack) {
-        System.out.println("Divining: " + stack.getItem().getUnlocalizedName());
+        System.out.println("Divining: " + stack.getItem().getRegistryName());
         List<Modifier> mods = NbtHelper.getModifiers(stack);
         if (mods.size() > 0)
             try {

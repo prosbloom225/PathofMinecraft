@@ -30,7 +30,7 @@ public class AugmentOrb extends BaseItem implements ICurrency {
 
     @Override
     public ItemStack process(ItemStack stack) {
-        System.out.println(String.format("Augment Orbing: %s", stack.getItem().getUnlocalizedName()));
+        System.out.println(String.format("Augment Orbing: %s", stack.getItem().getRegistryName()));
         // add corresponding prefix/suffix based
         try {
             if (NbtHelper.getPrefixes(stack).size() > 0)

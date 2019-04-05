@@ -25,7 +25,7 @@ public class RegalOrb extends BaseItem implements ICurrency {
 
     @Override
     public ItemStack process(ItemStack stack) {
-        System.out.println(String.format("Regal Orbing: %s", stack.getItem().getUnlocalizedName()));
+        System.out.println(String.format("Regal Orbing: %s", stack.getItem().getRegistryName()));
         NbtHelper.setRarity(stack, LibMisc.Rarity.RARE);
         try {
             if (new Random().nextBoolean())

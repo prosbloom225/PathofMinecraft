@@ -26,7 +26,7 @@ public class Pom {
 
     public static CreativeTabs tabPom = new CreativeTabs("Pom") {
         @Override
-        public ItemStack getTabIconItem() {
+        public ItemStack createIcon() {
             return new ItemStack(new ItemEnderEye());
         }
     };

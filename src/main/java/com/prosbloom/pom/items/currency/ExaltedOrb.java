@@ -38,7 +38,7 @@ public class ExaltedOrb extends BaseItem implements ICurrency {
 
     @Override
     public ItemStack process(ItemStack stack) {
-        System.out.println("Exalting: " + stack.getItem().getUnlocalizedName());
+        System.out.println("Exalting: " + stack.getItem().getRegistryName());
         List<Modifier> mods = NbtHelper.getModifiers(stack);
         // last check for modifier space to add a mod
         if (NbtHelper.getPrefixes(stack).size() < PomTag.PREFIXES.length ||
