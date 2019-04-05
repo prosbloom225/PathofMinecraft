@@ -7,12 +7,9 @@ import net.minecraft.util.text.TextFormatting;
 
 import java.util.Arrays;
 
-@Storable
 public class Prefix extends Modifier {
 
-    @Store
     public float damageMod = 0;
-    @Store
     public float[] damageModRange;
 
     public Prefix(String name, int ilvl, int tier, float[] damageModRange, float damageMod) {
@@ -37,8 +34,8 @@ public class Prefix extends Modifier {
 
 
     @Override
-    public NBTTagCompound toNbt() {
-        NBTTagCompound nbt = super.toNbt();
+    public NBTTagCompound serializeNbt() {
+        NBTTagCompound nbt = super.serializeNbt();
         nbt.setFloat(PomTag.MOD_DAMAGEMOD, damageMod);
         nbt.setFloat(PomTag.MOD_DAMAGERANGE_MIN, damageModRange[0]);
         nbt.setFloat(PomTag.MOD_DAMAGERANGE_MAX, damageModRange[1]);
@@ -66,4 +63,5 @@ public class Prefix extends Modifier {
                 && this.damageMod == other.getDamageMod()
                 && Arrays.equals(this.getDamageModRange(), other.getDamageModRange()));
     }
+
 }

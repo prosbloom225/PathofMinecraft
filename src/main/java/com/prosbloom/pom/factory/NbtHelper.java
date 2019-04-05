@@ -22,7 +22,7 @@ public class NbtHelper {
     private static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierException{
         PomItemData item = getNbt(stack);
         if (item.getPrefixes().size() < PomTag.PREFIXES.length) {
-            item.modifiers.add(prefix);
+            item.getPrefixes().add(prefix);
             writeNbt(stack, item);
         } else
             throw new ModifierException();
@@ -40,7 +40,7 @@ public class NbtHelper {
             }
         }
         if (suffixTag != "")
-            stack.getTagCompound().setTag(suffixTag, suffix.toNbt());
+            stack.getTagCompound().setTag(suffixTag, suffix.serializeNbt());
         else
             throw new ModifierException();
     }
@@ -102,7 +102,7 @@ public class NbtHelper {
         // any nbt initialization can happen here
         PomItemData item = new PomItemData();
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.POM_TAG)) {
-            Reader.read(stack.getTagCompound().getCompoundTag(PomTag.POM_TAG), item);
+            item = new PomItemData(stack.getTagCompound().getCompoundTag(PomTag.POM_TAG));
         }
         return item;
     }
@@ -112,8 +112,7 @@ public class NbtHelper {
             nbt = stack.getTagCompound();
         else
             nbt = new NBTTagCompound();
-        pomNbt = new NBTTagCompound();
-        Writer.write(pomNbt, item);
+        pomNbt = item.serializeNbt();
         nbt.setTag(PomTag.POM_TAG, pomNbt);
         stack.setTagCompound(nbt);
     }
@@ -159,18 +158,7 @@ public class NbtHelper {
 
     public static List<Prefix> getPrefixes(ItemStack stack) {
         PomItemData item = getNbt(stack);
-        // filter out the blanks
-        return item.modifiers.stream()
-                .filter(p->p!=null)
-                .filter(Prefix.class::isInstance)
-                .map(Prefix.class::cast)
-                .collect(Collectors.toList());
-        /*
-        return getModifiers(stack).stream()
-                .filter(m->m instanceof Prefix)
-                .map(m->(Prefix)m)
-                .collect(Collectors.toList());
-                */
+        return item.getPrefixes();
     }
     public static List<Suffix> getSuffixes(ItemStack stack) {
         return getModifiers(stack).stream()

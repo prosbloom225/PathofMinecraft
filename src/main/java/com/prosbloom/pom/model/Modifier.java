@@ -2,17 +2,15 @@ package com.prosbloom.pom.model;
 
 import info.loenwind.autosave.annotations.Storable;
 import info.loenwind.autosave.annotations.Store;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.util.INBTSerializable;
 
-@Storable
 public class Modifier {
 
-    @Store
     public String name;
-    @Store
     public int ilvl;
-    @Store
     public int tier;
 
     public Modifier(String name, int ilvl, int tier) {
@@ -50,13 +48,6 @@ public class Modifier {
         return String.format("T%s-%s(%s)", tier,name, ilvl);
     }
 
-    public NBTTagCompound toNbt() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString(PomTag.MOD_NAME, name);
-        nbt.setInteger(PomTag.MOD_ILVL, ilvl);
-        nbt.setInteger(PomTag.MOD_TIER, tier);
-        return nbt;
-    }
 
     // deserialize nbt
     public Modifier(NBTTagCompound nbt) {
@@ -76,5 +67,13 @@ public class Modifier {
                 && this.getIlvl() == other.getIlvl()
                 && this.getTier() == other.getTier()
         );
+    }
+
+    public NBTTagCompound serializeNbt() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString(PomTag.MOD_NAME, name);
+        nbt.setInteger(PomTag.MOD_ILVL, ilvl);
+        nbt.setInteger(PomTag.MOD_TIER, tier);
+        return nbt;
     }
 }

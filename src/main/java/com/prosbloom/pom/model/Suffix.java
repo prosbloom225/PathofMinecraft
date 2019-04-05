@@ -3,7 +3,7 @@ package com.prosbloom.pom.model;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 
-import java.text.DecimalFormat;
+import java.util.Arrays;
 
 public class Suffix extends Modifier {
 
@@ -23,8 +23,9 @@ public class Suffix extends Modifier {
                 this.speedMod = speedMod;
         }
 
-        public NBTTagCompound toNbt() {
-                NBTTagCompound nbt = super.toNbt();
+        @Override
+        public NBTTagCompound serializeNbt() {
+                NBTTagCompound nbt = super.serializeNbt();
                 nbt.setFloat(PomTag.MOD_SPEEDRANGE_MIN, this.getSpeedModRange()[0]);
                 nbt.setFloat(PomTag.MOD_SPEEDRANGE_MAX, this.getSpeedModRange()[1]);
                 nbt.setFloat(PomTag.MOD_SPEEDMOD, speedMod);
@@ -50,6 +51,6 @@ public class Suffix extends Modifier {
     public boolean equals(Suffix other) {
         return (super.equals(other)
                 && this.getSpeedMod() == other.getSpeedMod()
-                && this.getSpeedModRange() == other.getSpeedModRange());
+                && Arrays.equals(this.getSpeedModRange(), other.getSpeedModRange()));
     }
 }
