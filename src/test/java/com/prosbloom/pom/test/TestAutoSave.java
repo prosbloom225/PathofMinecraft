@@ -3,6 +3,7 @@ package com.prosbloom.pom.test;
 
 import javax.annotation.Nonnull;
 
+import info.loenwind.autosave.util.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ public class TestAutoSave {
 
     @BeforeAll
     public static void setup() {
-//    Log.enableExtremelyDetailedNBTActivity("AutoStoreTests", true);
+        Log.enableExtremelyDetailedNBTActivity("AutoStoreTests", true);
         Bootstrap.register();
 
         before.fill();
