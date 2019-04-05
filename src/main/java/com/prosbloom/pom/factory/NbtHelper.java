@@ -7,13 +7,10 @@ import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
 import com.prosbloom.pom.save.PomItemData;
-import info.loenwind.autosave.Reader;
-import info.loenwind.autosave.Writer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
