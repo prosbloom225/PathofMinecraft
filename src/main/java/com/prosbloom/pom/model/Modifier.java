@@ -1,11 +1,7 @@
 package com.prosbloom.pom.model;
 
-import info.loenwind.autosave.annotations.Storable;
-import info.loenwind.autosave.annotations.Store;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.util.INBTSerializable;
 
 public class Modifier {
 
