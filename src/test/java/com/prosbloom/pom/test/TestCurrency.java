@@ -1,12 +1,13 @@
 package com.prosbloom.pom.test;
 
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.factory.ItemFactory;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.items.ModSword;
-import com.prosbloom.pom.model.Modifier;
+import com.prosbloom.pom.items.currency.*;
 import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
@@ -14,6 +15,7 @@ import com.prosbloom.pom.save.PomItemData;
 import net.minecraft.init.Bootstrap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.datafix.walkers.ItemStackData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,60 +23,86 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class TestNbtHelper {
+public class TestCurrency {
     static Prefix pfx;
     static Suffix sfx;
     static ItemStack stack;
+    static PomItemData item;
 
-    @BeforeAll
-    public static void init() {
-        Bootstrap.register();
-        Pom.itemFactory = new ItemFactory();
-        pfx = Pom.itemFactory.rollPrefix(99);
-        sfx = Pom.itemFactory.rollSuffix(99);
-    }
     @BeforeEach
     public void setup() {
+        pfx = Pom.itemFactory.rollPrefix(99);
+        sfx = Pom.itemFactory.rollSuffix(99);
         stack = new ItemStack(new ModSword());
-    }
-    @Test
-    public void testItemStructSerialization() {
-        PomItemData item = new PomItemData(), item2;
-        item.ilvl = 88;
-        item.getModifiers().add(pfx);
-        item.getModifiers().add(sfx);
-        NBTTagCompound itm = item.serializeNbt();
-        item2 = new PomItemData(itm);
-        Assertions.assertTrue(item.equals(item2));
+        item = new PomItemData();
+        NbtHelper.writeNbt(stack, item);
     }
 
     @Test
-    public void TestNbtDeserialization() {
-        PomItemData item = new PomItemData(), item2;
-        item.ilvl = 88;
-        item.getModifiers().add(pfx);
-        item.getModifiers().add(sfx);
-        NBTTagCompound itm = item.serializeNbt();
-        stack.setTagCompound(new NBTTagCompound());
-        stack.getTagCompound().setTag(PomTag.POM_TAG, item.serializeNbt());
-        item2 = new PomItemData(stack.getTagCompound().getCompoundTag(PomTag.POM_TAG));
-        Assertions.assertTrue(item.equals(item2));
-
+    public void testChaosOrb() {
+        ChaosOrb chaosOrb  = new ChaosOrb();
+        NbtHelper.setRarity(stack, LibMisc.Rarity.RARE);
+        chaosOrb.process(stack);
+        int size = NbtHelper.getModifiers(stack).size();
+        Assertions.assertTrue(size >= 3);
+        Assertions.assertTrue(size <= 6);
     }
 
     @Test
-    public void TestNbtHelperAddModifiers() throws ModifierException {
+    public void testAlchemyOrb() {
+        AlchemyOrb alchemyOrb = new AlchemyOrb();
+        NbtHelper.setRarity(stack, LibMisc.Rarity.NORMAL);
+        NbtHelper.clearModifiers(stack);
+        alchemyOrb.process(stack);
+        Assertions.assertEquals(LibMisc.Rarity.RARE, NbtHelper.getRarity(stack));
+        int size = NbtHelper.getModifiers(stack).size();
+        Assertions.assertTrue(size >= 3);
+        Assertions.assertTrue(size <= 6);
+    }
+
+    @Test
+    public void testAlterationOrb() throws ModifierException {
+        AlterationOrb alterationOrb = new AlterationOrb();
+        NbtHelper.clearModifiers(stack);
         NbtHelper.addModifier(stack, pfx);
         NbtHelper.addModifier(stack, sfx);
-        // prefix
-        List<Prefix> prefixes = NbtHelper.getPrefixes(stack);
-        Assertions.assertEquals(1, prefixes.size());
-        Assertions.assertTrue(prefixes.get(0).equals(pfx));
+        NbtHelper.setRarity(stack, LibMisc.Rarity.MAGIC);
+        PomItemData item = NbtHelper.getNbt(stack);
+        alterationOrb.process(stack);
+        Assertions.assertTrue(!item.equals(NbtHelper.getNbt(stack)));
+        Assertions.assertTrue(NbtHelper.getModifiers(stack).size() >= 1);
+        Assertions.assertTrue(NbtHelper.getModifiers(stack).size() <= 2);
+    }
 
-        // suffix
-        List<Suffix> suffixes = NbtHelper.getSuffixes(stack);
-        Assertions.assertEquals(1, suffixes.size() );
-        Assertions.assertTrue(suffixes.get(0).equals(sfx));
+    @Test
+    public void testAnnulmentOrb() throws ModifierException {
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.addModifier(stack, pfx);
+        new AnnulmentOrb().process(stack);
+        Assertions.assertEquals(0, NbtHelper.getModifiers(stack).size());
+
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.addModifier(stack, pfx);
+        NbtHelper.addModifier(stack, pfx);
+        NbtHelper.addModifier(stack, sfx);
+        new AnnulmentOrb().process(stack);
+        Assertions.assertEquals(2, NbtHelper.getModifiers(stack).size());
+    }
+
+    @Test
+    public void testAugmentOrb() throws ModifierException {
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.setRarity(stack, LibMisc.Rarity.MAGIC);
+        NbtHelper.addModifier(stack, pfx);
+        new AugmentOrb().process(stack);
+        Assertions.assertEquals(2, NbtHelper.getModifiers(stack).size());
+
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.addModifier(stack, pfx);
+        NbtHelper.addModifier(stack, sfx);
+        new AugmentOrb().process(stack);
+        Assertions.assertEquals(2, NbtHelper.getModifiers(stack).size());
 
     }
+
 }

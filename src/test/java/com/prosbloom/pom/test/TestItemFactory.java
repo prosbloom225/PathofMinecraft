@@ -2,6 +2,7 @@ package com.prosbloom.pom.test;
 
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.factory.ItemFactory;
+import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
 import net.minecraft.init.Bootstrap;
@@ -25,9 +26,12 @@ public class TestItemFactory {
     public void testRandomModifiers() {
         Assertions.assertNotNull(pfx);
         Assertions.assertNotNull(sfx);
+    }
+
+    @Test
+    public void testFindModifiers() {
         Assertions.assertNotNull(Pom.itemFactory.getPrefix(pfx.getName()));
         Assertions.assertNotNull(Pom.itemFactory.getSuffix(sfx.getName()));
     }
-
 
 }
