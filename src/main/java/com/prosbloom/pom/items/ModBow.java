@@ -31,6 +31,7 @@ public class ModBow extends ItemBow {
     public ModBow() {
         super();
         setRegistryName(Pom.MODID, baseName);
+        setTranslationKey(Pom.MODID + "." + baseName);
     }
 
     @SideOnly(Side.CLIENT)

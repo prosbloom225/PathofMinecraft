@@ -31,6 +31,7 @@ public class ModSword extends ItemSword {
     public ModSword() {
         super(ToolMaterial.STONE);
         setRegistryName(Pom.MODID, baseName);
+        setTranslationKey(Pom.MODID + "." + baseName);
     }
 
     @SideOnly(Side.CLIENT)

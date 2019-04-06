@@ -3,7 +3,6 @@ package com.prosbloom.pom.items.currency;
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierException;
-import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.BaseItem;
 import com.prosbloom.pom.items.interfaces.ICurrency;
@@ -18,28 +17,38 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
 
-import static com.prosbloom.pom.LibMisc.Rarity.NORMAL;
+import static com.prosbloom.pom.LibMisc.Rarity.*;
 
-public class ScourOrb extends BaseItem implements ICurrency {
+public class TransmutationOrb extends BaseItem implements ICurrency {
     public String getBaseName() {
-        return "scourorb";
+        return "transmutationorb";
     }
+
 
     @Override
     public boolean canProcess(ItemStack stack) {
         // TODO - implement
-        if (NbtHelper.getRarity(stack) == LibMisc.Rarity.RARE || NbtHelper.getRarity(stack) == LibMisc.Rarity.MAGIC)
+        if (NbtHelper.getRarity(stack) == NORMAL)
             return true;
         return false;
     }
 
     @Override
     public ItemStack process(ItemStack stack) {
-        System.out.println("Scouring: " + stack.getItem().getRegistryName());
-        List<Modifier> mods = NbtHelper.getModifiers(stack);
-        if (mods.size() > 0)
-            NbtHelper.clearModifiers(stack);
-        NbtHelper.setRarity(stack, NORMAL);
+        System.out.println("Transmuting: " + stack.getItem().getRegistryName());
+        // last check for modifiers
+        if (NbtHelper.getModifiers(stack).size() < 2){
+            NbtHelper.setRarity(stack, MAGIC);
+            // add corresponding prefix/suffix based
+            try {
+                if (new Random().nextBoolean())
+                    NbtHelper.addModifier(stack, Pom.itemFactory.rollPrefix(NbtHelper.getIlvl(stack)));
+                if (new Random().nextBoolean())
+                    NbtHelper.addModifier(stack, Pom.itemFactory.rollSuffix(NbtHelper.getIlvl(stack)));
+            } catch (ModifierException e) {
+                System.out.println("Error in adding modifier: " + e.toString());
+            }
+        }
         return stack;
     }
 }

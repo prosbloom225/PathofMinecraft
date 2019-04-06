@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
@@ -44,5 +45,6 @@ public class CommonProxy {
         event.getRegistry().register(new AlterationOrb());
         event.getRegistry().register(new AugmentOrb());
         event.getRegistry().register(new RegalOrb());
+        event.getRegistry().register(new TransmutationOrb());
     }
 }

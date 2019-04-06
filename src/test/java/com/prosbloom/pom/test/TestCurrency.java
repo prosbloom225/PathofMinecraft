@@ -158,4 +158,13 @@ public class TestCurrency {
         new ScourOrb().process(stack);
         Assertions.assertEquals(0, NbtHelper.getModifiers(stack).size());
     }
+
+    @Test
+    public void testTransmutationOrb() {
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.setRarity(stack, LibMisc.Rarity.NORMAL);
+        new TransmutationOrb().process(stack);
+        Assertions.assertTrue(NbtHelper.getModifiers(stack).size() > 0);
+        Assertions.assertEquals(LibMisc.Rarity.MAGIC, NbtHelper.getRarity(stack));
+    }
 }

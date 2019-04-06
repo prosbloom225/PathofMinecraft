@@ -1,13 +1,16 @@
 itemGroup.pom=Path of Minecraft
 
-item.modsword.name=Test Sword
-item.modbow.name=Test Bow
-item.itemcase.name=Item Case
-item.chaosorb.name=Chaos Orb
-item.annulmentorb.name=Annulment Orb
-item.divineorb.name=Divine Orb
-item.scourorb.name=Orb of Scouring
-item.exaltedorb.name=Exalted Orb
-item.alterationorb.name=Orb of Alteration
-item.augmentorb.name=Orb of Augmentation
-item.regalorb.name=Regal Orb
+item.pom.modsword.name=Test Sword
+item.pom.modbow.name=Test Bow
+item.pom.alchemyorb.name=Alchemy Orb
+item.pom.itemcase.name=Item Case
+item.pom.chaosorb.name=Chaos Orb
+item.pom.annulmentorb.name=Annulment Orb
+item.pom.divineorb.name=Divine Orb
+item.pom.scourorb.name=Orb of Scouring
+item.pom.exaltedorb.name=Exalted Orb
+item.pom.alterationorb.name=Orb of Alteration
+item.pom.augmentorb.name=Orb of Augmentation
+item.pom.regalorb.name=Regal Orb
+item.pom.transmutationorb.name=Transmutation Orb
+
