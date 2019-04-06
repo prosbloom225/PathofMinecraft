@@ -3,12 +3,12 @@ package com.prosbloom.pom.factory;
 import com.google.gson.Gson;
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.exception.ModifierException;
-import com.prosbloom.pom.exception.ModifierExistsException;
-import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.items.ModItems;
-import com.prosbloom.pom.model.*;
+import com.prosbloom.pom.model.Modifier;
+import com.prosbloom.pom.model.Modifiers;
+import com.prosbloom.pom.model.Prefix;
+import com.prosbloom.pom.model.Suffix;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;

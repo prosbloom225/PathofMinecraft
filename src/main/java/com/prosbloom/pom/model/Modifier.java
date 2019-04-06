@@ -5,9 +5,9 @@ import net.minecraft.util.text.TextFormatting;
 
 public class Modifier {
 
-    private String name;
-    private int ilvl;
-    private int tier;
+    public String name;
+    public int ilvl;
+    public int tier;
 
     public Modifier(String name, int ilvl, int tier) {
         this.name = name;
@@ -44,13 +44,6 @@ public class Modifier {
         return String.format("T%s-%s(%s)", tier,name, ilvl);
     }
 
-    public NBTTagCompound toNbt() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString(PomTag.MOD_NAME, name);
-        nbt.setInteger(PomTag.MOD_ILVL, ilvl);
-        nbt.setInteger(PomTag.MOD_TIER, tier);
-        return nbt;
-    }
 
     // deserialize nbt
     public Modifier(NBTTagCompound nbt) {
@@ -65,10 +58,20 @@ public class Modifier {
     }
 
 
-    public boolean equals(Modifier other) {
+    @Override
+    public boolean equals(Object obj) {
+        Modifier other = (Modifier)obj;
         return (this.getName().equals(other.getName())
                 && this.getIlvl() == other.getIlvl()
                 && this.getTier() == other.getTier()
         );
+    }
+
+    public NBTTagCompound serializeNbt() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString(PomTag.MOD_NAME, name);
+        nbt.setInteger(PomTag.MOD_ILVL, ilvl);
+        nbt.setInteger(PomTag.MOD_TIER, tier);
+        return nbt;
     }
 }

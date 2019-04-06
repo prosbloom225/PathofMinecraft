@@ -51,7 +51,7 @@ public class ChaosOrb extends BaseItem implements ICurrency {
                 suffixes.add(Pom.itemFactory.rollSuffix(NbtHelper.getIlvl(stack)));
             else
                 i--;
-        System.out.println(String.format("Chaos Orbing: %s - %d:%d mods", stack.getItem().getUnlocalizedName(), prefixes.size(), suffixes.size()));
+        System.out.println(String.format("Chaos Orbing: %s - %d:%d mods", stack.getItem().getRegistryName(), prefixes.size(), suffixes.size()));
         try {
             if (prefixes.size() > 0)
                 NbtHelper.addModifiers(stack, prefixes);

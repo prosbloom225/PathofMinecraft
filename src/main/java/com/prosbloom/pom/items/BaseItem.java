@@ -11,7 +11,6 @@ public class BaseItem extends Item {
 
     public BaseItem() {
         super();
-        setUnlocalizedName(this.getBaseName());
         setRegistryName(Pom.MODID, this.getBaseName());
         setCreativeTab(Pom.tabPom);
     }

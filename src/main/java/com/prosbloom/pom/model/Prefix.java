@@ -3,10 +3,12 @@ package com.prosbloom.pom.model;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 
+import java.util.Arrays;
+
 public class Prefix extends Modifier {
 
-    private float damageMod = 0;
-    private float[] damageModRange;
+    public float damageMod = 0;
+    public float[] damageModRange;
 
     public Prefix(String name, int ilvl, int tier, float[] damageModRange, float damageMod) {
         super(name, ilvl, tier);
@@ -30,8 +32,8 @@ public class Prefix extends Modifier {
 
 
     @Override
-    public NBTTagCompound toNbt() {
-        NBTTagCompound nbt = super.toNbt();
+    public NBTTagCompound serializeNbt() {
+        NBTTagCompound nbt = super.serializeNbt();
         nbt.setFloat(PomTag.MOD_DAMAGEMOD, damageMod);
         nbt.setFloat(PomTag.MOD_DAMAGERANGE_MIN, damageModRange[0]);
         nbt.setFloat(PomTag.MOD_DAMAGERANGE_MAX, damageModRange[1]);
@@ -57,6 +59,7 @@ public class Prefix extends Modifier {
     public boolean equals(Prefix other) {
         return (super.equals(other)
                 && this.damageMod == other.getDamageMod()
-                && this.getDamageModRange() == other.getDamageModRange());
+                && Arrays.equals(this.getDamageModRange(), other.getDamageModRange()));
     }
+
 }
