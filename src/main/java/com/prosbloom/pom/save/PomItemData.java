@@ -17,6 +17,9 @@ public class PomItemData {
     public int ilvl;
     private List<Modifier> modifiers;
 
+    public void setModifiers(List modifiers) {
+        this.modifiers = modifiers;
+    }
     public List<Modifier> getModifiers() {
         return modifiers;
     }

@@ -16,33 +16,19 @@ import java.util.stream.Collectors;
 
 public class NbtHelper {
 
-    private static void addPrefix(ItemStack stack, Prefix prefix) throws ModifierException{
-        PomItemData item = getNbt(stack);
-        if (item.getPrefixes().size() < PomTag.PREFIXES.length) {
-            item.addModifier(prefix);
-            writeNbt(stack, item);
-        } else
-            throw new ModifierException();
-    }
-    private static void addSuffix(ItemStack stack, Suffix suffix) throws ModifierException{
-        PomItemData item = getNbt(stack);
-        if (item.getSuffixes().size() < PomTag.SUFFIXES.length) {
-            item.addModifier(suffix);
-            writeNbt(stack, item);
-        } else
-            throw new ModifierException();
-    }
     public static void addModifiers(ItemStack stack, List<Modifier> mods) throws ModifierException{
         for (Modifier mod : mods)
             addModifier(stack, mod);
     }
     public static void addModifier(ItemStack stack, Modifier mod) throws ModifierException {
-        if (mod instanceof Prefix)
-            addPrefix(stack, (Prefix) mod);
-        else if (mod instanceof Suffix)
-            addSuffix(stack, (Suffix) mod);
-        else
+        PomItemData item = getNbt(stack);
+        if (mod instanceof Prefix && item.getPrefixes().size() < PomTag.PREFIXES.length) {
+            item.addModifier(mod);
+        } else if (mod instanceof Suffix && item.getSuffixes().size() < PomTag.SUFFIXES.length) {
+            item.addModifier(mod);
+        }else
             throw new ModifierException();
+        writeNbt(stack, item);
     }
 
     public static void clearPrefixes(ItemStack stack) {
@@ -65,18 +51,16 @@ public class NbtHelper {
     }
 
     public static void clearModifier(ItemStack stack, Modifier mod) throws ModifierException{
-        List<Modifier> mods = NbtHelper.getModifiers(stack);
-        for (Modifier modifier : mods)
+        PomItemData item = getNbt(stack);
+        for (Modifier modifier : item.getModifiers())
             if (mod.equals(modifier)) {
-                mods.remove(modifier);
+                item.getModifiers().remove(modifier);
                 break;
             }
-        NbtHelper.clearModifiers(stack);
         // reserialize
-        NbtHelper.addModifiers(stack, mods);
+        writeNbt(stack, item);
     }
     public static void clearModifiers(ItemStack stack) {
-        // this is cheaty, but more efficient
         PomItemData item = getNbt(stack);
         item.setModifiers(new ArrayList<Modifier>());
         writeNbt(stack, item);
@@ -86,8 +70,11 @@ public class NbtHelper {
     public static PomItemData getNbt(ItemStack stack){
         // any nbt initialization can happen here
         PomItemData item = new PomItemData();
+        // create the nbt and save if it doesnt exist
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.POM_TAG)) {
             item = new PomItemData(stack.getTagCompound().getCompoundTag(PomTag.POM_TAG));
+        } else {
+            NbtHelper.writeNbt(stack, item);
         }
         return item;
     }
@@ -151,21 +138,6 @@ public class NbtHelper {
     }
 
     public static List<Modifier> getModifiers(ItemStack stack) {
-        List<Modifier> modifiers = new ArrayList<>();
-
-        for (String p : PomTag.PREFIXES) {
-            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(p)) {
-                modifiers.add(new Prefix(stack.getTagCompound().getCompoundTag(p)));
-            }
-        }
-        PomItemData item = getNbt(stack);
-        for (Prefix p : item.getPrefixes())
-            modifiers.add(p);
-        for (String s : PomTag.SUFFIXES) {
-            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(s)) {
-                modifiers.add(new Suffix(stack.getTagCompound().getCompoundTag(s)));
-            }
-        }
-        return modifiers;
+        return getNbt(stack).getModifiers();
     }
 }
