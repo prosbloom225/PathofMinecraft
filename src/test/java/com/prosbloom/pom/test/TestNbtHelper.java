@@ -1,5 +1,6 @@
 package com.prosbloom.pom.test;
 
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.factory.ItemFactory;
@@ -37,6 +38,7 @@ public class TestNbtHelper {
     public void testItemStructSerialization() {
         PomItemData item = new PomItemData(), item2;
         item.ilvl = 88;
+        item.rarity = LibMisc.Rarity.RARE;
         item.getModifiers().add(pfx);
         item.getModifiers().add(sfx);
         NBTTagCompound itm = item.serializeNbt();
@@ -48,6 +50,7 @@ public class TestNbtHelper {
     public void TestNbtDeserialization() {
         PomItemData item = new PomItemData(), item2;
         item.ilvl = 88;
+        item.rarity = LibMisc.Rarity.RARE;
         item.getModifiers().add(pfx);
         item.getModifiers().add(sfx);
         NBTTagCompound itm = item.serializeNbt();

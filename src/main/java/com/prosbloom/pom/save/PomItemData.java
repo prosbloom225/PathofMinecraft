@@ -1,5 +1,6 @@
 package com.prosbloom.pom.save;
 
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.model.Modifier;
 import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
@@ -16,7 +17,14 @@ public class PomItemData {
 
     public int ilvl;
     private List<Modifier> modifiers;
+    public LibMisc.Rarity rarity;
 
+    public LibMisc.Rarity getRarity() {
+        return rarity;
+    }
+    public void setRarity(LibMisc.Rarity rarity) {
+        this.rarity = rarity;
+    }
     public void setModifiers(List modifiers) {
         this.modifiers = modifiers;
     }
@@ -31,6 +39,7 @@ public class PomItemData {
     public PomItemData() {
         modifiers = new ArrayList<>();
         ilvl = 1;
+        rarity = LibMisc.Rarity.NORMAL;
     }
 
     public List<Prefix> getPrefixes() {
@@ -53,6 +62,7 @@ public class PomItemData {
     public NBTTagCompound serializeNbt() {
         NBTTagCompound pom = new NBTTagCompound();
         pom.setInteger(PomTag.ILVL, ilvl);
+        pom.setString(PomTag.RARITY, rarity.toString());
         int p=0, s=0;
         for (Modifier modifier : modifiers) {
             if (modifier instanceof Prefix && p < PomTag.PREFIXES.length) {
@@ -72,6 +82,7 @@ public class PomItemData {
     public PomItemData (NBTTagCompound pom) {
         modifiers = new ArrayList<>();
         this.ilvl = pom.getInteger(PomTag.ILVL);
+        this.rarity = LibMisc.Rarity.valueOf(pom.getString(PomTag.RARITY));
         for (int i=0;i<PomTag.PREFIXES.length;i++)
             if (pom.hasKey(PomTag.PREFIXES[i]))
                 modifiers.add(new Prefix(pom.getCompoundTag(PomTag.PREFIXES[i])));
@@ -84,6 +95,7 @@ public class PomItemData {
     public boolean equals(PomItemData other) {
         boolean ret = true;
         ret &= this.ilvl == other.ilvl;
+        ret &= this.rarity == other.rarity;
         for (Modifier modifier : modifiers) {
             ret &= other.getModifiers().contains(modifier);
         }

@@ -99,13 +99,13 @@ public class NbtHelper {
         stack.getTagCompound().setString(PomTag.DUMMY, "dummy");
     }
     public static LibMisc.Rarity getRarity(ItemStack stack) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.RARITY))
-                return LibMisc.Rarity.valueOf(stack.getTagCompound().getString(PomTag.RARITY));
-        else return LibMisc.Rarity.NORMAL;
+        PomItemData item = getNbt(stack);
+        return item.getRarity();
     }
     public static void setRarity(ItemStack stack, LibMisc.Rarity rarity) {
-        getNbt(stack);
-        stack.getTagCompound().setString(PomTag.RARITY, rarity.toString());
+        PomItemData item = getNbt(stack);
+        item.setRarity(rarity);
+        writeNbt(stack, item);
     }
 
 
