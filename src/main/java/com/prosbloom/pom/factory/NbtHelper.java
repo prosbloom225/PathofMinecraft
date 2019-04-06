@@ -77,12 +77,9 @@ public class NbtHelper {
     }
     public static void clearModifiers(ItemStack stack) {
         // this is cheaty, but more efficient
-        for (String p : PomTag.PREFIXES)
-            if (stack.getTagCompound().hasKey(p))
-                stack.getTagCompound().removeTag(p);
-        for (String s : PomTag.SUFFIXES)
-            if (stack.getTagCompound().hasKey(s))
-                stack.getTagCompound().removeTag(s);
+        PomItemData item = getNbt(stack);
+        item.setModifiers(new ArrayList<Modifier>());
+        writeNbt(stack, item);
     }
 
     // item level nbt
