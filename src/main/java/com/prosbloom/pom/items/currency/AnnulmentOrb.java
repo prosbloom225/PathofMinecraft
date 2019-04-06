@@ -1,18 +1,11 @@
 package com.prosbloom.pom.items.currency;
 
-import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.exception.ModifierException;
-import com.prosbloom.pom.exception.ModifierNotFoundException;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.BaseItem;
 import com.prosbloom.pom.items.interfaces.ICurrency;
 import com.prosbloom.pom.model.Modifier;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;

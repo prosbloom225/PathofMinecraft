@@ -31,14 +31,17 @@ public class AugmentOrb extends BaseItem implements ICurrency {
     @Override
     public ItemStack process(ItemStack stack) {
         System.out.println(String.format("Augment Orbing: %s", stack.getItem().getRegistryName()));
-        // add corresponding prefix/suffix based
-        try {
-            if (NbtHelper.getPrefixes(stack).size() > 0)
-                NbtHelper.addModifier(stack, Pom.itemFactory.rollSuffix(NbtHelper.getIlvl(stack)));
-            else
-                NbtHelper.addModifier(stack, Pom.itemFactory.rollPrefix(NbtHelper.getIlvl(stack)));
-        } catch (ModifierException e) {
-            System.out.println("Error in adding modifier: " + e.toString());
+        // last check for modifiers
+        if (NbtHelper.getModifiers(stack).size() < 2){
+            // add corresponding prefix/suffix based
+            try {
+                if (NbtHelper.getPrefixes(stack).size() > 0)
+                    NbtHelper.addModifier(stack, Pom.itemFactory.rollSuffix(NbtHelper.getIlvl(stack)));
+                else
+                    NbtHelper.addModifier(stack, Pom.itemFactory.rollPrefix(NbtHelper.getIlvl(stack)));
+            } catch (ModifierException e) {
+                System.out.println("Error in adding modifier: " + e.toString());
+            }
         }
         return stack;
     }
