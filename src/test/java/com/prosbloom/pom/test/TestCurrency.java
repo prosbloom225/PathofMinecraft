@@ -105,4 +105,57 @@ public class TestCurrency {
 
     }
 
+    @Test
+    public void testDivineOrb() throws ModifierException {
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.addModifier(stack, pfx);
+        NbtHelper.addModifier(stack, sfx);
+        float pp = NbtHelper.getPrefixes(stack).get(0).getDamageMod();
+        float ss = NbtHelper.getSuffixes(stack).get(0).getSpeedMod();
+        new DivineOrb().process(stack);
+        Assertions.assertNotEquals(pp, NbtHelper.getPrefixes(stack).get(0).getDamageMod());
+        Assertions.assertNotEquals(ss, NbtHelper.getSuffixes(stack).get(0).getSpeedMod());
+    }
+
+    @Test
+    public void testExaltedOrb() throws ModifierException {
+        NbtHelper.clearModifiers(stack);
+        new ExaltedOrb().process(stack);
+        Assertions.assertEquals(1, NbtHelper.getModifiers(stack).size());
+
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.addModifier(stack, pfx);
+        NbtHelper.addModifier(stack, pfx);
+        new ExaltedOrb().process(stack);
+        Assertions.assertEquals(3, NbtHelper.getModifiers(stack).size());
+
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.addModifier(stack, pfx);
+        NbtHelper.addModifier(stack, pfx);
+        NbtHelper.addModifier(stack, pfx);
+        NbtHelper.addModifier(stack, sfx);
+        NbtHelper.addModifier(stack, sfx);
+        NbtHelper.addModifier(stack, sfx);
+        new ExaltedOrb().process(stack);
+        Assertions.assertEquals(6, NbtHelper.getModifiers(stack).size());
+        //Assertions.assertThrows(ModifierException.class, () ->
+         //   new ExaltedOrb().process(stack));
+    }
+
+    @Test
+    public void testRegalOrb() {
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.setRarity(stack, LibMisc.Rarity.MAGIC);
+        new RegalOrb().process(stack);
+        Assertions.assertEquals(1, NbtHelper.getModifiers(stack).size());
+        Assertions.assertEquals(LibMisc.Rarity.RARE, NbtHelper.getRarity(stack));
+    }
+
+    @Test
+    public void testScourOrb() throws ModifierException {
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.addModifier(stack, pfx);
+        new ScourOrb().process(stack);
+        Assertions.assertEquals(0, NbtHelper.getModifiers(stack).size());
+    }
 }
