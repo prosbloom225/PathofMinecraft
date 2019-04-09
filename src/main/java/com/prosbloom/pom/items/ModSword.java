@@ -40,6 +40,7 @@ public class ModSword extends ItemSword {
     }
 
 
+    /*
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
@@ -93,6 +94,7 @@ public class ModSword extends ItemSword {
         }
 
     }
+     */
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
