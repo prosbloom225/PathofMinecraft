@@ -4,12 +4,19 @@ import com.google.gson.Gson;
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.items.ModItems;
+import com.prosbloom.pom.items.ModSword;
+import com.prosbloom.pom.items.currency.ChaosOrb;
+import com.prosbloom.pom.items.currency.TransmutationOrb;
 import com.prosbloom.pom.model.Modifier;
 import com.prosbloom.pom.model.Modifiers;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
+import com.prosbloom.pom.save.PomItemData;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import org.apache.logging.log4j.Logger;
+import static com.prosbloom.pom.LibMisc.Types.*;
+import static com.prosbloom.pom.LibMisc.Rarity.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,16 +35,18 @@ public class ItemFactory {
         //Type listType = new TypeToken<List<Modifiers>>() {}.getType();
         modifiers = gson.fromJson(new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/1hSword.json"))), Modifiers.class);
     }
+
     // TODO  - prefix and suffix shouldn't be separate.  should refactor to just modifiers with prefix/suffix being a property
-    public Modifier getPrefix (String name) {
+    public Modifier getPrefix(String name) {
         return modifiers.getPrefixes().stream()
-                .filter(s-> name.equals(s.getName()))
+                .filter(s -> name.equals(s.getName()))
                 .findFirst()
                 .orElse(null);
     }
-    public Modifier getSuffix (String name) {
+
+    public Modifier getSuffix(String name) {
         return modifiers.getSuffixes().stream()
-                .filter(s-> name.equals(s.getName()))
+                .filter(s -> name.equals(s.getName()))
                 .findFirst()
                 .orElse(null);
     }
@@ -45,16 +54,18 @@ public class ItemFactory {
     // rolls
     public Prefix rollPrefix(int ilvl) {
         // grab a viable prefix
-        List <Modifier>viablePrefixes = modifiers.getPrefixes().stream().filter(i->ilvl>= i.getIlvl()).collect(Collectors.toList());
-        Prefix prefix = (Prefix)viablePrefixes.get(new Random().nextInt(viablePrefixes.size()));
+        List<Modifier> viablePrefixes = modifiers.getPrefixes().stream().filter(i -> ilvl >= i.getIlvl()).collect(Collectors.toList());
+        Prefix prefix = (Prefix) viablePrefixes.get(new Random().nextInt(viablePrefixes.size()));
         return rollPrefix(prefix);
     }
+
     public Prefix rollPrefix(Prefix prefix) {
         // roll the prefix mods
         prefix.setDamageMod(1 + prefix.getDamageModRange()[0] + new Random().nextFloat() * (prefix.getDamageModRange()[1] - prefix.getDamageModRange()[0]));
         return prefix;
 
     }
+
     public void rerollPrefix(ItemStack stack) {
         try {
             List<Prefix> prefix = NbtHelper.getPrefixes(stack);
@@ -71,12 +82,14 @@ public class ItemFactory {
         suffix.setSpeedMod(suffix.getSpeedModRange()[0] + new Random().nextFloat() * (suffix.getSpeedModRange()[1] - suffix.getSpeedModRange()[0]));
         return suffix;
     }
+
     public Suffix rollSuffix(int ilvl) {
         // grab a viable suffix
-        List <Modifier>viableSuffixes = modifiers.getSuffixes().stream().filter(i->ilvl>= i.getIlvl()).collect(Collectors.toList());
-        Suffix suffix = (Suffix)viableSuffixes.get(new Random().nextInt(viableSuffixes.size()));
+        List<Modifier> viableSuffixes = modifiers.getSuffixes().stream().filter(i -> ilvl >= i.getIlvl()).collect(Collectors.toList());
+        Suffix suffix = (Suffix) viableSuffixes.get(new Random().nextInt(viableSuffixes.size()));
         return rollSuffix(suffix);
     }
+
     public void rerollSuffix(ItemStack stack) {
         try {
             List<Suffix> suffix = NbtHelper.getSuffixes(stack);
@@ -105,5 +118,28 @@ public class ItemFactory {
         }
 
         return stack;
+    }
+
+    public void generateItem(ItemStack stack, int ilvl) {
+        NbtHelper.setIlvl(stack, ilvl);
+        NbtHelper.setRarity(stack, getRandomRarity());
+            // process rarity and add modifiers
+            // TODO - just gonna use currency for the time.  this may be right or wrong
+            switch (NbtHelper.getRarity(stack)) {
+                case NORMAL:
+                    break;
+                case MAGIC:
+                    new TransmutationOrb().process(stack);
+                    break;
+                case RARE:
+                    new ChaosOrb().process(stack);
+                    break;
+                case UNIQUE:
+                    // TODO - should probably build some stub uniques and implement functionality
+                    // will need to determine how to handle random uniqyes
+                    break;
+        }
+        if (stack.getItem() instanceof ItemSword)
+            stack = NbtHelper.upgradeSword(stack);
     }
 }

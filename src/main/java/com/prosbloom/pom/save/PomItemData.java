@@ -14,11 +14,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PomItemData {
-
     public int ilvl;
     private List<Modifier> modifiers;
     public LibMisc.Rarity rarity;
+    // TODO - need to save type of item as well.
+    // especially for nonmod items added to system, might want to have a bow with sword stats or whatever
+    // then again that miht break shit.  either way, store the type...
 
+
+    public int getIlvl() {
+        return ilvl;
+    }
+    public void setIlvl(int ilvl) {
+        this.ilvl = ilvl;
+    }
     public LibMisc.Rarity getRarity() {
         return rarity;
     }

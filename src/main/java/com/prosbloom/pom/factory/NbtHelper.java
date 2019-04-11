@@ -1,5 +1,6 @@
 package com.prosbloom.pom.factory;
 
+import com.google.common.collect.Multimap;
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.exception.ModifierException;
 import com.prosbloom.pom.model.Modifier;
@@ -7,14 +8,25 @@ import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
 import com.prosbloom.pom.save.PomItemData;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.UUID;
 
 public class NbtHelper {
+    // TODO - get these dynamically
+    protected static final UUID ATTACK_DAMAGE_MODIFIER = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+    protected static final UUID ATTACK_SPEED_MODIFIER = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
 
     public static void addModifiers(ItemStack stack, List<Modifier> mods) throws ModifierException{
         for (Modifier mod : mods)
@@ -139,5 +151,25 @@ public class NbtHelper {
 
     public static List<Modifier> getModifiers(ItemStack stack) {
         return getNbt(stack).getModifiers();
+    }
+
+    // Attribute stuff
+    public static ItemStack upgradeSword(ItemStack stack) {
+        Multimap<String, AttributeModifier> modifiers = stack.getItem().getAttributeModifiers(EntityEquipmentSlot.MAINHAND, stack);
+        // Phys Dmg
+        double dmgMod = 1.0;
+        for (Prefix prefix : getPrefixes(stack))
+            dmgMod += prefix.getDamageMod();
+        final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
+                .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_DAMAGE_MODIFIER))
+                .findFirst();
+        if (modifierOptional.isPresent()) {
+            final AttributeModifier modifier = modifierOptional.get();
+            double dmg = modifierOptional.get().getAmount() * dmgMod;
+            AttributeModifier mod = new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon Modifier", dmg, 0);
+            stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), mod, EntityEquipmentSlot.MAINHAND);
+        }
+
+        return stack;
     }
 }

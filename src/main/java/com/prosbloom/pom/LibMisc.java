@@ -14,4 +14,8 @@ public class LibMisc {
             return Rarity.values()[pick];
         }
     }
+    public enum Types {
+        SWORD,
+        BOW;
+    }
 }
