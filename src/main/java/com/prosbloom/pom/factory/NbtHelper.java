@@ -154,22 +154,41 @@ public class NbtHelper {
     }
 
     // Attribute stuff
-    public static ItemStack upgradeSword(ItemStack stack) {
-        Multimap<String, AttributeModifier> modifiers = stack.getItem().getAttributeModifiers(EntityEquipmentSlot.MAINHAND, stack);
-        // Phys Dmg
-        double dmgMod = 1.0;
-        for (Prefix prefix : getPrefixes(stack))
-            dmgMod += prefix.getDamageMod();
-        final Optional<AttributeModifier> modifierOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
-                .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_DAMAGE_MODIFIER))
-                .findFirst();
-        if (modifierOptional.isPresent()) {
-            final AttributeModifier modifier = modifierOptional.get();
-            double dmg = modifierOptional.get().getAmount() * dmgMod;
-            AttributeModifier mod = new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon Modifier", dmg, 0);
-            stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), mod, EntityEquipmentSlot.MAINHAND);
-        }
+    public static void processItemData(ItemStack stack) {
+        // check nbt here for performace
+       if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.POM_TAG)) {
+           PomItemData item = getNbt(stack);
+            // process mainhand attributes
+            Multimap<String, AttributeModifier> modifiers = stack.getItem().getAttributeModifiers(EntityEquipmentSlot.MAINHAND, stack);
+            // Phys Dmg
+            double dmgMod = 1.0;
+            for (Prefix prefix : item.getPrefixes())
+                dmgMod += prefix.getDamageMod();
+            final Optional<AttributeModifier> prefixOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
+                    .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_DAMAGE_MODIFIER))
+                    .findFirst();
+            if (prefixOptional.isPresent()) {
+                final AttributeModifier modifier = prefixOptional.get();
+                double dmg = prefixOptional.get().getAmount() * dmgMod;
+                AttributeModifier mod = new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon Modifier", dmg, 0);
+                stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), mod, EntityEquipmentSlot.MAINHAND);
+            }
 
-        return stack;
+            // Atk Spd
+            double spdMod = 1.0;
+            for (Suffix suffix : item.getSuffixes())
+                spdMod += suffix.getSpeedMod();
+            final Optional<AttributeModifier> suffixOptional = modifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName()).stream()
+                    .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_SPEED_MODIFIER))
+                    .findFirst();
+            if (suffixOptional.isPresent()) {
+                final AttributeModifier modifier = suffixOptional.get();
+                // spd calc is weird cuz it starts negative
+                double val = suffixOptional.get().getAmount();
+                double spd = val + Math.abs(val) * spdMod;
+                AttributeModifier mod = new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon Modifier", spd, 0);
+                stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_SPEED.getName(), mod, EntityEquipmentSlot.MAINHAND);
+            }
+        }
     }
 }

@@ -122,7 +122,9 @@ public class ItemFactory {
 
     public void generateItem(ItemStack stack, int ilvl) {
         NbtHelper.setIlvl(stack, ilvl);
-        NbtHelper.setRarity(stack, getRandomRarity());
+        //NbtHelper.setRarity(stack, getRandomRarity());
+        // TODO - temp shim
+        NbtHelper.setRarity(stack, RARE);
             // process rarity and add modifiers
             // TODO - just gonna use currency for the time.  this may be right or wrong
             switch (NbtHelper.getRarity(stack)) {
@@ -139,7 +141,6 @@ public class ItemFactory {
                     // will need to determine how to handle random uniqyes
                     break;
         }
-        if (stack.getItem() instanceof ItemSword)
-            stack = NbtHelper.upgradeSword(stack);
+        NbtHelper.processItemData(stack);
     }
 }

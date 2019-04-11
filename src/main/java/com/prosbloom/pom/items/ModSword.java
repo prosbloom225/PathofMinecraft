@@ -96,6 +96,7 @@ public class ModSword extends ItemSword {
     }
      */
 
+    /*
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
@@ -144,4 +145,5 @@ public class ModSword extends ItemSword {
 
         return modifiers;
     }
+     */
 }
