@@ -3,6 +3,7 @@ package com.prosbloom.pom.events;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.BaseItem;
 import com.prosbloom.pom.items.ModSword;
+import com.prosbloom.pom.model.PomTag;
 import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
 import com.prosbloom.pom.save.PomItemData;
@@ -25,7 +26,7 @@ public class PomTooltipEvent {
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-        if (stack.getItem() instanceof ModSword){
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.POM_TAG)){
             PomItemData item = NbtHelper.getNbt(stack);
             event.getToolTip().add("(" + item.ilvl + ")");
             String suffix;
@@ -75,6 +76,5 @@ public class PomTooltipEvent {
             }
 
         }
-
     }
 }
