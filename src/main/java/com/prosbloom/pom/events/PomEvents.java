@@ -2,8 +2,6 @@ package com.prosbloom.pom.events;
 
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.factory.NbtHelper;
-import com.prosbloom.pom.items.ModItems;
-import com.prosbloom.pom.items.ModSword;
 import com.prosbloom.pom.items.interfaces.ICurrency;
 import com.prosbloom.pom.model.PomTag;
 import net.minecraft.item.ItemStack;
@@ -59,8 +57,10 @@ public class PomEvents {
         if (rightStack.getItem() instanceof ICurrency) {
             ItemStack newStack = leftStack.copy();
             // only apply currency on server
-            if (event.getEntity().getEntityWorld().isRemote == false)
+            if (event.getEntity().getEntityWorld().isRemote == false) {
                 newStack = ((ICurrency) rightStack.getItem()).process(newStack);
+                NbtHelper.processItemData(newStack);
+            }
 
             // TODO - item in hand isnt refreshed until a new container event triggers, item doesnt appear updated when mousing out of anvil
             // clicking item out of output slot leaves it in the anvil

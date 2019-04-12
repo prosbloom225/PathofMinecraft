@@ -162,17 +162,19 @@ public class NbtHelper {
         // check nbt here for performace
        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.POM_TAG)) {
            PomItemData item = getNbt(stack);
+           // clear the attributes
+           stack.getTagCompound().removeTag("AttributeModifiers");
             // process mainhand attributes
             Multimap<String, AttributeModifier> modifiers = stack.getItem().getAttributeModifiers(EntityEquipmentSlot.MAINHAND, stack);
             // Phys Dmg
             double dmgMod = 1.0;
+           //TODO - can probably clean this up.. stolen code from old ModSword
             for (Prefix prefix : item.getPrefixes())
                 dmgMod += prefix.getDamageMod();
             final Optional<AttributeModifier> prefixOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
                     .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_DAMAGE_MODIFIER))
                     .findFirst();
             if (prefixOptional.isPresent()) {
-                final AttributeModifier modifier = prefixOptional.get();
                 double dmg = prefixOptional.get().getAmount() * dmgMod;
                 AttributeModifier mod = new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon Modifier", dmg, 0);
                 stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), mod, EntityEquipmentSlot.MAINHAND);
@@ -186,7 +188,6 @@ public class NbtHelper {
                     .filter(attributeModifier -> attributeModifier.getID().equals(ATTACK_SPEED_MODIFIER))
                     .findFirst();
             if (suffixOptional.isPresent()) {
-                final AttributeModifier modifier = suffixOptional.get();
                 // spd calc is weird cuz it starts negative
                 double val = suffixOptional.get().getAmount();
                 double spd = val + Math.abs(val) * spdMod;
