@@ -25,7 +25,8 @@ public class PomEvents {
     public static void PlayerContainerEvent(PlayerContainerEvent event) {
         System.out.println("Container: " + event.getContainer());
         List<ItemStack> stacks = event.getContainer().getInventory().stream()
-                .filter(i-> i.getItem().getRegistryName().toString().contains("sword"))
+                .filter(i-> i.getItem().getRegistryName().toString().contains("sword")
+                || i.getItem().getRegistryName().toString().contains("bow"))
                 .filter(i-> !i.hasTagCompound() || (i.hasTagCompound() && !i.getTagCompound().hasKey(PomTag.POM_TAG)))
                 .collect(Collectors.toList());
         for (ItemStack stack : stacks) {
