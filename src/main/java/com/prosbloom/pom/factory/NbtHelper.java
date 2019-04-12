@@ -100,6 +100,10 @@ public class NbtHelper {
         nbt.setTag(PomTag.POM_TAG, pomNbt);
         stack.setTagCompound(nbt);
     }
+    public static boolean hasTag(ItemStack stack) {
+        return stack.hasTagCompound()
+                && stack.getTagCompound().hasKey(PomTag.POM_TAG);
+    }
 
     public static boolean isDummy(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(PomTag.DUMMY))

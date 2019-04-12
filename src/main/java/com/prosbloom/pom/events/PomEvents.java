@@ -56,7 +56,7 @@ public class PomEvents {
         ItemStack leftStack = event.getItemInput();
 
         // TODO - ok so if you shift click a ModSword out of anvil, with a ModSword in hand, it breaks, fix it later
-        if (rightStack.getItem() instanceof ICurrency){
+        if (rightStack.getItem() instanceof ICurrency) {
             ItemStack newStack = leftStack.copy();
             // only apply currency on server
             if (event.getEntity().getEntityWorld().isRemote == false)
@@ -64,14 +64,14 @@ public class PomEvents {
 
             // TODO - item in hand isnt refreshed until a new container event triggers, item doesnt appear updated when mousing out of anvil
             // clicking item out of output slot leaves it in the anvil
-            if (event.getEntityPlayer().inventory.getItemStack().getItem() instanceof ModSword)
+            if (NbtHelper.hasTag(event.getEntityPlayer().inventory.getItemStack()))
                 event.getEntityPlayer().inventory.setItemStack(newStack.copy());
             else
                 // shift click clears the anvil
                 event.getEntityPlayer().inventory.addItemStackToInventory(newStack);
             // remove the(all) dummy item(s)
             event.getEntityPlayer().inventory.mainInventory.stream()
-                    .filter(stack->stack.getItem() instanceof ModSword && NbtHelper.isDummy(stack))
+                    .filter(stack->NbtHelper.hasTag(stack) && NbtHelper.isDummy(stack))
                     .forEach(stack->stack.shrink(1));
         }
     }
@@ -81,11 +81,12 @@ public class PomEvents {
     {
         ItemStack rightItem = event.getRight();
         ItemStack leftItem = event.getLeft();
-        if (leftItem.getItem() instanceof ModSword && rightItem.getItem() instanceof ICurrency && ((ICurrency)rightItem.getItem()).canProcess(leftItem)) {
+        if (NbtHelper.hasTag(leftItem) && rightItem.getItem() instanceof ICurrency && ((ICurrency)rightItem.getItem()).canProcess(leftItem)) {
             // we need to set a valid cost and output item to give the player something in output slot
             event.setCost(1);
             event.setMaterialCost(1);
-            ItemStack stack = new ItemStack(ModItems.modSword);
+            ItemStack stack = leftItem.copy();
+            NbtHelper.clearModifiers(stack);
             NbtHelper.setIlvl(stack, 99);
             NbtHelper.setDummy(stack, true);
             event.setOutput(stack);
