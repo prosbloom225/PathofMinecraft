@@ -1,6 +1,7 @@
 package com.prosbloom.pom;
 
 
+import com.prosbloom.pom.common.ConfigHandler;
 import com.prosbloom.pom.factory.ItemFactory;
 import com.prosbloom.pom.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
@@ -14,12 +15,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod(modid = Pom.MODID, name = Pom.MODNAME, version = Pom.MODVERSION, dependencies = "", useMetadata = true)
+@Mod(modid = LibMisc.MODID, name = LibMisc.MODNAME, version = LibMisc.VERSION, dependencies = "", useMetadata = true)
 public class Pom {
 
-    public static final String MODID = "pom";
-    public static final String MODNAME = "Path of Minecraft";
-    public static final String MODVERSION= "0.0.1";
 
     @SidedProxy(clientSide = "com.prosbloom.pom.proxy.ClientProxy", serverSide = "com.prosbloom.pom.proxy.ServerProxy")
     public static CommonProxy proxy;
@@ -42,6 +40,7 @@ public class Pom {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
         proxy.preInit(event);
+        ConfigHandler.loadConfig(event.getSuggestedConfigurationFile());
     }
 
     @Mod.EventHandler

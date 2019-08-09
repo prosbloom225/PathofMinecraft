@@ -1,5 +1,6 @@
 package com.prosbloom.pom.items;
 
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -11,9 +12,9 @@ public class BaseItem extends Item {
 
     public BaseItem() {
         super();
-        setRegistryName(Pom.MODID, this.getBaseName());
+        setRegistryName(LibMisc.MODID, this.getBaseName());
         setCreativeTab(Pom.tabPom);
-        setTranslationKey(Pom.MODID + "." + this.getBaseName());
+        setTranslationKey(LibMisc.MODID + "." + this.getBaseName());
     }
 
     public String getBaseName() {

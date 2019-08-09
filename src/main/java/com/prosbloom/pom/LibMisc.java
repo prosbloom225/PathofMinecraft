@@ -3,6 +3,13 @@ package com.prosbloom.pom;
 import java.util.Random;
 
 public class LibMisc {
+
+    public static final String MODID = "pom";
+    public static final String MODNAME = "Path of Minecraft";
+    public static final String BUILD = "GRADLE:BUILD";
+    public static final String VERSION = "GRADLE:VERSION-" + BUILD;
+
+
     public enum Rarity {
         NORMAL,
         MAGIC,

@@ -1,6 +1,7 @@
 package com.prosbloom.pom.items;
 
 import com.google.common.collect.Multimap;
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.model.Prefix;
@@ -30,8 +31,8 @@ public class ModSword extends ItemSword {
 
     public ModSword() {
         super(ToolMaterial.STONE);
-        setRegistryName(Pom.MODID, baseName);
-        setTranslationKey(Pom.MODID + "." + baseName);
+        setRegistryName(LibMisc.MODID, baseName);
+        setTranslationKey(LibMisc.MODID + "." + baseName);
     }
 
     @SideOnly(Side.CLIENT)
