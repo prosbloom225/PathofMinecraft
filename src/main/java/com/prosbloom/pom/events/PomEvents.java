@@ -1,9 +1,12 @@
 package com.prosbloom.pom.events;
 
+import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
+import com.prosbloom.pom.common.ConfigHandler;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.interfaces.ICurrency;
 import com.prosbloom.pom.model.PomTag;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
@@ -14,20 +17,33 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(value =
         { Side.SERVER, Side.CLIENT })
 public class PomEvents {
+
+    private static boolean shouldAddToSystem(Item i) {
+        boolean ret;
+        // mod check
+        ret = (ConfigHandler.addVanillaWeaponsToSystem && i.getRegistryName().toString().contains("minecraft:"));
+        ret = ret || (ConfigHandler.addOtherModItemsToSystem && (!i.getRegistryName().toString().contains("minecraft:")
+                || i.getRegistryName().toString().contains(LibMisc.MODID + ":")));
+        // regex check
+        ret = ret && (ConfigHandler.swordRegexPattern.matcher(i.getRegistryName().toString()).matches() ||
+                ConfigHandler.swordRegexPattern.matcher(i.getRegistryName().toString()).matches());
+        return ret;
+    }
 
     // Inventory closed after adding new item
     @SubscribeEvent
     public static void PlayerContainerEvent(PlayerContainerEvent event) {
         System.out.println("Container: " + event.getContainer());
         List<ItemStack> stacks = event.getContainer().getInventory().stream()
-                .filter(i-> i.getItem().getRegistryName().toString().contains("sword")
-                || i.getItem().getRegistryName().toString().contains("bow"))
                 .filter(i-> !i.hasTagCompound() || (i.hasTagCompound() && !i.getTagCompound().hasKey(PomTag.POM_TAG)))
+                .filter(i->shouldAddToSystem(i.getItem()))
                 .collect(Collectors.toList());
         for (ItemStack stack : stacks) {
             System.out.println("Adding item to system" + stack.getDisplayName());
