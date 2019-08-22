@@ -2,6 +2,7 @@ package com.prosbloom.pom;
 
 
 import com.prosbloom.pom.common.ConfigHandler;
+import com.prosbloom.pom.factory.DropFactory;
 import com.prosbloom.pom.factory.ItemFactory;
 import com.prosbloom.pom.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
@@ -33,6 +34,7 @@ public class Pom {
     public static Pom instance;
 
     public static ItemFactory itemFactory = new ItemFactory();
+    public static DropFactory dropFactory = new DropFactory();
 
     public static Logger logger;
 

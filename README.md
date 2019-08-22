@@ -4,6 +4,8 @@ Path of Exile ported to minecraft
 # TODO
 
 ## Items
+- Mirror of Kalandra
+- Eternal Orb
 - Divine Orb
 - Vaal Orb
 - Item Names(not just prefix/suffix)
@@ -18,8 +20,10 @@ Path of Exile ported to minecraft
 - Item identification
 - Flasks
 - Cosmetics
+- Vendor recipes
 
 ## Player
+- Item Quant/Rarity
 - Skill tree
 - Attributes(str/dex/int)
 - Elemental(chaos) damage

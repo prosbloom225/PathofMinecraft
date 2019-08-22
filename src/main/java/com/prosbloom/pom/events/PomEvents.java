@@ -45,6 +45,7 @@ public class PomEvents {
                 .filter(i-> !i.hasTagCompound() || (i.hasTagCompound() && !i.getTagCompound().hasKey(PomTag.POM_TAG)))
                 .filter(i->shouldAddToSystem(i.getItem()))
                 .collect(Collectors.toList());
+
         for (ItemStack stack : stacks) {
             System.out.println("Adding item to system" + stack.getDisplayName());
             // TODO - need to handle ilvl somehow...

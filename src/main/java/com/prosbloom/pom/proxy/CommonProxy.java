@@ -1,5 +1,6 @@
 package com.prosbloom.pom.proxy;
 
+import com.prosbloom.pom.events.MobDeathEvents;
 import com.prosbloom.pom.events.PomEvents;
 import com.prosbloom.pom.items.*;
 import com.prosbloom.pom.items.currency.*;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 public class CommonProxy {
 
     public static PomEvents pomEvents = new PomEvents();
+    public static MobDeathEvents mobDeathEvents = new MobDeathEvents();
 
     public void preInit(FMLPreInitializationEvent e) {
     }
