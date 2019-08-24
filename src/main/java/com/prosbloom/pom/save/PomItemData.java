@@ -19,6 +19,16 @@ public class PomItemData {
     public LibMisc.Rarity rarity;
     private boolean mirrored = false;
 
+    public boolean isCorrupted() {
+        return corrupted;
+    }
+
+    public void setCorrupted(boolean corrupted) {
+        this.corrupted = corrupted;
+    }
+
+    private boolean corrupted = false;
+
     // TODO - need to save type of item as well.
     // especially for nonmod items added to system, might want to have a bow with sword stats or whatever
     // then again that miht break shit.  either way, store the type...
@@ -82,6 +92,7 @@ public class PomItemData {
         pom.setInteger(PomTag.ILVL, ilvl);
         pom.setString(PomTag.RARITY, rarity.toString());
         pom.setBoolean(PomTag.MIRROR, mirrored);
+        pom.setBoolean(PomTag.CORRUPT, corrupted);
         int p=0, s=0;
         for (Modifier modifier : modifiers) {
             if (modifier instanceof Prefix && p < PomTag.PREFIXES.length) {
@@ -103,6 +114,7 @@ public class PomItemData {
         this.ilvl = pom.getInteger(PomTag.ILVL);
         this.rarity = LibMisc.Rarity.valueOf(pom.getString(PomTag.RARITY));
         this.mirrored = pom.getBoolean(PomTag.MIRROR);
+        this.corrupted = pom.getBoolean(PomTag.CORRUPT);
         for (int i=0;i<PomTag.PREFIXES.length;i++)
             if (pom.hasKey(PomTag.PREFIXES[i]))
                 modifiers.add(new Prefix(pom.getCompoundTag(PomTag.PREFIXES[i])));
@@ -117,6 +129,7 @@ public class PomItemData {
         ret &= this.ilvl == other.ilvl;
         ret &= this.rarity == other.rarity;
         ret &= this.mirrored == other.mirrored;
+        ret &= this.corrupted == other.corrupted;
         for (Modifier modifier : modifiers) {
             ret &= other.getModifiers().contains(modifier);
         }

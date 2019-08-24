@@ -8,6 +8,7 @@ public class PomTag {
     public static final String DUMMY = "dummy";
     public static final String RARITY = "rarity";
     public static final String MIRROR = "mirror";
+    public static final String CORRUPT = "corrupt";
 
 
     public static final String MOD_NAME = "name";

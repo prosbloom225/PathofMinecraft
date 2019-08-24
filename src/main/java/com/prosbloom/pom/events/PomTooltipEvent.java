@@ -69,6 +69,8 @@ public class PomTooltipEvent {
             event.getToolTip().add(String.format("%s %s %s %s", name, prefix, stack.getItem().getRegistryName(), suffix));
             if (NbtHelper.getMirrored(stack))
                 event.getToolTip().add(TextFormatting.RED + "Mirrored");
+            if (NbtHelper.getCorrupted(stack))
+                event.getToolTip().add(TextFormatting.RED + "Corrupted");
             if (GuiScreen.isShiftKeyDown()) {
                 for (Prefix p : item.getPrefixes())
                     advPrefix.add(p.getAdvTooltip());

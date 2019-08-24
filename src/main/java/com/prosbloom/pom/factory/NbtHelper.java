@@ -152,6 +152,15 @@ public class NbtHelper {
         writeNbt(stack, item);
     }
 
+    public static boolean getCorrupted(ItemStack stack) {
+        PomItemData item = getNbt(stack);
+        return item.isCorrupted();
+    }
+    public static void setCorrupted(ItemStack stack, boolean corrupt) {
+        PomItemData item = getNbt(stack);
+        item.setCorrupted(corrupt);
+        writeNbt(stack, item);
+    }
 
     public static List<Prefix> getPrefixes(ItemStack stack) {
         PomItemData item = getNbt(stack);
