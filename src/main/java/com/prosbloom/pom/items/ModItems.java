@@ -5,7 +5,16 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ModItems {
+
+    public static List<BaseItem> getItems() {
+        return items;
+    }
+
+    private static List<BaseItem> items;
 
     @GameRegistry.ObjectHolder("pom:modsword")
     public static ModSword modSword;
@@ -48,20 +57,29 @@ public class ModItems {
 
     @SideOnly(Side.CLIENT)
     public static void initModels() {
-        modSword.initModel();
-        modBow.initModel();
-        itemCase.initModel();
-        chaosOrb.initModel();
-        annulmentOrb.initModel();
-        divineOrb.initModel();
-        scourOrb.initModel();
-        exaltedOrb.initModel();
-        alchemyOrb.initModel();
-        alterationOrb.initModel();
-        augmentOrb.initModel();
-        regalOrb.initModel();
-        transmutationOrb.initModel();
+        for (BaseItem item : items)
+            item.initModel();
     }
+    public static void register(BaseItem item){
+        items.add(item);
+    }
+    public static void init() {
+        items = new ArrayList<>();
+        modSword = new ModSword();
+        modBow = new ModBow();
+        itemCase = new ItemCase();
+        chaosOrb = new ChaosOrb();
+        annulmentOrb = new AnnulmentOrb();
+        divineOrb = new DivineOrb();
+        scourOrb = new ScourOrb();
+        exaltedOrb = new ExaltedOrb();
+        alchemyOrb = new AlchemyOrb();
+        alterationOrb = new AlterationOrb();
+        augmentOrb = new AugmentOrb();
+        regalOrb = new RegalOrb();
+        transmutationOrb = new TransmutationOrb();
 
+
+    }
 }
 

@@ -10,10 +10,15 @@ public class Drops {
         drops.addAll(Arrays.asList(currency));
         return drops;
     }
+
     public List<Drop> getCurrency() {
         return Arrays.asList(currency);
     }
+    public List<Drop> getRates() {
+        return Arrays.asList(rates);
+    }
 
+    private Drop[] rates;
     private Drop[] currency;
 
 

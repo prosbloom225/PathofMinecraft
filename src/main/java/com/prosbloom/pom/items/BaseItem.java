@@ -15,6 +15,7 @@ public class BaseItem extends Item {
         setRegistryName(LibMisc.MODID, this.getBaseName());
         setCreativeTab(Pom.tabPom);
         setTranslationKey(LibMisc.MODID + "." + this.getBaseName());
+        ModItems.register(this);
     }
 
     public String getBaseName() {

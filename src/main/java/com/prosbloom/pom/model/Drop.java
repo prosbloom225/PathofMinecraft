@@ -1,6 +1,7 @@
 package com.prosbloom.pom.model;
 
 import com.prosbloom.pom.items.BaseItem;
+import com.prosbloom.pom.items.ModItems;
 import org.apache.logging.log4j.Logger;
 
 public class Drop {
@@ -10,15 +11,19 @@ public class Drop {
         return rate;
     }
     public BaseItem getItem() {
-        try {
-            return (BaseItem) Class.forName(name).newInstance();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        return new BaseItem();
+
+        BaseItem itm = ModItems.getItems().stream()
+                .filter(i-> name.contains(i.getClass().getCanonicalName()))
+                .findFirst().orElse(null);
+        return itm;
     }
 
     private double rate;
+
+    public String getName() {
+        return name;
+    }
+
     private String name;
 
     @Override

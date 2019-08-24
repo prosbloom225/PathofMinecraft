@@ -2,8 +2,8 @@ package com.prosbloom.pom.proxy;
 
 import com.prosbloom.pom.events.MobDeathEvents;
 import com.prosbloom.pom.events.PomEvents;
-import com.prosbloom.pom.items.*;
-import com.prosbloom.pom.items.currency.*;
+import com.prosbloom.pom.items.BaseItem;
+import com.prosbloom.pom.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
@@ -35,18 +34,8 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(new ModSword());
-        event.getRegistry().register(new ModBow());
-        event.getRegistry().register(new ItemCase());
-        event.getRegistry().register(new ChaosOrb());
-        event.getRegistry().register(new AnnulmentOrb());
-        event.getRegistry().register(new DivineOrb());
-        event.getRegistry().register(new ScourOrb());
-        event.getRegistry().register(new ExaltedOrb());
-        event.getRegistry().register(new AlchemyOrb());
-        event.getRegistry().register(new AlterationOrb());
-        event.getRegistry().register(new AugmentOrb());
-        event.getRegistry().register(new RegalOrb());
-        event.getRegistry().register(new TransmutationOrb());
+        ModItems.init();
+        for (BaseItem item : ModItems.getItems())
+            event.getRegistry().register(item);
     }
 }

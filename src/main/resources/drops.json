@@ -1,96 +1,50 @@
 {
+  "rates": [
+    {
+      "name": "Currency",
+      "rate": 1.0
+    }
+  ],
   "currency" :[
     {
       "name": "com.prosbloom.pom.items.currency.TransmutationOrb",
-      "rate": 0.20831
+      "rate": 0.25
     },
     {
-      "name": "com.prosbloom.pom.items.currency.ArmourerScrap",
-      "rate": 0.20827
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.BlacksmithWhetstone",
-      "rate": 0.11095
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.AugmentationOrb",
-      "rate": 0.10328
+      "name": "com.prosbloom.pom.items.currency.AugmentOrb",
+      "rate": 0.15
     },
     {
       "name": "com.prosbloom.pom.items.currency.AlterationOrb",
-      "rate": 0.05508
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.ChanceOrb",
-      "rate": 0.05508
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.JewellerOrb",
-      "rate": 0.05508
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.ChromaticOrb",
-      "rate": 0.05508
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.FusingOrb",
-      "rate": 0.03443
+      "rate": 0.15
     },
     {
       "name": "com.prosbloom.pom.items.currency.AlchemyOrb",
-      "rate": 0.02754
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.CartographersChisel",
-      "rate": 0.02754
+      "rate": 0.10
     },
     {
       "name": "com.prosbloom.pom.items.currency.ChaosOrb",
-      "rate": 0.01652
+      "rate": 0.05
     },
     {
       "name": "com.prosbloom.pom.items.currency.ScourOrb",
-      "rate": 0.01377
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.VaalOrb",
-      "rate": 0.00689
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.RegretOrb",
-      "rate": 0.00689
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.GlassblowerBauble",
-      "rate": 0.00682
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.GemcutterPrism",
-      "rate": 0.00275
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.BlessedOrb",
-      "rate": 0.00275
+      "rate": 0.10
     },
     {
       "name": "com.prosbloom.pom.items.currency.RegalOrb",
-      "rate": 0.00207
+      "rate": 0.05
     },
     {
       "name": "com.prosbloom.pom.items.currency.ExaltedOrb",
-      "rate": 0.00055
+      "rate": 0.05
     },
     {
       "name": "com.prosbloom.pom.items.currency.DivineOrb",
-      "rate": 0.00034
+      "rate": 0.05
     },
     {
-      "name": "com.prosbloom.pom.items.currency.EternalOrb",
-      "rate": 0.00001
-    },
-    {
-      "name": "com.prosbloom.pom.items.currency.KalandraMirror",
-      "rate": 0.00001
+      "name": "com.prosbloom.pom.items.currency.AnnulmentOrb",
+      "rate": 0.05
     }
   ]
 }

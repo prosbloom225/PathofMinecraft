@@ -4,6 +4,7 @@ package com.prosbloom.pom;
 import com.prosbloom.pom.common.ConfigHandler;
 import com.prosbloom.pom.factory.DropFactory;
 import com.prosbloom.pom.factory.ItemFactory;
+import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemEnderEye;
@@ -34,7 +35,7 @@ public class Pom {
     public static Pom instance;
 
     public static ItemFactory itemFactory = new ItemFactory();
-    public static DropFactory dropFactory = new DropFactory();
+    public static DropFactory dropFactory;
 
     public static Logger logger;
 
@@ -48,6 +49,7 @@ public class Pom {
     @Mod.EventHandler
     public void init(FMLInitializationEvent e) {
         proxy.init(e);
+        dropFactory = new DropFactory();
     }
 
     @Mod.EventHandler
