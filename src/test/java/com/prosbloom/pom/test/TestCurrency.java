@@ -186,4 +186,14 @@ public class TestCurrency {
         Assertions.assertTrue(NbtHelper.getMirrored(stack));
         Assertions.assertNotEquals(stack2, stack);
     }
+
+    @Test
+    public void testVaalOrb() {
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.setRarity(stack, LibMisc.Rarity.NORMAL);
+        ItemStack stack2 = stack.copy();
+        new VaalOrb().process(stack);
+        Assertions.assertTrue(NbtHelper.getCorrupted(stack));
+        Assertions.assertNotEquals(stack2, stack);
+    }
 }

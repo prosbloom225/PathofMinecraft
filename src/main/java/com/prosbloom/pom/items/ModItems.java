@@ -58,6 +58,9 @@ public class ModItems {
     @GameRegistry.ObjectHolder("pom:kalandramirror")
     public static KalandraMirror kalandraMirror;
 
+    @GameRegistry.ObjectHolder("pom:vaalorb")
+    public static VaalOrb vaalOrb;
+
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         for (BaseItem item : items)
@@ -82,8 +85,7 @@ public class ModItems {
         regalOrb = new RegalOrb();
         transmutationOrb = new TransmutationOrb();
         kalandraMirror = new KalandraMirror();
-
-
+        vaalOrb= new VaalOrb();
     }
 }
 

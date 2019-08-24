@@ -20,7 +20,7 @@
     },
     {
       "name": "com.prosbloom.pom.items.currency.AlchemyOrb",
-      "rate": 0.10
+      "rate": 0.8
     },
     {
       "name": "com.prosbloom.pom.items.currency.ChaosOrb",
@@ -28,7 +28,7 @@
     },
     {
       "name": "com.prosbloom.pom.items.currency.ScourOrb",
-      "rate": 0.10
+      "rate": 0.8
     },
     {
       "name": "com.prosbloom.pom.items.currency.RegalOrb",
@@ -45,6 +45,10 @@
     {
       "name": "com.prosbloom.pom.items.currency.AnnulmentOrb",
       "rate": 0.05
+    },
+    {
+      "name": "com.prosbloom.pom.items.currency.VaalOrb",
+      "rate": 0.04
     }
   ]
 }
