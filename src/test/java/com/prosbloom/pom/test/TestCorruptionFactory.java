@@ -3,7 +3,9 @@ package com.prosbloom.pom.test;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.factory.CorruptionFactory;
 import com.prosbloom.pom.factory.ItemFactory;
+import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.ModItems;
+import com.prosbloom.pom.model.Corruption;
 import net.minecraft.init.Bootstrap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,5 +38,9 @@ public class TestCorruptionFactory {
         Assertions.assertNotNull(Pom.corruptionFactory.generateWeightedCorruption(stack));
         Assertions.assertNotNull(Pom.corruptionFactory.generateWeightedCorruption(stack));
         Assertions.assertNotNull(Pom.corruptionFactory.generateWeightedCorruption(stack));
+
+        Corruption corruption = Pom.corruptionFactory.generateWeightedCorruption(stack);
+        NbtHelper.setCorruption(stack, corruption);
+        Assertions.assertEquals(corruption, NbtHelper.getCorruption(stack));
     }
 }

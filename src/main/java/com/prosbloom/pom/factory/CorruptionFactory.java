@@ -21,6 +21,10 @@ public class CorruptionFactory {
     public void dumpRates() {
     }
 
+    public ItemStack corruptItem(ItemStack stack) {
+        NbtHelper.setCorruption(stack, generateWeightedCorruption(stack));
+        return stack;
+    }
     public Corruption generateWeightedCorruption(ItemStack stack) {
         // TODO - do this on load for all types and store in factory.  doing every calculation is incredibly inefficient
         // then again how often do you corrupt....

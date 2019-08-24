@@ -1,10 +1,7 @@
 package com.prosbloom.pom.save;
 
 import com.prosbloom.pom.LibMisc;
-import com.prosbloom.pom.model.Modifier;
-import com.prosbloom.pom.model.PomTag;
-import com.prosbloom.pom.model.Prefix;
-import com.prosbloom.pom.model.Suffix;
+import com.prosbloom.pom.model.*;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
@@ -16,28 +13,31 @@ import java.util.stream.Collectors;
 public class PomItemData {
     public int ilvl;
     private List<Modifier> modifiers;
+    private Corruption corruption;
     public LibMisc.Rarity rarity;
+    private LibMisc.Types type;
     private boolean mirrored = false;
+    private boolean corrupted = false;
 
+    public Corruption getCorruption() {
+        return corruption;
+    }
+    public void setCorruption(Corruption corruption) {
+        this.corruption = corruption;
+    }
     public LibMisc.Types getType() {
         return type;
     }
-
     public void setType(LibMisc.Types type) {
         this.type = type;
     }
-
-    private LibMisc.Types type;
-
     public boolean isCorrupted() {
         return corrupted;
     }
-
     public void setCorrupted(boolean corrupted) {
         this.corrupted = corrupted;
     }
 
-    private boolean corrupted = false;
 
     // TODO - need to save type of item as well.
     // especially for nonmod items added to system, might want to have a bow with sword stats or whatever
@@ -105,6 +105,8 @@ public class PomItemData {
         pom.setBoolean(PomTag.MIRROR, mirrored);
         pom.setBoolean(PomTag.CORRUPT, corrupted);
         pom.setString(PomTag.TYPE, type.toString());
+        if (corruption != null)
+            pom.setTag(PomTag.CORRUPTION, corruption.serializeNbt());
         int p=0, s=0;
         for (Modifier modifier : modifiers) {
             if (modifier instanceof Prefix && p < PomTag.PREFIXES.length) {
@@ -128,6 +130,7 @@ public class PomItemData {
         this.type = LibMisc.Types.valueOf(pom.getString(PomTag.TYPE));
         this.mirrored = pom.getBoolean(PomTag.MIRROR);
         this.corrupted = pom.getBoolean(PomTag.CORRUPT);
+        this.corruption = new Corruption(pom.getCompoundTag(PomTag.CORRUPTION));
         for (int i=0;i<PomTag.PREFIXES.length;i++)
             if (pom.hasKey(PomTag.PREFIXES[i]))
                 modifiers.add(new Prefix(pom.getCompoundTag(PomTag.PREFIXES[i])));

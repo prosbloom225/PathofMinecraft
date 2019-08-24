@@ -3,10 +3,7 @@ package com.prosbloom.pom.factory;
 import com.google.common.collect.Multimap;
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.exception.ModifierException;
-import com.prosbloom.pom.model.Modifier;
-import com.prosbloom.pom.model.PomTag;
-import com.prosbloom.pom.model.Prefix;
-import com.prosbloom.pom.model.Suffix;
+import com.prosbloom.pom.model.*;
 import com.prosbloom.pom.save.PomItemData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -128,6 +125,15 @@ public class NbtHelper {
         item.setType(type);
         writeNbt(stack, item);
     }
+    public static Corruption getCorruption(ItemStack stack) {
+        PomItemData item = getNbt(stack);
+        return item.getCorruption();
+    }
+    public static void setCorruption(ItemStack stack, Corruption corruption) {
+        PomItemData item = getNbt(stack);
+        item.setCorruption(corruption);
+        writeNbt(stack, item);
+    }
 
 
     public static int getIlvl(ItemStack stack) {
@@ -191,7 +197,9 @@ public class NbtHelper {
             Multimap<String, AttributeModifier> modifiers = stack.getItem().getAttributeModifiers(EntityEquipmentSlot.MAINHAND, stack);
             // Phys Dmg
             double dmgMod = 1.0;
-           //TODO - can probably clean this up.. stolen code from old ModSword
+           // TODO - Need to break this up,  cyclo complexity too high.  especially if adding corruptions here
+           // might want to look at custom dmg and atk spd logic.  At very worst split into its own class and handle each type accordingly
+           // gonna get messy with armor and other types of weapons getting added.
             for (Prefix prefix : item.getPrefixes())
                 dmgMod += prefix.getDamageMod();
             final Optional<AttributeModifier> prefixOptional = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).stream()
