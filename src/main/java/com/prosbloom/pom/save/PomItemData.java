@@ -116,6 +116,7 @@ public class PomItemData {
         boolean ret = true;
         ret &= this.ilvl == other.ilvl;
         ret &= this.rarity == other.rarity;
+        ret &= this.mirrored == other.mirrored;
         for (Modifier modifier : modifiers) {
             ret &= other.getModifiers().contains(modifier);
         }
