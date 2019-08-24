@@ -6,7 +6,6 @@ Path of Exile ported to minecraft
 ## Items
 - Eternal Orb
 - Divine Orb
-- Vaal Orb
 - Tweak currency drop rates
 - Item Names(not just prefix/suffix)
 - More modifiers

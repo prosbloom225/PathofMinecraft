@@ -1,30 +1,20 @@
 package com.prosbloom.pom.model;
 
-import com.prosbloom.pom.items.BaseItem;
-import com.prosbloom.pom.items.ModItems;
-import org.apache.logging.log4j.Logger;
+import com.prosbloom.pom.LibMisc;
+import net.minecraft.nbt.NBTTagCompound;
 
-public class Drop {
-    public static Logger logger;
+import java.util.Map;
 
-    public double getDropRate() {
-        return rate;
-    }
-    public BaseItem getItem() {
-
-        BaseItem itm = ModItems.getItems().stream()
-                .filter(i-> name.contains(i.getClass().getCanonicalName()))
-                .findFirst().orElse(null);
-        return itm;
-    }
+public class Corruption extends Modifier {
 
     private double rate;
+    private Map<String, Integer> weight;
+    private int[] flatDmgRangePhysicalMin;
+    private int[] flatDmgRangePhysicalMax;
 
-    public String getName() {
-        return name;
+    public Corruption(NBTTagCompound nbt) {
+        super(nbt);
     }
-
-    private String name;
 
     @Override
     public String toString() {

@@ -1,15 +1,19 @@
-{
-  "corruptions" :[{
-    "name": "V2LocalAddedPhysicalDamage1hCorrupted1",
-    "type": {"sword": 1000},
+[{
+  "name": "V2LocalAddedPhysicalDamage1hCorrupted1",
+  "ilvl": 1,
+  "tier": 1,
+  "rate": 0.50,
+  "weight": {"sword": 1000},
+  "flatDmgRangePhysicalMin": [ 1, 1 ],
+  "flatDmgRangePhysicalMax": [ 2, 2 ]
+},
+  {
+    "name": "V2LocalAddedPhysicalDamage1hCorrupted2",
+    "ilvl": 31,
+    "tier": 2,
+    "rate": 0.50,
+    "weight": {"sword": 1000},
     "flatDmgRangePhysicalMin": [ 1, 1 ],
     "flatDmgRangePhysicalMax": [ 2, 2 ]
-  },
-    {
-      "name": "V2LocalAddedPhysicalDamage1hCorrupted2",
-      "type": "sword",
-      "flatDmgRangePhysicalMin": [ 1, 1 ],
-      "flatDmgRangePhysicalMax": [ 2, 2 ]
-    }
-  ]
-}
+  }
+]

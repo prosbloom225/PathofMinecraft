@@ -1,71 +1,39 @@
 package com.prosbloom.pom.factory;
 
 import com.google.gson.Gson;
-import com.prosbloom.pom.common.RandomCollection;
-import com.prosbloom.pom.items.BaseItem;
-import com.prosbloom.pom.items.ModItems;
-import com.prosbloom.pom.items.currency.AlchemyOrb;
-import com.prosbloom.pom.model.Drop;
-import com.prosbloom.pom.model.Drops;
-import net.minecraft.item.Item;
+import com.prosbloom.pom.model.Corruption;
 import net.minecraft.item.ItemStack;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
+import java.util.Arrays;
+import java.util.List;
 
-public class DropFactory {
+import static com.prosbloom.pom.LibMisc.Types.SWORD;
+
+public class CorruptionFactory {
     private static Gson gson;
-    private static RandomCollection<BaseItem> currencyTable;
-    private static Map<Double, String> dropRates;
-    private double dropWeightTotal;
+    private List<Corruption> corruptions;
 
     public void dumpRates() {
     }
 
-    public BaseItem generateWeightedCurrency() {
-        BaseItem item = currencyTable.next();
-        if (item == null)
-            return new BaseItem();
-        return item;
-    }
+    public Corruption generateWeightedCorruption(ItemStack stack) {
+        switch (NbtHelper.getType(stack)){
+            case SWORD:
+                System.out.println("Generating corruption for type: " + SWORD);
 
-    public List<ItemStack> generateWeightedDrops(int count, int ilvl) {
-        Random rng = new Random();
-        List<ItemStack> drops = new ArrayList<>();
-        for (int i = 0; i < count; i++){
-            double curr = dropWeightTotal  * rng.nextDouble();
-            // TODO - can probably use an enum here for the various types.
-            // keeping as is cuz i only have currency types for now.
-            for (Map.Entry<Double, String> rate : dropRates.entrySet()) {
-                if (curr <= rate.getKey())
-                    switch (rate.getValue()){
-                        case "Currency":
-                            drops.add(new ItemStack(generateWeightedCurrency(), 1));
-                            break;
-                    }
                 break;
-            }
         }
-
-        return drops;
+        return null;
     }
-    public DropFactory() {
+
+    public CorruptionFactory() {
         gson = new Gson();
-        Drops drops = gson.fromJson(new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/drops.json"))), Drops.class);
+        corruptions = Arrays.asList(gson.fromJson(new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/corruptions.json"))), Corruption[].class));
+        corruptions.forEach(c->
+                System.out.println(c.toString()));
 
-        // drop types
-        currencyTable = new RandomCollection<>();
-        drops.getCurrency().forEach(d-> currencyTable.add(d.getDropRate(), d.getItem()));
-
-        dropRates = new TreeMap<>();
-        double curr = 0;
-        for (Drop rate : drops.getRates()) {
-            dropRates.put((curr +=rate.getDropRate()), rate.getName());
-            dropWeightTotal += rate.getDropRate();
-        }
 
     }
 }

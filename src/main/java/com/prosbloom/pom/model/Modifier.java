@@ -58,6 +58,7 @@ public class Modifier {
     }
 
 
+
     @Override
     public boolean equals(Object obj) {
         Modifier other = (Modifier)obj;
