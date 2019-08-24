@@ -142,6 +142,15 @@ public class NbtHelper {
         item.ilvl = ilvl;
         writeNbt(stack, item);
     }
+    public static boolean getMirrored(ItemStack stack) {
+        PomItemData item = getNbt(stack);
+        return item.isMirrored();
+    }
+    public static void setMirrored(ItemStack stack, boolean mirror) {
+        PomItemData item = getNbt(stack);
+        item.setMirrored(mirror);
+        writeNbt(stack, item);
+    }
 
 
     public static List<Prefix> getPrefixes(ItemStack stack) {

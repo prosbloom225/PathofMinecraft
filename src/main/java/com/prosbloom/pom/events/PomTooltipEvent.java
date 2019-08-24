@@ -73,6 +73,8 @@ public class PomTooltipEvent {
                 suffixes.stream().forEach(s -> advSuffix.add(s.getAdvTooltip()));
                 event.getToolTip().addAll(advPrefix);
                 event.getToolTip().addAll(advSuffix);
+                if (NbtHelper.getMirrored(stack))
+                    event.getToolTip().add(TextFormatting.RED + "Mirrored");
             }
 
         }

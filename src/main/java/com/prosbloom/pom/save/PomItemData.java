@@ -17,6 +17,8 @@ public class PomItemData {
     public int ilvl;
     private List<Modifier> modifiers;
     public LibMisc.Rarity rarity;
+    private boolean mirrored = false;
+
     // TODO - need to save type of item as well.
     // especially for nonmod items added to system, might want to have a bow with sword stats or whatever
     // then again that miht break shit.  either way, store the type...
@@ -42,6 +44,13 @@ public class PomItemData {
     }
     public void addModifier(Modifier modifier) {
         modifiers.add(modifier);
+    }
+    public boolean isMirrored() {
+        return mirrored;
+    }
+
+    public void setMirrored(boolean mirrored) {
+        this.mirrored = mirrored;
     }
 
 
@@ -72,6 +81,7 @@ public class PomItemData {
         NBTTagCompound pom = new NBTTagCompound();
         pom.setInteger(PomTag.ILVL, ilvl);
         pom.setString(PomTag.RARITY, rarity.toString());
+        pom.setBoolean(PomTag.MOD_MIRROR, mirrored);
         int p=0, s=0;
         for (Modifier modifier : modifiers) {
             if (modifier instanceof Prefix && p < PomTag.PREFIXES.length) {

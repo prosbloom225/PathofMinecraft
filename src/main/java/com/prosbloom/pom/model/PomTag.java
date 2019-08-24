@@ -12,6 +12,7 @@ public class PomTag {
     public static final String MOD_NAME = "name";
     public static final String MOD_ILVL = "ilvl";
     public static final String MOD_TIER = "tier";
+    public static final String MOD_MIRROR = "mirror";
     public static final String MOD_DAMAGERANGE_MIN = "damagemin";
     public static final String MOD_DAMAGERANGE_MAX = "damagemax";
     public static final String MOD_DAMAGEMOD = "damagemod";

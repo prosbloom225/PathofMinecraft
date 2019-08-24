@@ -53,6 +53,7 @@ public class TestNbtHelper {
         item.rarity = LibMisc.Rarity.RARE;
         item.getModifiers().add(pfx);
         item.getModifiers().add(sfx);
+        item.setMirrored(true);
         NBTTagCompound itm = item.serializeNbt();
         stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setTag(PomTag.POM_TAG, item.serializeNbt());
