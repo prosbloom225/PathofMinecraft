@@ -4,6 +4,7 @@ import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.common.ConfigHandler;
 import com.prosbloom.pom.factory.NbtHelper;
+import com.prosbloom.pom.items.currency.ChaosOrb;
 import com.prosbloom.pom.items.interfaces.ICurrency;
 import com.prosbloom.pom.model.PomTag;
 import net.minecraft.item.Item;
@@ -87,10 +88,15 @@ public class PomEvents {
             else
                 // shift click clears the anvil
                 event.getEntityPlayer().inventory.addItemStackToInventory(newStack);
+            // if flag is set, add the original item back into inventory
+            if (rightStack.getItem() instanceof ICurrency && !((ICurrency)rightStack.getItem()).shouldConsume())
+                event.getEntityPlayer().inventory.addItemStackToInventory(leftStack);
+
             // remove the(all) dummy item(s)
             event.getEntityPlayer().inventory.mainInventory.stream()
                     .filter(stack->NbtHelper.hasTag(stack) && NbtHelper.isDummy(stack))
                     .forEach(stack->stack.shrink(1));
+
         }
     }
 

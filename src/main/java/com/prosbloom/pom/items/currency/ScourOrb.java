@@ -42,4 +42,8 @@ public class ScourOrb extends BaseItem implements ICurrency {
         NbtHelper.setRarity(stack, NORMAL);
         return stack;
     }
+
+    public boolean shouldConsume() {
+        return true;
+    }
 }

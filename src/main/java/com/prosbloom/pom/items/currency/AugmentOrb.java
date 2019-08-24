@@ -46,5 +46,8 @@ public class AugmentOrb extends BaseItem implements ICurrency {
         return stack;
     }
 
+    public boolean shouldConsume() {
+        return true;
+    }
 
 }

@@ -41,4 +41,8 @@ public class DivineOrb extends BaseItem implements ICurrency {
             }
         return stack;
     }
+
+    public boolean shouldConsume() {
+        return true;
+    }
 }
