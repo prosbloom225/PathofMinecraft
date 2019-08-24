@@ -37,6 +37,12 @@ public class PomEvents {
                 ConfigHandler.swordRegexPattern.matcher(i.getRegistryName().toString()).matches());
         return ret;
     }
+    private static LibMisc.Types typeItem(Item i) {
+        if (ConfigHandler.swordRegexPattern.matcher(i.getRegistryName().toString()).matches())
+            return LibMisc.Types.SWORD;
+        // default to a sword and hope the item can receive the attributes
+        else return LibMisc.Types.SWORD;
+    }
 
     // Inventory closed after adding new item
     @SubscribeEvent
@@ -52,7 +58,8 @@ public class PomEvents {
             // TODO - need to handle ilvl somehow...
             // other mods base it on distance from spawn.  should probably do that for the time
             // ultimately id like to have maps have zone level and drop a range of ilvls like path
-            Pom.itemFactory.generateItem(stack, 99);
+
+            Pom.itemFactory.generateItem(stack, 99, typeItem(stack.getItem()));
         }
     }
 

@@ -19,6 +19,16 @@ public class PomItemData {
     public LibMisc.Rarity rarity;
     private boolean mirrored = false;
 
+    public LibMisc.Types getType() {
+        return type;
+    }
+
+    public void setType(LibMisc.Types type) {
+        this.type = type;
+    }
+
+    private LibMisc.Types type;
+
     public boolean isCorrupted() {
         return corrupted;
     }
@@ -68,6 +78,7 @@ public class PomItemData {
         modifiers = new ArrayList<>();
         ilvl = 1;
         rarity = LibMisc.Rarity.NORMAL;
+        type = LibMisc.Types.SWORD;
     }
 
     public List<Prefix> getPrefixes() {
@@ -93,6 +104,7 @@ public class PomItemData {
         pom.setString(PomTag.RARITY, rarity.toString());
         pom.setBoolean(PomTag.MIRROR, mirrored);
         pom.setBoolean(PomTag.CORRUPT, corrupted);
+        pom.setString(PomTag.TYPE, type.toString());
         int p=0, s=0;
         for (Modifier modifier : modifiers) {
             if (modifier instanceof Prefix && p < PomTag.PREFIXES.length) {
@@ -113,6 +125,7 @@ public class PomItemData {
         modifiers = new ArrayList<>();
         this.ilvl = pom.getInteger(PomTag.ILVL);
         this.rarity = LibMisc.Rarity.valueOf(pom.getString(PomTag.RARITY));
+        this.type = LibMisc.Types.valueOf(pom.getString(PomTag.TYPE));
         this.mirrored = pom.getBoolean(PomTag.MIRROR);
         this.corrupted = pom.getBoolean(PomTag.CORRUPT);
         for (int i=0;i<PomTag.PREFIXES.length;i++)
@@ -130,6 +143,7 @@ public class PomItemData {
         ret &= this.rarity == other.rarity;
         ret &= this.mirrored == other.mirrored;
         ret &= this.corrupted == other.corrupted;
+        ret &= this.type == other.type;
         for (Modifier modifier : modifiers) {
             ret &= other.getModifiers().contains(modifier);
         }

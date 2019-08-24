@@ -10,13 +10,9 @@ import com.prosbloom.pom.model.Suffix;
 import com.prosbloom.pom.save.PomItemData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +117,15 @@ public class NbtHelper {
     public static void setRarity(ItemStack stack, LibMisc.Rarity rarity) {
         PomItemData item = getNbt(stack);
         item.setRarity(rarity);
+        writeNbt(stack, item);
+    }
+    public static LibMisc.Types getType(ItemStack stack) {
+        PomItemData item = getNbt(stack);
+        return item.getType();
+    }
+    public static void setType(ItemStack stack, LibMisc.Types type) {
+        PomItemData item = getNbt(stack);
+        item.setType(type);
         writeNbt(stack, item);
     }
 
