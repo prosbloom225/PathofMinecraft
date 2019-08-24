@@ -13,7 +13,9 @@ import com.prosbloom.pom.model.Prefix;
 import com.prosbloom.pom.model.Suffix;
 import com.prosbloom.pom.save.PomItemData;
 import net.minecraft.init.Bootstrap;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.walkers.ItemStackData;
 import org.junit.jupiter.api.Assertions;
@@ -28,6 +30,13 @@ public class TestCurrency {
     static Suffix sfx;
     static ItemStack stack;
     static PomItemData item;
+
+    @BeforeAll
+    public static void init() {
+        Bootstrap.register();
+        ModItems.init();
+        Pom.itemFactory = new ItemFactory();
+    }
 
     @BeforeEach
     public void setup() {
@@ -166,5 +175,15 @@ public class TestCurrency {
         new TransmutationOrb().process(stack);
         Assertions.assertTrue(NbtHelper.getModifiers(stack).size() > 0);
         Assertions.assertEquals(LibMisc.Rarity.MAGIC, NbtHelper.getRarity(stack));
+    }
+
+    @Test
+    public void testKalandraMirror() {
+        NbtHelper.clearModifiers(stack);
+        NbtHelper.setRarity(stack, LibMisc.Rarity.NORMAL);
+        ItemStack stack2 = stack.copy();
+        new KalandraMirror().process(stack);
+        Assertions.assertTrue(NbtHelper.getMirrored(stack));
+        Assertions.assertNotEquals(stack2, stack);
     }
 }

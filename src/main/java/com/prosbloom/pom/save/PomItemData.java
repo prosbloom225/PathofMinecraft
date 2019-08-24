@@ -81,7 +81,7 @@ public class PomItemData {
         NBTTagCompound pom = new NBTTagCompound();
         pom.setInteger(PomTag.ILVL, ilvl);
         pom.setString(PomTag.RARITY, rarity.toString());
-        pom.setBoolean(PomTag.MOD_MIRROR, mirrored);
+        pom.setBoolean(PomTag.MIRROR, mirrored);
         int p=0, s=0;
         for (Modifier modifier : modifiers) {
             if (modifier instanceof Prefix && p < PomTag.PREFIXES.length) {
@@ -102,6 +102,7 @@ public class PomItemData {
         modifiers = new ArrayList<>();
         this.ilvl = pom.getInteger(PomTag.ILVL);
         this.rarity = LibMisc.Rarity.valueOf(pom.getString(PomTag.RARITY));
+        this.mirrored = pom.getBoolean(PomTag.MIRROR);
         for (int i=0;i<PomTag.PREFIXES.length;i++)
             if (pom.hasKey(PomTag.PREFIXES[i]))
                 modifiers.add(new Prefix(pom.getCompoundTag(PomTag.PREFIXES[i])));

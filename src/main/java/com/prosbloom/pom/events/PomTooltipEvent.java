@@ -67,14 +67,14 @@ public class PomTooltipEvent {
                     name = TextFormatting.WHITE+ "";
             }
             event.getToolTip().add(String.format("%s %s %s %s", name, prefix, stack.getItem().getRegistryName(), suffix));
+            if (NbtHelper.getMirrored(stack))
+                event.getToolTip().add(TextFormatting.RED + "Mirrored");
             if (GuiScreen.isShiftKeyDown()) {
                 for (Prefix p : item.getPrefixes())
                     advPrefix.add(p.getAdvTooltip());
                 suffixes.stream().forEach(s -> advSuffix.add(s.getAdvTooltip()));
                 event.getToolTip().addAll(advPrefix);
                 event.getToolTip().addAll(advSuffix);
-                if (NbtHelper.getMirrored(stack))
-                    event.getToolTip().add(TextFormatting.RED + "Mirrored");
             }
 
         }

@@ -105,7 +105,7 @@ public class PomEvents {
     {
         ItemStack rightItem = event.getRight();
         ItemStack leftItem = event.getLeft();
-        if (NbtHelper.hasTag(leftItem) && rightItem.getItem() instanceof ICurrency && ((ICurrency)rightItem.getItem()).canProcess(leftItem)) {
+        if (NbtHelper.hasTag(leftItem) && !NbtHelper.getMirrored(leftItem) && rightItem.getItem() instanceof ICurrency && ((ICurrency)rightItem.getItem()).canProcess(leftItem)) {
             // we need to set a valid cost and output item to give the player something in output slot
             event.setCost(1);
             event.setMaterialCost(1);
