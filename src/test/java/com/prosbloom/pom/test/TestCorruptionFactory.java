@@ -34,6 +34,7 @@ public class TestCorruptionFactory {
     @Test
     public void testCorruptionLoading() {
         Assertions.assertNotNull(Pom.corruptionFactory.generateWeightedCorruption(stack));
-        //System.out.println(Pom.dropFactory.generateWeightedCurrency().getBaseName());
+        Assertions.assertNotNull(Pom.corruptionFactory.generateWeightedCorruption(stack));
+        Assertions.assertNotNull(Pom.corruptionFactory.generateWeightedCorruption(stack));
     }
 }

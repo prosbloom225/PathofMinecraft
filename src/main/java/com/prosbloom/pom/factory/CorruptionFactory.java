@@ -1,6 +1,8 @@
 package com.prosbloom.pom.factory;
 
 import com.google.gson.Gson;
+import com.prosbloom.pom.LibMisc;
+import com.prosbloom.pom.common.RandomCollection;
 import com.prosbloom.pom.model.Corruption;
 import net.minecraft.item.ItemStack;
 
@@ -8,8 +10,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.prosbloom.pom.LibMisc.Types.SWORD;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class CorruptionFactory {
     private static Gson gson;
@@ -19,13 +22,13 @@ public class CorruptionFactory {
     }
 
     public Corruption generateWeightedCorruption(ItemStack stack) {
-        switch (NbtHelper.getType(stack)){
-            case SWORD:
-                System.out.println("Generating corruption for type: " + SWORD);
-
-                break;
-        }
-        return null;
+        // TODO - do this on load for all types and store in factory.  doing every calculation is incredibly inefficient
+        // then again how often do you corrupt....
+        LibMisc.Types type = NbtHelper.getType(stack);
+        List<Corruption> possibleCorruptions = corruptions.stream().filter(c->c.getWeightForType(NbtHelper.getType(stack)) > 0).collect(Collectors.toList());
+        RandomCollection<Corruption> corruptionMap = new RandomCollection();
+        possibleCorruptions.forEach(c->corruptionMap.add(c.getWeightForType(type), c));
+        return corruptionMap.next();
     }
 
     public CorruptionFactory() {
