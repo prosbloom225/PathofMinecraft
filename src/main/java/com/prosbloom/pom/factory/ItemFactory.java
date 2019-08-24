@@ -120,8 +120,9 @@ public class ItemFactory {
         return stack;
     }
 
-    public void generateItem(ItemStack stack, int ilvl) {
+    public void generateItem(ItemStack stack, int ilvl, LibMisc.Types type) {
         NbtHelper.setIlvl(stack, ilvl);
+        NbtHelper.setType(stack, type);
         //NbtHelper.setRarity(stack, getRandomRarity());
         // TODO - temp shim
         NbtHelper.setRarity(stack, RARE);
