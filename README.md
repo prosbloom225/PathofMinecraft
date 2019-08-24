@@ -21,6 +21,7 @@ Path of Exile ported to minecraft
 - Flasks
 - Cosmetics
 - Vendor recipes
+- Quality for weapons/armor
 
 ## Player
 - Item Quant/Rarity
@@ -48,4 +49,4 @@ Path of Exile ported to minecraft
 
 ## Custom
 - Config files
-- System to pull in other mods weapons via regex (configurable)
+- Different weapon/armor types
