@@ -15,9 +15,17 @@ public class Corruption extends Modifier {
     private int[] flatDmgRangePhysicalMin;
     private int[] flatDmgRangePhysicalMax;
 
+
     // once rolled
     private int flatDmgMin = 0;
     private int flatDmgMax = 0;
+
+    public int getFlatDmgMin() {
+        return flatDmgMin;
+    }
+    public int getFlatDmgMax() {
+        return flatDmgMax;
+    }
 
     public int getWeightForType(LibMisc.Types type){
         return weight.get(type.toString().toLowerCase());
