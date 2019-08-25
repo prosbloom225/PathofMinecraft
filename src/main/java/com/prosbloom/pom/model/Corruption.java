@@ -19,12 +19,19 @@ public class Corruption extends Modifier {
     // once rolled
     private int flatDmgMin = 0;
     private int flatDmgMax = 0;
+    private int flatDmgAvg = 0;
 
     public int getFlatDmgMin() {
         return flatDmgMin;
     }
     public int getFlatDmgMax() {
         return flatDmgMax;
+    }
+    public int getFlatDmgAvg(){
+        /// TODO - maybe roll this at attack time and use the min/max instead?? Avging on creation for now
+        if (flatDmgAvg == 0)
+            flatDmgAvg = (getFlatDmgMin() + getFlatDmgMax()) / 2;
+        return flatDmgAvg;
     }
 
     public int getWeightForType(LibMisc.Types type){
