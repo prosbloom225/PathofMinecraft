@@ -3,6 +3,7 @@ package com.prosbloom.pom.events;
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.Pom;
 import com.prosbloom.pom.common.ConfigHandler;
+import com.prosbloom.pom.factory.AttributeHelper;
 import com.prosbloom.pom.factory.NbtHelper;
 import com.prosbloom.pom.items.currency.ChaosOrb;
 import com.prosbloom.pom.items.interfaces.ICurrency;
@@ -85,7 +86,7 @@ public class PomEvents {
             // only apply currency on server
             if (event.getEntity().getEntityWorld().isRemote == false) {
                 newStack = ((ICurrency) rightStack.getItem()).process(newStack);
-                NbtHelper.processItemData(newStack);
+                AttributeHelper.processItemData(newStack);
             }
 
             // TODO - item in hand isnt refreshed until a new container event triggers, item doesnt appear updated when mousing out of anvil

@@ -1,5 +1,6 @@
 package com.prosbloom.pom.factory;
 
+import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.prosbloom.pom.LibMisc;
 import com.prosbloom.pom.exception.ModifierException;
@@ -7,20 +8,22 @@ import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.items.ModSword;
 import com.prosbloom.pom.items.currency.ChaosOrb;
 import com.prosbloom.pom.items.currency.TransmutationOrb;
-import com.prosbloom.pom.model.Modifier;
-import com.prosbloom.pom.model.Modifiers;
-import com.prosbloom.pom.model.Prefix;
-import com.prosbloom.pom.model.Suffix;
+import com.prosbloom.pom.model.*;
 import com.prosbloom.pom.save.PomItemData;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import org.apache.logging.log4j.Logger;
 import static com.prosbloom.pom.LibMisc.Types.*;
 import static com.prosbloom.pom.LibMisc.Rarity.*;
+import static com.prosbloom.pom.factory.NbtHelper.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -142,6 +145,7 @@ public class ItemFactory {
                     // will need to determine how to handle random uniqyes
                     break;
         }
-        NbtHelper.processItemData(stack);
+        AttributeHelper.processItemData(stack);
     }
+
 }
