@@ -1,6 +1,7 @@
 package com.prosbloom.pom.factory;
 
 import com.google.common.collect.Multimap;
+import com.prosbloom.pom.common.ConfigHandler;
 import com.prosbloom.pom.model.*;
 import com.prosbloom.pom.save.PomItemData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -44,6 +45,7 @@ public class AttributeHelper {
                     .findFirst();
             if (prefixOptional.isPresent()) {
                 double dmg = (prefixOptional.get().getAmount() * getWeaponDmgMod(item)) + getWeaponDmgFlat(item);
+                dmg *= ConfigHandler.scalerDmg;
                 AttributeModifier mod = new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon Modifier", dmg, 0);
                 stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), mod, EntityEquipmentSlot.MAINHAND);
             }
@@ -59,6 +61,7 @@ public class AttributeHelper {
                 // spd calc is weird cuz it starts negative
                 double val = suffixOptional.get().getAmount();
                 double spd = val + Math.abs(val) * spdMod;
+                spd *= ConfigHandler.scalerAtkSpd;
                 AttributeModifier mod = new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon Modifier", spd, 0);
                 stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_SPEED.getName(), mod, EntityEquipmentSlot.MAINHAND);
             }

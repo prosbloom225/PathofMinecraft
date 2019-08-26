@@ -5,7 +5,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import sun.util.resources.ar.CurrencyNames_ar_YE;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -21,9 +20,9 @@ public class ConfigHandler {
     public static String swordRegex;
     public static Pattern swordRegexPattern;
 
-    // drops
-    public static float currencyDropRate =  0.20f;
-    public static float transmutationOrbDropRate = 0.20831f;
+    // scaling
+    public static float scalerDmg =  0.50f;
+    public static float scalerAtkSpd =  0.50f;
 
     public static void loadConfig(File configFile) {
         config = new Configuration(configFile);
@@ -47,9 +46,12 @@ public class ConfigHandler {
         swordRegex = config.getString("swordRegex", "weapon", ".*sword.*", desc);
 
 
-        // Drops
-        desc = "Chance any killed mob will drop a currency item";
-        currencyDropRate = config.getFloat("currencyDropRate", "drops", currencyDropRate, 0, 1, desc);
+        // Scaling
+        desc = "Attack damage scaler.  All damage modifications from system will be multiplied by this before being applied.";
+        scalerDmg = config.getFloat("scalerDmg", "scaling", scalerDmg, 0, 1, desc);
+
+        desc = "Attack speed scaler.  All attack speed modifications from system will be multiplied by this before being applied.";
+        scalerAtkSpd = config.getFloat("scalerSpd", "scaling", scalerAtkSpd, 0, 1, desc);
 
         if(config.hasChanged())
             config.save();
