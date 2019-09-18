@@ -1,0 +1,18 @@
+package com.prosbloom.pom.capability;
+
+import com.prosbloom.pom.LibMisc;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+public class CapabilityHandler {
+        static final ResourceLocation MANA_CAP = new ResourceLocation(LibMisc.MODID, "mana");
+
+        public void attachCapability(AttachCapabilitiesEvent.Entity event)
+        {
+            if (!(event.getEntity() instanceof EntityPlayer)) return;
+
+            event.addCapability(MANA_CAP, new ManaProvider());
+        }
+}

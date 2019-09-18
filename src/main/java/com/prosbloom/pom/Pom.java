@@ -5,7 +5,6 @@ import com.prosbloom.pom.common.ConfigHandler;
 import com.prosbloom.pom.factory.CorruptionFactory;
 import com.prosbloom.pom.factory.DropFactory;
 import com.prosbloom.pom.factory.ItemFactory;
-import com.prosbloom.pom.items.ModItems;
 import com.prosbloom.pom.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemEnderEye;
